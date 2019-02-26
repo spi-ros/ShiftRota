@@ -7,9 +7,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.android.shiftrota.data.Date;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -19,14 +19,13 @@ import java.util.Locale;
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
     private Context context;
-    private List<String> dates;
-    private static ItemClickListener mClickListener;
+    private List<Date> mDates;
 
 
-    DateAdapter(Context context, List<String> dates) {
-        this.context = context;
-        this.dates = dates;
-    }
+//    DateAdapter(Context context, List<String> dates) {
+//        this.context = context;
+//        this.dates = dates;
+//    }
 
     @NonNull
     @Override
@@ -37,52 +36,43 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull final DateAdapter.ViewHolder holder, final int position) {
-        holder.textView.setText(dates.get(position));
-        SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
-        Calendar rightNow = Calendar.getInstance();
-        String formatted = format1.format(rightNow.getTime());
-        String testString = holder.textView.getText().toString();
-        if (testString.equals(formatted)) {
-            holder.textView.setTextColor(Color.RED);
-        }
 
+        if (mDates != null) {
+            Date current = mDates.get(position);
+            holder.textView.setText(current.getDate());
+        } else {
+            holder.textView.setText(com.example.android.shiftrota.R.string.no_data);
+        }
+//        holder.textView.setText(dates.get(position));
+//        SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
+//        Calendar rightNow = Calendar.getInstance();
+//        String formatted = format1.format(rightNow.getTime());
+//        String testString = holder.textView.getText().toString();
+//        if (testString.equals(formatted)) {
+//            holder.textView.setTextColor(Color.RED);
+//        }
     }
 
-    @Override
-    public long getItemId(int position) {
-        return position;
+    void setDates(List<Date> dates){
+        mDates = dates;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return dates.size();
+        if (mDates != null)
+            return mDates.size();
+        else return 0;
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView textView;
 
         ViewHolder(View itemView) {
             super(itemView);
             textView = itemView.findViewById(R.id.item_text_view);
-            itemView.setOnClickListener(this);
         }
-
-        @Override
-        public void onClick(View view) {
-            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-        }
-    }
-
-
-    // allows clicks events to be caught
-    void setClickListener(ItemClickListener itemClickListener) {
-        mClickListener = itemClickListener;
-    }
-
-    // parent activity will implement this method to respond to click events
-    public interface ItemClickListener {
-        void onItemClick(View view, int position);
     }
 
 //    private List<String> dates;
