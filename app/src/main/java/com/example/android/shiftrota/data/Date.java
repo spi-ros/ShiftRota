@@ -10,7 +10,7 @@ import android.support.annotation.NonNull;
 public class Date {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    int id;
 
     @NonNull
     @ColumnInfo(name = "date")
