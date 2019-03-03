@@ -18,8 +18,8 @@ import java.util.Locale;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
-    private Context context;
     private List<Date> mDates;
+    private final LayoutInflater mInflater;
 
 
 //    DateAdapter(Context context, List<String> dates) {
@@ -27,10 +27,12 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 //        this.dates = dates;
 //    }
 
+    DateAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+
     @NonNull
     @Override
     public DateAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false);
+        View v = mInflater.inflate(R.layout.item_view, parent, false);
         return new ViewHolder(v);
     }
 

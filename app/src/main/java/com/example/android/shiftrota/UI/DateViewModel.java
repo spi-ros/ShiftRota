@@ -22,7 +22,7 @@ public class DateViewModel extends AndroidViewModel {
         mAllDates = mDateRepository.getAllDates();
     }
 
-    LiveData<List<Date>> getAllDates() { return mAllDates; }
+    public LiveData<List<Date>> getAllDates() { return mAllDates; }
 
     public void insert(Date date) { mDateRepository.insert(date); }
 }
