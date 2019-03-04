@@ -41,7 +41,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
         if (mDates != null) {
             Date current = mDates.get(position);
-            holder.textView.setText(current.getDate());
+            holder.textView.setText(current.getId());
         } else {
             holder.textView.setText(com.example.android.shiftrota.R.string.no_data);
         }

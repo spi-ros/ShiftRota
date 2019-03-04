@@ -5,11 +5,13 @@ import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
 @Database(entities = {Date.class}, version = 1)
+@TypeConverters({Converters.class})
 public abstract class DateRoomDatabase extends RoomDatabase {
 
     public abstract DateDao dateDao();
@@ -56,11 +58,11 @@ public abstract class DateRoomDatabase extends RoomDatabase {
             // Not needed if you only populate on creation.
 //            mDao.deleteAll();
 
-            Date date = new Date("mein");
-            mDao.insert(date);
-
-            Date date1 = new Date("Tein");
-            mDao.insert(date1);
+//            Date date = new Date(DatesGenerator.getDays());
+//            mDao.insert(date);
+//
+//            Date date1 = new Date("Tein");
+//            mDao.insert(date1);
 //            word = new Word("World");
 //            mDao.insert(word);
 //            DatesGenerator.getDays();

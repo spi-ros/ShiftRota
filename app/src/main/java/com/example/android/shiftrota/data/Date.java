@@ -5,6 +5,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -12,22 +13,30 @@ import java.util.List;
 public class Date {
 
     @PrimaryKey(autoGenerate = true)
-    int id;
+    private int id;
 
     @NonNull
     @ColumnInfo(name = "date")
-    private String mDate;
+    private ArrayList<String> mDate = new ArrayList<>();
 
 //    @NonNull
 //    @ColumnInfo(name = "status")
 //    private String mStatus;
 
-    public Date(@NonNull String date) {
-        this.mDate = date;
+    public Date(@NonNull List<String> date) {
+        this.mDate.addAll(date);
 //        this.mStatus = status;
     }
 
-    public String getDate() {return this.mDate;}
+    void setMDate(ArrayList<String> mDate) {
+        this.mDate = mDate;
+    }
+
+    public ArrayList<String> getMDate() { return this.mDate; }
+
+    void setId(int id) { this.id = id; }
+
+    public int getId() { return this.id; }
 
 //    public String getStatus() {return this.mStatus;}
 }
