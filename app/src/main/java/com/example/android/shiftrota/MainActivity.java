@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity {
 
     DateAdapter dateAdapter;
 
-    private DateViewModel mDateViewModel;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
-        mDateViewModel = ViewModelProviders.of(this).get(DateViewModel.class);
+        DateViewModel mDateViewModel = ViewModelProviders.of(this).get(DateViewModel.class);
         mDateViewModel.getAllDates().observe(this, new Observer<List<Date>>() {
             @Override
             public void onChanged(@Nullable List<Date> dates) {

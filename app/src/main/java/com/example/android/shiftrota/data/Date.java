@@ -9,34 +9,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 @Entity(tableName = "date_table")
 public class Date {
 
     @PrimaryKey(autoGenerate = true)
-    private int id;
+    int id;
 
     @NonNull
     @ColumnInfo(name = "date")
-    private ArrayList<String> mDate = new ArrayList<>();
+    private String mDate;
 
 //    @NonNull
 //    @ColumnInfo(name = "status")
 //    private String mStatus;
 
-    public Date(@NonNull List<String> date) {
-        this.mDate.addAll(date);
+    public Date(@NonNull String date) {
+        this.mDate = date;
 //        this.mStatus = status;
     }
 
-    void setMDate(ArrayList<String> mDate) {
-        this.mDate = mDate;
-    }
+    public String getDate() { return mDate; }
 
-    public ArrayList<String> getMDate() { return this.mDate; }
-
-    void setId(int id) { this.id = id; }
-
-    public int getId() { return this.id; }
-
+//    public void setDate(ArrayList<String> date) {
+//        this.mDate = date;    }
 //    public String getStatus() {return this.mStatus;}
 }

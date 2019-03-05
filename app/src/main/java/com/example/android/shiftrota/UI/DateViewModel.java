@@ -7,7 +7,9 @@ import android.support.annotation.NonNull;
 
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DateRepository;
+import com.example.android.shiftrota.data.DatesGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DateViewModel extends AndroidViewModel {
@@ -16,10 +18,16 @@ public class DateViewModel extends AndroidViewModel {
 
     private LiveData<List<Date>> mAllDates;
 
+    private LiveData<List<String>> listLiveData;
+
+    private DatesGenerator datesGenerator;
+
     public DateViewModel(@NonNull Application application) {
         super(application);
         mDateRepository = new DateRepository(application);
         mAllDates = mDateRepository.getAllDates();
+        datesGenerator = new DatesGenerator(application);
+        listLiveData = DatesGenerator.getDays();
     }
 
     public LiveData<List<Date>> getAllDates() { return mAllDates; }

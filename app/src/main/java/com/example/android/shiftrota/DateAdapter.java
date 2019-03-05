@@ -1,25 +1,23 @@
 package com.example.android.shiftrota;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.shiftrota.data.Date;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
     private List<Date> mDates;
     private final LayoutInflater mInflater;
+    Context context;
 
 
 //    DateAdapter(Context context, List<String> dates) {
@@ -27,7 +25,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 //        this.dates = dates;
 //    }
 
-    DateAdapter(Context context) { mInflater = LayoutInflater.from(context); }
+    DateAdapter(Context context) {
+        mInflater = LayoutInflater.from(context);
+        this.context = context;
+    }
 
     @NonNull
     @Override
@@ -41,10 +42,18 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
         if (mDates != null) {
             Date current = mDates.get(position);
-            holder.textView.setText(current.getId());
+            holder.textView.setText(current.getDate());
         } else {
             holder.textView.setText(com.example.android.shiftrota.R.string.no_data);
         }
+
+        holder.textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context,
+                        "You clicked " + ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
+            }
+        });
 //        holder.textView.setText(dates.get(position));
 //        SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
 //        Calendar rightNow = Calendar.getInstance();

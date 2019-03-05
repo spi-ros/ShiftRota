@@ -2,6 +2,9 @@ package com.example.android.shiftrota.data;
 
 
 
+import android.app.Application;
+import android.arch.lifecycle.LiveData;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -11,14 +14,16 @@ import java.util.Locale;
 
 public class DatesGenerator {
 
+    private static Calendar rightNow = Calendar.getInstance();
+
     private static SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
+    private static SimpleDateFormat format2 = new SimpleDateFormat("dd", Locale.ENGLISH);
+    private static String formatted2 = format2.format(rightNow.getTime());
+    private static int mein = Integer.parseInt(formatted2);
 
-    private static final List<String> daysIncrement = new ArrayList<String>() {{
+    public DatesGenerator(Application application) {}
 
-        Calendar rightNow = Calendar.getInstance();
-        SimpleDateFormat format2 = new SimpleDateFormat("dd", Locale.ENGLISH);
-        String formatted2 = format2.format(rightNow.getTime());
-        int mein = Integer.parseInt(formatted2);
+    private final static List<String> daysIncrement = new ArrayList<String>() {{
 
         /* Total amount of days, of the current month. */
         int test = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -30,12 +35,7 @@ public class DatesGenerator {
         }
     }};
 
-    private static final List<String> daysDecrement = new ArrayList<String>() {{
-
-        Calendar rightNow = Calendar.getInstance();
-        SimpleDateFormat format2 = new SimpleDateFormat("dd", Locale.ENGLISH);
-        String formatted2 = format2.format(rightNow.getTime());
-        int mein = Integer.parseInt(formatted2);
+    private final static List<String> daysDecrement = new ArrayList<String>() {{
 
         for (int i=mein; i>1; i--) {
             rightNow.add(Calendar.DATE, -1);
@@ -44,9 +44,8 @@ public class DatesGenerator {
         }
     }};
 
-    private static final List<String> days = new ArrayList<String>() {{
+    private final static List<String> days = new ArrayList<String>() {{
 
-        Calendar rightNow = Calendar.getInstance();
         String formatted = format1.format(rightNow.getTime());
         add(formatted);
         addAll(daysIncrement);
