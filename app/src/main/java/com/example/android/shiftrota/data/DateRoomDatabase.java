@@ -58,11 +58,11 @@ public abstract class DateRoomDatabase extends RoomDatabase {
             // Not needed if you only populate on creation.
 //            mDao.deleteAll();
 
-            Date date = new Date("Klein");
-            mDao.insert(date);
-
-            Date date1 = new Date("Mein");
-            mDao.insert(date1);
+//            Date date = new Date("Klein");
+//            mDao.insert(date);
+//
+//            Date date1 = new Date("Mein");
+//            mDao.insert(date1);
 //            word = new Word("World");
 //            mDao.insert(word);
 //            DatesGenerator.getDays();

@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="klein">#1DE9B6</color>
     <color name="cellColor">#90CAF9</color>
+    <color name="today_color">#E0F2F1</color>
 </resources>

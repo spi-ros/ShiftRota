@@ -30,25 +30,15 @@ public class MainActivity extends AppCompatActivity {
         mDateViewModel.getAllDates().observe(this, new Observer<List<Date>>() {
             @Override
             public void onChanged(@Nullable List<Date> dates) {
-                dateAdapter.setDates(dates);
+//                dateAdapter.setDates(dates);
             }
         });
 
         int numberOfColumns = 7;
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
-        dateAdapter = new DateAdapter(this);
+        dateAdapter = new DateAdapter(this, DatesGenerator.getDays());
 
         recyclerView.setAdapter(dateAdapter);
-
-//        recyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                Toast.makeText(getApplicationContext(),
-//                        "You clicked " + ((TextView) view).getText().toString(), Toast.LENGTH_SHORT).show();
-//
-//                ((TextView) view).setTextColor(Color.BLUE);
-//            }
-//        });
     }
 }

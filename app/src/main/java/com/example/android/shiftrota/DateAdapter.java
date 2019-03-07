@@ -1,7 +1,11 @@
 package com.example.android.shiftrota;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,13 +15,20 @@ import android.widget.Toast;
 
 import com.example.android.shiftrota.data.Date;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
-    private List<Date> mDates;
+    private List<String> mDates;
     private final LayoutInflater mInflater;
     Context context;
+
+    SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
+    Calendar rightNow = Calendar.getInstance();
+    String formatted = format1.format(rightNow.getTime());
 
 
 //    DateAdapter(Context context, List<String> dates) {
@@ -25,8 +36,9 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 //        this.dates = dates;
 //    }
 
-    DateAdapter(Context context) {
+    DateAdapter(Context context, List<String> dates) {
         mInflater = LayoutInflater.from(context);
+        this.mDates = dates;
         this.context = context;
     }
 
@@ -41,33 +53,74 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final DateAdapter.ViewHolder holder, final int position) {
 
         if (mDates != null) {
-            Date current = mDates.get(position);
-            holder.textView.setText(current.getDate());
+//            Date current = mDates.get(position);
+            holder.textView.setText(mDates.get(position));
+            String testString = holder.textView.getText().toString();
+
+            if (testString.equals(formatted)) {
+
+//                holder.textView.setTextColor(Color.parseColor("#E0F2F1"));
+                holder.textView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
+            }
+
         } else {
             holder.textView.setText(com.example.android.shiftrota.R.string.no_data);
         }
 
         holder.textView.setOnClickListener(new View.OnClickListener() {
+            int counter = 0;
             @Override
             public void onClick(View v) {
+
+
+                    if (counter == 0) {
+                        v.setBackgroundColor(Color.GREEN);
+                        counter++;
+                    }
+                    else if (counter == 1) {
+                        v.setBackgroundColor(Color.RED);
+                        counter++;
+                    }
+                    else {
+                        v.setBackgroundColor(ContextCompat.getColor(context, R.color.cellColor));
+                        counter = 0;
+                    }
+//                    switch (counter) {
+//
+//                        case 0:
+//                            v.setBackgroundColor(ContextCompat.getColor(context, R.color.cellColor));
+//                            counter++;
+//                            break;
+//                        case 1:
+//                            v.setBackgroundColor(Color.GREEN);
+//                            counter++;
+//                            break;
+//                        case 2:
+//                            v.setBackgroundColor(Color.RED);
+//                            counter++;
+//                            break;
+//                    }
+
+
+//                if (counter[0] == 0) {
+//                    v.setBackgroundColor(Color.GREEN);
+//                } else if (counter[0] == 1) {
+//                    v.setBackgroundColor(Color.RED);
+//                } else {
+//                    v.setBackgroundColor(ContextCompat.getColor(context, R.color.cellColor));
+//                }
+//                counter[0]++;
                 Toast.makeText(context,
                         "You clicked " + ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
 //        holder.textView.setText(dates.get(position));
-//        SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
-//        Calendar rightNow = Calendar.getInstance();
-//        String formatted = format1.format(rightNow.getTime());
-//        String testString = holder.textView.getText().toString();
-//        if (testString.equals(formatted)) {
-//            holder.textView.setTextColor(Color.RED);
-//        }
     }
 
-    void setDates(List<Date> dates){
-        mDates = dates;
-        notifyDataSetChanged();
-    }
+//    void setDates(List<Date> dates){
+//        mDates = dates;
+//        notifyDataSetChanged();
+//    }
 
     @Override
     public int getItemCount() {
