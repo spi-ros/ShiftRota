@@ -27,8 +27,8 @@ public class DateRepository {
     }
 
     /*This should get called from a non-UI thread or the app will crash.
-    * Room ensures that we don't do any long running operations on the main thread,
-    * blocking the UI.*/
+     * Room ensures that we don't do any long running operations on the main thread,
+     * blocking the UI.*/
 
     public void insert(Date date) {
         new insertAsyncTask(mDateDao).execute(date);

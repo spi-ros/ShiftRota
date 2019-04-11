@@ -2,15 +2,12 @@ package com.example.android.shiftrota.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.List;
 
-
-
-@Entity(tableName = "date_table")
+@Entity(tableName = "date_table", indices = @Index(value = {"date"}, unique = true))
 public class Date {
 
     @PrimaryKey(autoGenerate = true)
@@ -20,18 +17,24 @@ public class Date {
     @ColumnInfo(name = "date")
     private String mDate;
 
-//    @NonNull
-//    @ColumnInfo(name = "status")
-//    private String mStatus;
+    @ColumnInfo(name = "status")
+    private int mStatus;
 
-    public Date(@NonNull String date) {
+    public Date(@NonNull String date, int status) {
         this.mDate = date;
-//        this.mStatus = status;
+        this.mStatus = status;
     }
 
-    public String getDate() { return mDate; }
+    public String getDate() {
+        return mDate;
+    }
 
-//    public void setDate(ArrayList<String> date) {
-//        this.mDate = date;    }
-//    public String getStatus() {return this.mStatus;}
+    void setDate(String date) {
+        this.mDate = date;
+        this.mStatus = 0;
+    }
+
+    public int getStatus() {
+        return mStatus;
+    }
 }

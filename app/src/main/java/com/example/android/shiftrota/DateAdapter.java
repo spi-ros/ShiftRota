@@ -1,9 +1,7 @@
 package com.example.android.shiftrota;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
-import android.graphics.Color;
-import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.shiftrota.UI.DateViewModel;
 import com.example.android.shiftrota.data.Date;
 
 import java.text.SimpleDateFormat;
@@ -22,24 +21,16 @@ import java.util.Locale;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
-    private List<String> mDates;
     private final LayoutInflater mInflater;
-    Context context;
+    private List<Date> mDates;
+    private Context context;
+    private int testInt;
+    private DateViewModel mDateViewModel;
 
-    SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
-    Calendar rightNow = Calendar.getInstance();
-    String formatted = format1.format(rightNow.getTime());
-
-
-//    DateAdapter(Context context, List<String> dates) {
-//        this.context = context;
-//        this.dates = dates;
-//    }
-
-    DateAdapter(Context context, List<String> dates) {
+    DateAdapter(Context context) {
         mInflater = LayoutInflater.from(context);
-        this.mDates = dates;
         this.context = context;
+        mDateViewModel = ViewModelProviders.of((MainActivity) context).get(DateViewModel.class);
     }
 
     @NonNull
@@ -53,13 +44,40 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final DateAdapter.ViewHolder holder, final int position) {
 
         if (mDates != null) {
-//            Date current = mDates.get(position);
-            holder.textView.setText(mDates.get(position));
+            Date current = mDates.get(position);
+
+            testInt = current.getStatus();
+            switch (testInt) {
+                case 0:
+                    holder.textView.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.cellColor));
+                    break;
+                case 1:
+                    holder.textView.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.will_work));
+                    break;
+                case 2:
+                    holder.textView.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.have_worked));
+                    break;
+                case 3:
+                    holder.textView.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.canceled));
+                    break;
+                case 4:
+                    holder.textView.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.holiday));
+                    break;
+            }
+
+            holder.textView.setText(current.getDate());
+
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
+            Calendar rightNow = Calendar.getInstance();
+            String formatted = dateFormat.format(rightNow.getTime());
             String testString = holder.textView.getText().toString();
 
             if (testString.equals(formatted)) {
-
-//                holder.textView.setTextColor(Color.parseColor("#E0F2F1"));
                 holder.textView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
             }
 
@@ -68,59 +86,53 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
         }
 
         holder.textView.setOnClickListener(new View.OnClickListener() {
-            int counter = 0;
+            int counter = testInt;
+
             @Override
             public void onClick(View v) {
 
-
-                    if (counter == 0) {
-                        v.setBackgroundColor(Color.GREEN);
-                        counter++;
-                    }
-                    else if (counter == 1) {
-                        v.setBackgroundColor(Color.RED);
-                        counter++;
-                    }
-                    else {
-                        v.setBackgroundColor(ContextCompat.getColor(context, R.color.cellColor));
-                        counter = 0;
-                    }
-//                    switch (counter) {
-//
-//                        case 0:
-//                            v.setBackgroundColor(ContextCompat.getColor(context, R.color.cellColor));
-//                            counter++;
-//                            break;
-//                        case 1:
-//                            v.setBackgroundColor(Color.GREEN);
-//                            counter++;
-//                            break;
-//                        case 2:
-//                            v.setBackgroundColor(Color.RED);
-//                            counter++;
-//                            break;
-//                    }
-
-
-//                if (counter[0] == 0) {
-//                    v.setBackgroundColor(Color.GREEN);
-//                } else if (counter[0] == 1) {
-//                    v.setBackgroundColor(Color.RED);
-//                } else {
-//                    v.setBackgroundColor(ContextCompat.getColor(context, R.color.cellColor));
-//                }
-//                counter[0]++;
-                Toast.makeText(context,
-                        "You clicked " + ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
+                String string = holder.textView.getText().toString();
+                if (counter == 0) {
+                    v.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.will_work));
+                    Date date = new Date(string, 1);
+                    mDateViewModel.insert(date);
+                    counter++;
+                } else if (counter == 1) {
+                    v.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.have_worked));
+                    Date date = new Date(string, 2);
+                    mDateViewModel.insert(date);
+                    counter++;
+                } else if (counter == 2) {
+                    v.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.canceled));
+                    Date date = new Date(string, 3);
+                    mDateViewModel.insert(date);
+                    counter++;
+                } else if (counter == 3) {
+                    v.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.holiday));
+                    Date date = new Date(string, 4);
+                    mDateViewModel.insert(date);
+                    counter++;
+                } else {
+                    v.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.cellColor));
+                    Date date = new Date(string, 0);
+                    mDateViewModel.insert(date);
+                    counter = 0;
+                }
+                Toast.makeText(context.getApplicationContext(), "You clicked " +
+                        ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
-//        holder.textView.setText(dates.get(position));
     }
 
-//    void setDates(List<Date> dates){
-//        mDates = dates;
-//        notifyDataSetChanged();
-//    }
+    void setDates(List<Date> dates) {
+        mDates = dates;
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
@@ -138,66 +150,4 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             textView = itemView.findViewById(R.id.item_text_view);
         }
     }
-
-//    private List<String> dates;
-//    private Context context;
-//    private ItemClickListener mClickListener;
-//
-//    // data is passed into the constructor
-//    DateAdapter(Context context, List<String> dates) {
-//        this.context = context;
-//        this.dates = dates;
-//    }
-//
-//    // inflates the cell layout from xml when needed
-//    @Override
-//    @NonNull
-//    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-//        View v = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false);
-//        return new ViewHolder(v);
-//    }
-//
-//    // binds the data to the TextView in each cell
-//    @Override
-//    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-//        holder.textView.setText(dates.get(position));
-//    }
-//
-//    // total number of cells
-//    @Override
-//    public int getItemCount() {
-//        return dates.size();
-//    }
-//
-//
-//    // stores and recycles views as they are scrolled off screen
-//    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-//        TextView textView;
-//
-//        ViewHolder(View itemView) {
-//            super(itemView);
-//            textView = itemView.findViewById(R.id.item_text_view);
-//            itemView.setOnClickListener(this);
-//        }
-//
-//        @Override
-//        public void onClick(View view) {
-//            if (mClickListener != null) mClickListener.onItemClick(view, getAdapterPosition());
-//        }
-//    }
-//
-//    // convenience method for getting data at click position
-//    String getItem(int id) {
-//        return dates.get(id);
-//    }
-//
-//    // allows clicks events to be caught
-//    void setClickListener(ItemClickListener itemClickListener) {
-//        this.mClickListener = itemClickListener;
-//    }
-//
-//    // parent activity will implement this method to respond to click events
-//    public interface ItemClickListener {
-//        void onItemClick(View view, int position);
-//    }
 }

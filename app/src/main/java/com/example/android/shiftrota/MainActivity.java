@@ -8,12 +8,11 @@ import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import com.example.android.shiftrota.DateAdapter;
 import com.example.android.shiftrota.UI.DateViewModel;
 import com.example.android.shiftrota.data.Date;
-import com.example.android.shiftrota.data.DatesGenerator;
 
 import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -24,20 +23,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        final RecyclerView recyclerView = findViewById(R.id.recycler_view);
 
         DateViewModel mDateViewModel = ViewModelProviders.of(this).get(DateViewModel.class);
         mDateViewModel.getAllDates().observe(this, new Observer<List<Date>>() {
             @Override
             public void onChanged(@Nullable List<Date> dates) {
-//                dateAdapter.setDates(dates);
+                dateAdapter.setDates(dates);
             }
         });
 
         int numberOfColumns = 7;
         recyclerView.setLayoutManager(new GridLayoutManager(this, numberOfColumns));
 
-        dateAdapter = new DateAdapter(this, DatesGenerator.getDays());
+        dateAdapter = new DateAdapter(this);
 
         recyclerView.setAdapter(dateAdapter);
     }

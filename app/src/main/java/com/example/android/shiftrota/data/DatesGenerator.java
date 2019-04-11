@@ -2,7 +2,6 @@ package com.example.android.shiftrota.data;
 
 
 
-import android.app.Application;
 import android.arch.lifecycle.LiveData;
 
 import java.text.SimpleDateFormat;
@@ -32,6 +31,7 @@ public class DatesGenerator {
             rightNow.add(Calendar.DATE, 1);
             String formatted = format1.format(rightNow.getTime());
             add(formatted);
+
         }
     }};
 
