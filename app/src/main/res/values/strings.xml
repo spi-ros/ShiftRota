@@ -2,4 +2,11 @@
     <string name="app_name">Shift Rota</string>
     <string name="klein">KLEIN</string>
     <string name="no_data">No Data</string>
+    <string name="hours">hours</string>
+
+    <!-- Strings for hours drop-down Spinner -->
+    <string name="will_work">Will work</string>
+    <string name="have_worked">Have worked</string>
+    <string name="holiday">Holiday</string>
+    <string name="cancel">Cancel</string>
 </resources>

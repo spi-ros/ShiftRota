@@ -2,6 +2,8 @@ package com.example.android.shiftrota;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.android.shiftrota.UI.DateViewModel;
 import com.example.android.shiftrota.data.Date;
+import com.example.android.shiftrota.data.DatesGenerator;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,12 +28,16 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     private List<Date> mDates;
     private Context context;
     private int testInt;
-    private DateViewModel mDateViewModel;
+    private AdapterCallback mAdapterCallback;
 
     DateAdapter(Context context) {
+        try {
+            this.mAdapterCallback = ((AdapterCallback) context);
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement AdapterCallback.");
+        }
         mInflater = LayoutInflater.from(context);
         this.context = context;
-        mDateViewModel = ViewModelProviders.of((MainActivity) context).get(DateViewModel.class);
     }
 
     @NonNull
@@ -44,89 +51,68 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull final DateAdapter.ViewHolder holder, final int position) {
 
         if (mDates != null) {
+
             Date current = mDates.get(position);
 
             testInt = current.getStatus();
             switch (testInt) {
                 case 0:
-                    holder.textView.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.cellColor));
+                    holder.textViewA.setBackgroundColor(ContextCompat.
+                            getColor(context, R.color.cell_color));
                     break;
                 case 1:
-                    holder.textView.setBackgroundColor(ContextCompat.
+                    holder.textViewA.setBackgroundColor(ContextCompat.
                             getColor(context, R.color.will_work));
                     break;
                 case 2:
-                    holder.textView.setBackgroundColor(ContextCompat.
+                    holder.textViewA.setBackgroundColor(ContextCompat.
                             getColor(context, R.color.have_worked));
                     break;
                 case 3:
-                    holder.textView.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.canceled));
-                    break;
-                case 4:
-                    holder.textView.setBackgroundColor(ContextCompat.
+                    holder.textViewA.setBackgroundColor(ContextCompat.
                             getColor(context, R.color.holiday));
                     break;
             }
 
-            holder.textView.setText(current.getDate());
+            holder.textViewA.setText(DatesGenerator.midTwo(current.getDate()));
+//            String monthDayYear = current.getMonthDayYear();
+//            holder.textViewB.setText(monthDayYear);
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd", Locale.ENGLISH);
             Calendar rightNow = Calendar.getInstance();
             String formatted = dateFormat.format(rightNow.getTime());
-            String testString = holder.textView.getText().toString();
+            String testString = holder.textViewA.getText().toString();
 
             if (testString.equals(formatted)) {
-                holder.textView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
+                holder.textViewA.setTextColor(ContextCompat.getColor(context, R.color.today_color));
             }
 
         } else {
-            holder.textView.setText(com.example.android.shiftrota.R.string.no_data);
+            holder.textViewA.setText(com.example.android.shiftrota.R.string.no_data);
         }
 
-        holder.textView.setOnClickListener(new View.OnClickListener() {
-            int counter = testInt;
+//        holder.myView.setVisibility(View.INVISIBLE);
+
+        holder.textViewA.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-                String string = holder.textView.getText().toString();
-                if (counter == 0) {
-                    v.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.will_work));
-                    Date date = new Date(string, 1);
-                    mDateViewModel.insert(date);
-                    counter++;
-                } else if (counter == 1) {
-                    v.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.have_worked));
-                    Date date = new Date(string, 2);
-                    mDateViewModel.insert(date);
-                    counter++;
-                } else if (counter == 2) {
-                    v.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.canceled));
-                    Date date = new Date(string, 3);
-                    mDateViewModel.insert(date);
-                    counter++;
-                } else if (counter == 3) {
-                    v.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.holiday));
-                    Date date = new Date(string, 4);
-                    mDateViewModel.insert(date);
-                    counter++;
-                } else {
-                    v.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.cellColor));
-                    Date date = new Date(string, 0);
-                    mDateViewModel.insert(date);
-                    counter = 0;
-                }
+//                v.setBackgroundColor(holder.itemView.getResources().getColor(R.color.cellColor));
+
+                Date current = mDates.get(holder.getAdapterPosition());
+
+                String dataString = current.getDate();
+                mAdapterCallback.onMethodCallback(dataString);
+
                 Toast.makeText(context.getApplicationContext(), "You clicked " +
                         ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    public interface AdapterCallback {
+        void onMethodCallback(String yourValue1);
     }
 
     void setDates(List<Date> dates) {
@@ -143,11 +129,19 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textView;
+        TextView textViewA;
+//        LinearLayout myView;
+//        LinearLayout linearLayout;
+//        TextView textViewB;
+
 
         ViewHolder(View itemView) {
             super(itemView);
-            textView = itemView.findViewById(R.id.item_text_view);
+            textViewA = itemView.findViewById(R.id.item_text_view_a);
+            // previously invisible view
+//            myView = itemView.findViewById(R.id.my_view);
+//            linearLayout = itemView.findViewById(R.id.hidden_layout);
+//            textViewB = itemView.findViewById(R.id.item_text_view_b);
         }
     }
 }

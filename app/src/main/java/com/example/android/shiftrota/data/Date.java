@@ -10,9 +10,12 @@ import android.support.annotation.NonNull;
 @Entity(tableName = "date_table", indices = @Index(value = {"date"}, unique = true))
 public class Date {
 
-    @PrimaryKey(autoGenerate = true)
-    int id;
 
+//    @NonNull
+//    @ColumnInfo(name = "monthDayYear")
+//    private String monthDayYear;
+
+    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "date")
     private String mDate;
@@ -20,11 +23,21 @@ public class Date {
     @ColumnInfo(name = "status")
     private int mStatus;
 
-    public Date(@NonNull String date, int status) {
+    @ColumnInfo (name = "hours")
+    private String mHours;
+
+    @ColumnInfo (name = "notes")
+    private String mNotes;
+
+    public Date(@NonNull String date, int status, String hours, String notes) {
         this.mDate = date;
         this.mStatus = status;
+        this.mHours = hours;
+        this.mNotes = notes;
+//        this.monthDayYear = monthDayYear;
     }
 
+    @NonNull
     public String getDate() {
         return mDate;
     }
@@ -37,4 +50,16 @@ public class Date {
     public int getStatus() {
         return mStatus;
     }
+
+    public String getHours() { return  mHours;}
+
+    String getNotes() {
+        return mNotes;
+    }
+
+
+//    @NonNull
+//    public String getMonthDayYear() {
+//        return monthDayYear;
+//    }
 }

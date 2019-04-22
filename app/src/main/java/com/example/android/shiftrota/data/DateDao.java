@@ -22,4 +22,7 @@ public interface DateDao {
 
     @Query("SELECT * FROM date_table ORDER BY date ASC")
     LiveData<List<Date>> getAllDates();
+
+    @Query("SELECT * FROM date_table WHERE date BETWEEN :search AND :search1")
+    LiveData<List<Date>> loadByMonth(String search, String search1);
 }

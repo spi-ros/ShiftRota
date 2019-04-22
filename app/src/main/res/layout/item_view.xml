@@ -1,15 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="2dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="50dp"
-    android:layout_height="50dp">
+    android:layout_height="50dp"
+    android:padding="2dp">
 
     <TextView
-        android:id="@+id/item_text_view"
+        android:id="@+id/item_text_view_a"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:background="@color/cellColor"/>
+        android:layout_centerInParent="true"
+        android:gravity="center" />
 
+    <!--<android.support.v7.widget.CardView-->
+        <!--android:id="@+id/my_view"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_margin="8dp"-->
+        <!--app:cardBackgroundColor="#FFF9C4"-->
+        <!--app:cardCornerRadius="4dp"-->
+        <!--app:cardElevation="6dp">-->
+
+
+        <!--<LinearLayout-->
+            <!--android:id="@+id/my_view"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:orientation="vertical"-->
+            <!--android:background="#FFF9C4">-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/item_text_view_b"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:text="Alfa" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/item_text_view_c"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:text="Bhta" />-->
+
+            <!--<TextView-->
+                <!--android:id="@+id/item_text_view_d"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:gravity="center"-->
+                <!--android:text="gama" />-->
+
+        <!--</LinearLayout>-->
+    <!--</android.support.v7.widget.CardView>-->
+
+
+    <!--<LinearLayout-->
+    <!--android:id="@+id/hidden_layout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_below="@id/item_text_view_a"-->
+    <!--android:orientation="vertical">-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/hours_edit_text"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:hint="@string/hours"-->
+    <!--android:inputType="textAutoComplete"-->
+    <!--android:textSize="18sp"-->
+    <!--tools:ignore="Autofill" />-->
+
+    <!--<Spinner-->
+    <!--android:id="@+id/spinner_status"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:spinnerMode="dropdown"-->
+    <!--tools:ignore="RtlSymmetry" />-->
+
+    <!--</LinearLayout>-->
 
 </RelativeLayout>
