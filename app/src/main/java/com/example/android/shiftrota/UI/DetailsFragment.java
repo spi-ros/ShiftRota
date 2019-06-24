@@ -1,6 +1,6 @@
 package com.example.android.shiftrota.UI;
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 public class DetailsFragment extends Fragment {
 

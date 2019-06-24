@@ -1,8 +1,9 @@
 package com.example.android.shiftrota.data;
 
 import android.app.Application;
-import android.arch.lifecycle.LiveData;
+import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,145 +13,150 @@ import java.util.Locale;
 public class DateRepository {
 
     private DateDao mDateDao;
-    private LiveData<List<Date>> mAllDates, nAllDates;
-
-    private SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yy", Locale.ENGLISH);
-    //        SimpleDateFormat format3 = new SimpleDateFormat("MM", Locale.ENGLISH);
-    private Calendar rightNow = Calendar.getInstance();
-    private String stringFormat = format1.format(rightNow.getTime());
-    private String search;
-    private String search1;
-    private int year = Integer.parseInt(DatesGenerator.lastTwo(stringFormat));
-    private String month = DatesGenerator.firstTwo(stringFormat);
+    private LiveData<List<Date>> mAllDates;
 
     /*constructor that gets a handle to the database and initializes the member variables.*/
 
     public DateRepository(Application application) {
         DateRoomDatabase db = DateRoomDatabase.getDatabase(application);
         mDateDao = db.dateDao();
+    }
+
+    public LiveData<List<Date>> getMonth(int month) {
+        Log.d("DateRepository", "month = " + month);
+
+        Calendar rightNow = Calendar.getInstance();
+        SimpleDateFormat format11 = new SimpleDateFormat("MM/dd/yy", Locale.ENGLISH);
+        String stringFormats = format11.format(rightNow.getTime());
+        int years = Integer.parseInt(DatesGenerator.lastTwo(stringFormats));
 
         switch (month) {
-            case "01": {
-                rightNow.set(year, Calendar.JANUARY, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightNow.set(year, Calendar.JANUARY, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 1: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.JANUARY, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.JANUARY, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "02": {
-                rightNow.set(year, Calendar.FEBRUARY, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightNow.set(year, Calendar.FEBRUARY, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 2: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.FEBRUARY, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.FEBRUARY, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "03": {
-                rightNow.set(year, Calendar.MARCH, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightNow.set(year, Calendar.MARCH, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 3: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.MARCH, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.MARCH, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "04": {
-                rightNow.set(year, Calendar.APRIL, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightNow.set(year, Calendar.APRIL, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 4: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.APRIL, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.APRIL, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "05": {
-                rightNow.set(year, Calendar.MAY, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
-                rightNow.set(year, Calendar.MAY, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 5: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.MAY, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.MAY, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "06": {
-                rightNow.set(year, Calendar.JUNE, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
-                rightNow.set(year, Calendar.JUNE, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 6: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.JUNE, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.JUNE, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "07": {
-                rightNow.set(year, Calendar.JULY, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
-                rightNow.set(year, Calendar.JULY, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 7: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.JULY, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.JULY, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "08": {
-                rightNow.set(year, Calendar.AUGUST, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
-                rightNow.set(year, Calendar.AUGUST, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 8: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.AUGUST, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.AUGUST, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "09": {
-                rightNow.set(year, Calendar.SEPTEMBER, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
-                rightNow.set(year, Calendar.SEPTEMBER, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 9: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.SEPTEMBER, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "10": {
-                rightNow.set(year, Calendar.OCTOBER, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
-                rightNow.set(year, Calendar.OCTOBER, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 10: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.OCTOBER, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.OCTOBER, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "11": {
-                rightNow.set(year, Calendar.NOVEMBER, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
-                rightNow.set(year, Calendar.NOVEMBER, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 11: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.NOVEMBER, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.NOVEMBER, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
-            case "12": {
-                rightNow.set(year, Calendar.DECEMBER, 1);
-                search = format1.format(rightNow.getTime());
-                int totalOfDaysInMonth = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH) + 1;
-                rightNow.set(year, Calendar.DECEMBER, totalOfDaysInMonth);
-                search1 = format1.format(rightNow.getTime());
+            case 12: {
+                Calendar rightMeow = Calendar.getInstance();
+                rightMeow.set(years, Calendar.DECEMBER, 1);
+                String search = format11.format(rightMeow.getTime());
+                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
+                rightMeow.set(years, Calendar.DECEMBER, totalOfDaysInMonth);
+                String search1 = format11.format(rightMeow.getTime());
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
         }
+        return mAllDates;
     }
 
     /* Room executes all queries on a separate thread.
      Observed LiveData will notify the observer when the data has changed.*/
-
-    public LiveData<List<Date>> loadByMonth() {
-        return mAllDates;
-    }
-
-    public LiveData<List<Date>> loadNextMonth() {
-        return nAllDates;
-    }
 
     /*This should get called from a non-UI thread or the app will crash.
      * Room ensures that we don't do any long running operations on the main thread,

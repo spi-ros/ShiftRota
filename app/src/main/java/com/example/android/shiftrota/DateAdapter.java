@@ -1,19 +1,24 @@
 package com.example.android.shiftrota;
 
-import android.arch.lifecycle.ViewModelProviders;
+import android.app.Activity;
 import android.content.Context;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.android.shiftrota.UI.DateViewModel;
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
 
@@ -27,10 +32,12 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     private final LayoutInflater mInflater;
     private List<Date> mDates;
     private Context context;
-    private int testInt;
     private AdapterCallback mAdapterCallback;
+    private Activity activity;
 
-    DateAdapter(Context context) {
+    
+
+    DateAdapter(Context context, Activity activity) {
         try {
             this.mAdapterCallback = ((AdapterCallback) context);
         } catch (ClassCastException e) {
@@ -38,6 +45,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
         }
         mInflater = LayoutInflater.from(context);
         this.context = context;
+        this.activity = activity;
     }
 
     @NonNull
@@ -54,29 +62,23 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
             Date current = mDates.get(position);
 
-            testInt = current.getStatus();
+            int testInt = current.getStatus();
             switch (testInt) {
                 case 0:
-                    holder.textViewA.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.cell_color));
+                    holder.textViewA.setBackgroundResource(R.drawable.cell_shape_unchecked);
                     break;
                 case 1:
-                    holder.textViewA.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.will_work));
+                    holder.textViewA.setBackgroundResource(R.drawable.cell_shape_will_work);
                     break;
                 case 2:
-                    holder.textViewA.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.have_worked));
+                    holder.textViewA.setBackgroundResource(R.drawable.cell_shape_have_worked);
                     break;
                 case 3:
-                    holder.textViewA.setBackgroundColor(ContextCompat.
-                            getColor(context, R.color.holiday));
+                    holder.textViewA.setBackgroundResource(R.drawable.cell_shape_holiday);
                     break;
             }
 
             holder.textViewA.setText(DatesGenerator.midTwo(current.getDate()));
-//            String monthDayYear = current.getMonthDayYear();
-//            holder.textViewB.setText(monthDayYear);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd", Locale.ENGLISH);
             Calendar rightNow = Calendar.getInstance();
@@ -91,28 +93,102 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             holder.textViewA.setText(com.example.android.shiftrota.R.string.no_data);
         }
 
-//        holder.myView.setVisibility(View.INVISIBLE);
+        final ActionMode[] currentActionMode = new ActionMode[1];
+
+        ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                MenuInflater inflater = mode.getMenuInflater();
+                inflater.inflate(R.menu.action_text_view, menu);
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_clear:
+                        return true;
+                    case R.id.menu_will_work:
+                        return true;
+                    case R.id.menu_have_worked:
+                        return true;
+                    case R.id.menu_holiday:
+                        return true;
+                    case R.id.menu_select_hours:
+                        return true;
+                    case R.id.menu_notes:
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                currentActionMode[0] = null;
+            }
+        };
+
+        holder.textViewA.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (currentActionMode[0] != null) {
+                    return false;
+                }
+                currentActionMode[0] = activity.startActionMode(actionModeCallback);
+                v.setSelected(true);
+                return true;
+            }
+        });
+
+        final boolean[] isPressed = {false};
 
         holder.textViewA.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
 
-//                v.setBackgroundColor(holder.itemView.getResources().getColor(R.color.cellColor));
+                if (!isPressed[0]) {
+                    v.setBackgroundColor(Color.RED);
+                } else {
+                    Date current = mDates.get(holder.getAdapterPosition());
+
+                    int testInt = current.getStatus();
+                    switch (testInt) {
+                        case 0:
+                            v.setBackgroundResource(R.drawable.cell_shape_unchecked);
+                            break;
+                        case 1:
+                            v.setBackgroundResource(R.drawable.cell_shape_will_work);
+                            break;
+                        case 2:
+                            v.setBackgroundResource(R.drawable.cell_shape_have_worked);
+                            break;
+                        case 3:
+                            v.setBackgroundResource(R.drawable.cell_shape_holiday);
+                            break;
+                    }
+                }
+                isPressed[0] = !isPressed[0];
 
                 Date current = mDates.get(holder.getAdapterPosition());
 
-                String dataString = current.getDate();
-                mAdapterCallback.onMethodCallback(dataString);
+                String dateString = current.getDate();
+                String hoursString = current.getHours();
+                String notesString = current.getNotes();
+                int statusInt = current.getStatus();
+                mAdapterCallback.onMethodCallback(dateString, hoursString, notesString, statusInt);
+                Log.d("KLEIN", dateString);
 
                 Toast.makeText(context.getApplicationContext(), "You clicked " +
                         ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    public interface AdapterCallback {
-        void onMethodCallback(String yourValue1);
     }
 
     void setDates(List<Date> dates) {
@@ -125,6 +201,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
         if (mDates != null)
             return mDates.size();
         else return 0;
+    }
+
+    public interface AdapterCallback {
+        void onMethodCallback(String yourValue1, String yourValue2, String yourValue3, int statusInt);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

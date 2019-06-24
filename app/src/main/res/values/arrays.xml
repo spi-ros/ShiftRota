@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="array_hours_options">
+        <item>@string/status</item>
         <item>@string/cancel</item>
         <item>@string/will_work</item>
         <item>@string/have_worked</item>

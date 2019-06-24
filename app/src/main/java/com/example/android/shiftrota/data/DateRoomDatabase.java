@@ -1,12 +1,12 @@
 package com.example.android.shiftrota.data;
 
-import android.arch.persistence.db.SupportSQLiteDatabase;
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.Room;
-import android.arch.persistence.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -62,7 +62,6 @@ public abstract class DateRoomDatabase extends RoomDatabase {
             // Not needed if you only populate on creation.
 //            mDao.deleteAll();
             if (mDao.getAnyWord().length < 1) {
-//                SimpleDateFormat format1 = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
                 SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yy", Locale.ENGLISH);
 
                 String stringFormat = format1.format(rightNow.getTime());

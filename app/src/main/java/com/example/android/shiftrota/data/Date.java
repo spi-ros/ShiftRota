@@ -1,19 +1,14 @@
 package com.example.android.shiftrota.data;
 
-import android.arch.persistence.room.ColumnInfo;
-import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Index;
-import android.arch.persistence.room.PrimaryKey;
-import android.support.annotation.NonNull;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+import androidx.annotation.NonNull;
 
 
 @Entity(tableName = "date_table", indices = @Index(value = {"date"}, unique = true))
 public class Date {
-
-
-//    @NonNull
-//    @ColumnInfo(name = "monthDayYear")
-//    private String monthDayYear;
 
     @PrimaryKey
     @NonNull
@@ -34,7 +29,6 @@ public class Date {
         this.mStatus = status;
         this.mHours = hours;
         this.mNotes = notes;
-//        this.monthDayYear = monthDayYear;
     }
 
     @NonNull
@@ -53,13 +47,7 @@ public class Date {
 
     public String getHours() { return  mHours;}
 
-    String getNotes() {
+    public String getNotes() {
         return mNotes;
     }
-
-
-//    @NonNull
-//    public String getMonthDayYear() {
-//        return monthDayYear;
-//    }
 }
