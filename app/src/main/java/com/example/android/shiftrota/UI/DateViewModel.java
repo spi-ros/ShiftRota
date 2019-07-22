@@ -16,8 +16,6 @@ public class DateViewModel extends AndroidViewModel {
 
     private DateRepository mDateRepository;
 
-    private LiveData<List<Date>> nAllDates;
-
     private MutableLiveData<Integer> searchByMonth = new MutableLiveData<>();
 
     private LiveData<List<Date>> anotherMonth =

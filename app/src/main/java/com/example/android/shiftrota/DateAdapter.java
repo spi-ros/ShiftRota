@@ -5,6 +5,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
+import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
@@ -34,10 +36,12 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     private Context context;
     private AdapterCallback mAdapterCallback;
     private Activity activity;
+    private int indexInt = -1;
+    private int tempPosition = -1;
+    private int saveInt;
 
-    
 
-    DateAdapter(Context context, Activity activity) {
+    DateAdapter(Context context, Activity activity, int saveInt) {
         try {
             this.mAdapterCallback = ((AdapterCallback) context);
         } catch (ClassCastException e) {
@@ -46,6 +50,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
         mInflater = LayoutInflater.from(context);
         this.context = context;
         this.activity = activity;
+        this.saveInt = saveInt;
     }
 
     @NonNull
@@ -134,61 +139,53 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             }
         };
 
-        holder.textViewA.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (currentActionMode[0] != null) {
-                    return false;
-                }
-                currentActionMode[0] = activity.startActionMode(actionModeCallback);
-                v.setSelected(true);
-                return true;
+        holder.textViewA.setOnLongClickListener(v -> {
+            if (currentActionMode[0] != null) {
+                return false;
             }
+            currentActionMode[0] = activity.startActionMode(actionModeCallback);
+            v.setSelected(true);
+            return true;
         });
 
-        final boolean[] isPressed = {false};
+        holder.textViewA.setOnClickListener(v -> {
 
-        holder.textViewA.setOnClickListener(new View.OnClickListener() {
+            tempPosition = indexInt;
+            indexInt = position;
+            notifyDataSetChanged();
 
-            @Override
-            public void onClick(View v) {
-
-                if (!isPressed[0]) {
-                    v.setBackgroundColor(Color.RED);
-                } else {
-                    Date current = mDates.get(holder.getAdapterPosition());
-
-                    int testInt = current.getStatus();
-                    switch (testInt) {
-                        case 0:
-                            v.setBackgroundResource(R.drawable.cell_shape_unchecked);
-                            break;
-                        case 1:
-                            v.setBackgroundResource(R.drawable.cell_shape_will_work);
-                            break;
-                        case 2:
-                            v.setBackgroundResource(R.drawable.cell_shape_have_worked);
-                            break;
-                        case 3:
-                            v.setBackgroundResource(R.drawable.cell_shape_holiday);
-                            break;
-                    }
-                }
-                isPressed[0] = !isPressed[0];
-
-                Date current = mDates.get(holder.getAdapterPosition());
-
-                String dateString = current.getDate();
-                String hoursString = current.getHours();
-                String notesString = current.getNotes();
-                int statusInt = current.getStatus();
-                mAdapterCallback.onMethodCallback(dateString, hoursString, notesString, statusInt);
-                Log.d("KLEIN", dateString);
-
-                Toast.makeText(context.getApplicationContext(), "You clicked " +
-                        ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
-            }
+            Date current = mDates.get(position);
+            String dateString = current.getDate();
+            String hoursString = current.getHours();
+            String notesString = current.getNotes();
+            int statusInt = current.getStatus();
+            mAdapterCallback.onMethodCallback(dateString, hoursString, notesString, statusInt);
+            Toast.makeText(context.getApplicationContext(), "You clicked " +
+                    ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
         });
+
+        if (indexInt == position && indexInt != tempPosition && saveInt == 0) {
+            holder.textViewA.setBackgroundColor(Color.RED);
+        } else {
+            Date current = mDates.get(holder.getAdapterPosition());
+
+            int testInt = current.getStatus();
+
+            switch (testInt) {
+                case 0:
+                    holder.textViewA.setBackgroundResource(R.drawable.cell_shape_unchecked);
+                    break;
+                case 1:
+                    holder.textViewA.setBackgroundResource(R.drawable.cell_shape_will_work);
+                    break;
+                case 2:
+                    holder.textViewA.setBackgroundResource(R.drawable.cell_shape_have_worked);
+                    break;
+                case 3:
+                    holder.textViewA.setBackgroundResource(R.drawable.cell_shape_holiday);
+                    break;
+            }
+        }
     }
 
     void setDates(List<Date> dates) {

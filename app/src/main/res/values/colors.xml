@@ -16,4 +16,5 @@
     <color name="hidden_layout_color">#FCF4D9</color>
     <color name="recycler_view_background">#EEEEEE</color>
     <color name="check_color">#ff1c1c</color>
+    <color name="check_color_dark">#450606</color>
 </resources>

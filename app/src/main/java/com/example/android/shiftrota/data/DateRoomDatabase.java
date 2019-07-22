@@ -73,7 +73,7 @@ public abstract class DateRoomDatabase extends RoomDatabase {
 
                     rightNow.add(Calendar.DATE, 0);
                     String formatted = format1.format(rightNow.getTime());
-                    Date date = new Date(formatted, 0, "0", null);
+                    Date date = new Date(formatted, 0, null, null);
                     mDao.insert(date);
 
                     int test = rightNow.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -81,7 +81,7 @@ public abstract class DateRoomDatabase extends RoomDatabase {
                     for (int j = 1; j < test; j++) {
                         rightNow.add(Calendar.DATE, 1);
                         String formatted2 = format1.format(rightNow.getTime());
-                        Date date1 = new Date(formatted2, 0, "0", null);
+                        Date date1 = new Date(formatted2, 0, null, null);
                         mDao.insert(date1);
                     }
                     rightNow.set(year, MY_MONTH++, MY_DAY);

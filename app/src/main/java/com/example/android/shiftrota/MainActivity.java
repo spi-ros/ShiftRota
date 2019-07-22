@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -15,12 +16,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
-import android.view.View;
 //import android.widget.AdapterView;
 //import android.widget.ArrayAdapter;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.GridLayout;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 //import android.widget.Spinner;
@@ -33,7 +35,6 @@ import com.example.android.shiftrota.data.DatesGenerator;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.Objects;
 
@@ -46,19 +47,19 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     DateAdapter dateAdapter;
     RelativeLayout hiddenLayout;
     TextView titleTextView, monthTextView;
-    MaterialButton cancelImageView, willWorkImageView,
-            haveWorkedImageView, holidayImageView;
+    MaterialButton cancelButton, willWorkButton,
+            haveWorkedButton, holidayButton;
     //    Spinner statusSpinner;
     TextInputEditText hoursEditText, notesEditText;
     //    Button  monthIncrementButton, monthDecrementButton;
     ImageView saveImageView, clearImageView;
-    int statusInt;
+    int statusInt, saveInt;
     int originalStatusInt;
     Date date;
     int klein = DatesGenerator.getMonth();
     DateViewModel mDateViewModel;
     private GestureDetectorCompat gestureDetector;
-    Calendar calendar;
+    String clear;
 
     public void onMethodCallback(String yourValue1, String yourValue2, String yourValue3, int gStatusInt) {
 //        DatesGenerator.layoutAnimation(hiddenLayout, true);
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         originalString2 = yourValue2;
         originalString3 = yourValue3;
 
-        if (originalString2.matches("0")) {
+        if (originalString2 == null) {
             Objects.requireNonNull(hoursEditText.getText()).clear();
         } else {
             hoursEditText.setText(originalString2);
@@ -100,15 +101,14 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         hiddenLayout = findViewById(R.id.hidden_linear_layout);
         titleTextView = findViewById(R.id.title_text_view);
         monthTextView = findViewById(R.id.month_text_view);
-        cancelImageView = findViewById(R.id.cancel_text_view);
-        willWorkImageView = findViewById(R.id.will_work_text_view);
-        haveWorkedImageView = findViewById(R.id.have_worked_text_view);
-        holidayImageView = findViewById(R.id.holiday_text_view);
+        cancelButton = findViewById(R.id.cancel_text_view);
+        willWorkButton = findViewById(R.id.will_work_text_view);
+        haveWorkedButton = findViewById(R.id.have_worked_text_view);
+        holidayButton = findViewById(R.id.holiday_text_view);
 //        statusSpinner = findViewById(R.id.status_spinner);
         hoursEditText = findViewById(R.id.hours_edit_text);
         notesEditText = findViewById(R.id.notes_edit_text);
         saveImageView = findViewById(R.id.save_image_view);
-        clearImageView = findViewById(R.id.clear_image_view);
 //        monthDecrementButton = findViewById(R.id.month_decrement);
 //        monthIncrementButton = findViewById(R.id.month_increment);
 
@@ -127,16 +127,16 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         int etsi = gridLayout.getSpanCount();
         Log.d("MainActivity", "span count" + etsi);
 
-        dateAdapter = new DateAdapter(this, this);
+        dateAdapter = new DateAdapter(this, this, saveInt);
         recyclerView.setAdapter(dateAdapter);
 
-        cancelImageView.setOnClickListener(view -> statusInt = 0);
+        cancelButton.setOnClickListener(view -> statusInt = 0);
 
-        willWorkImageView.setOnClickListener(view -> statusInt = 1);
+        willWorkButton.setOnClickListener(view -> statusInt = 1);
 
-        haveWorkedImageView.setOnClickListener(view -> statusInt = 2);
+        haveWorkedButton.setOnClickListener(view -> statusInt = 2);
 
-        holidayImageView.setOnClickListener(view -> statusInt = 3);
+        holidayButton.setOnClickListener(view -> statusInt = 3);
 
 //        monthDecrementButton.setOnClickListener(v -> {
 //            if (klein == 1) {
@@ -168,9 +168,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 Toast.makeText(MainActivity.this, getResources().
                                 getString(R.string.change_status_or_date_in_future),
                         Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (statusInt == 2 && DatesGenerator.getCalendarFromString(originalString1).
+            } else if (statusInt == 2 && DatesGenerator.getCalendarFromString(originalString1).
                     after(DatesGenerator.getToday())) {
                 Toast.makeText(MainActivity.this, getResources().
                                 getString(R.string.cant_book_in_the_future),
@@ -178,22 +176,21 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 Toast.makeText(MainActivity.this, getResources().
                                 getString(R.string.change_status_or_date_in_past),
                         Toast.LENGTH_SHORT).show();
-                return;
-            }
-            if (statusInt == 0 || statusInt == 3) {
-                date = new Date(originalString1, statusInt, null, notesString);
-                mDateViewModel.insert(date);
-            }
-            if ((statusInt == 1 || statusInt == 2) &&
+            } else if ((statusInt == 1 || statusInt == 2) &&
                     (hoursString.isEmpty() || hoursString.matches("0") ||
                             hoursString.matches("00"))) {
                 Toast.makeText(MainActivity.this, "Please give the amount of hours",
                         Toast.LENGTH_SHORT).show();
-                return;
+            } else if (statusInt == 0 || statusInt == 3) {
+                date = new Date(originalString1, statusInt, null, null);
+                mDateViewModel.insert(date);
+                saveInt = 1;
             } else {
                 date = new Date(originalString1, statusInt, hoursString, notesString);
                 mDateViewModel.insert(date);
+                saveInt = 1;
             }
+
 //            DatesGenerator.layoutAnimation(hiddenLayout, false);
         });
 
@@ -257,6 +254,23 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
             }
             return true;
         }
+    }
+
+    /**
+     * This method hides the keyboard if the user touches anywhere else on the screen
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        View view = getCurrentFocus();
+        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+            int[] screen = new int[2];
+            view.getLocationOnScreen(screen);
+            float x = ev.getRawX() + view.getLeft() - screen[0];
+            float y = ev.getRawY() + view.getTop() - screen[1];
+            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
+                ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+        }
+        return super.dispatchTouchEvent(ev);
     }
 
 //    private void setUpSpinner() {
