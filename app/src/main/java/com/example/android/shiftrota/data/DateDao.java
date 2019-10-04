@@ -5,6 +5,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -25,4 +26,14 @@ public interface DateDao {
 
     @Query("SELECT * FROM date_table WHERE date BETWEEN :search AND :search1")
     LiveData<List<Date>> loadByMonth(String search, String search1);
+
+//    @Query("SELECT hours FROM date_table WHERE date BETWEEN :search AND :search1")
+//    LiveData<List<String>> loadHoursByMonth(String search, String search1);
+
+//    **@Query("SELECT status FROM date_table WHERE status = 1  BEFORE :search")
+//    LiveData<List<Date>> statusUpdate(int search);
+
+//    @Query("UPDATE date_table SET status = 2 WHERE date BETWEEN :search AND :search1")
+//    List<Date> statusUpdate(int search, int search1);
+
 }

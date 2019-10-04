@@ -14,6 +14,8 @@ import java.util.List;
 
 public class DateViewModel extends AndroidViewModel {
 
+//    private List<Date> statusUpdate;
+
     private DateRepository mDateRepository;
 
     private MutableLiveData<Integer> searchByMonth = new MutableLiveData<>();
@@ -26,6 +28,8 @@ public class DateViewModel extends AndroidViewModel {
 
         mDateRepository = new DateRepository(application);
     }
+
+//    public List<Date> getStatusUpdate() { return statusUpdate; }
 
     public void setInput(int month) {
         searchByMonth.setValue(month);

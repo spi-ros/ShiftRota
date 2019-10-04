@@ -12,8 +12,9 @@
     <string name="holiday">Holiday</string>
     <string name="cancel">Clear</string>
     <string name="notes">Notes</string>
-    <string name="cant_book_in_the_past">You can\'t book that you\'ll work in the Past…</string>
+    <string name="cant_book_in_the_past">You can\'t check that you\'ll work in the Past…</string>
     <string name="change_status_or_date_in_future">Please change Status or select a date in the Future</string>
-    <string name="cant_book_in_the_future">You can\'t book that you have worked in the Future…</string>
+    <string name="cant_book_in_the_future">You can\'t check that you have worked in the Future…</string>
     <string name="change_status_or_date_in_past">Please change Status or select a date in the Past</string>
+    <string name="string1">You have booked days</string>
 </resources>

@@ -41,6 +41,9 @@ public class Date {
         this.mStatus = 0;
     }
 
+    void setStatus (int status) {
+        this.mStatus = status;
+    }
     public int getStatus() {
         return mStatus;
     }

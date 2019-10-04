@@ -5,8 +5,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
-import androidx.recyclerview.selection.ItemDetailsLookup;
-import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
@@ -21,16 +19,21 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.shiftrota.UI.DateViewModel;
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import static java.lang.Integer.parseInt;
+
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
+    private DateViewModel dateViewModel;
     private final LayoutInflater mInflater;
     private List<Date> mDates;
     private Context context;
@@ -38,10 +41,19 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     private Activity activity;
     private int indexInt = -1;
     private int tempPosition = -1;
-    private int saveInt;
+//    private int hours;
+//    private int value;
+
+//    public static int findSum(int[] array) {
+//        int sum = 0;
+//        for (int value : array) {
+//            sum += value;
+//        }
+//        return sum;
+//    }
 
 
-    DateAdapter(Context context, Activity activity, int saveInt) {
+    DateAdapter(Context context, Activity activity) {
         try {
             this.mAdapterCallback = ((AdapterCallback) context);
         } catch (ClassCastException e) {
@@ -50,7 +62,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
         mInflater = LayoutInflater.from(context);
         this.context = context;
         this.activity = activity;
-        this.saveInt = saveInt;
     }
 
     @NonNull
@@ -58,6 +69,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     public DateAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = mInflater.inflate(R.layout.item_view, parent, false);
         return new ViewHolder(v);
+
     }
 
     @Override
@@ -66,6 +78,20 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
         if (mDates != null) {
 
             Date current = mDates.get(position);
+
+//            String klein = current.getHours();
+//            int hours = 0;
+//            if (klein != null) {
+//                hours = Integer.parseInt(klein);
+//            }
+//            int finalHours = hours;
+//            ArrayList<Integer> integers = new ArrayList<Integer>(){{
+//                    add(finalHours);
+//
+//            }};
+//
+//            Log.d("DateAdapter", "hours= " + integers);
+//            Log.d("DateAdapter", "hours= " + findSum());
 
             int testInt = current.getStatus();
             switch (testInt) {
@@ -84,6 +110,23 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             }
 
             holder.textViewA.setText(DatesGenerator.midTwo(current.getDate()));
+
+            holder.textViewB.setText(current.getHours());
+
+
+//            String testString1 = holder.textViewB.getText().toString();
+//            if (!testString1.isEmpty()) {
+//                hours = Integer.parseInt(testString1);
+//                value = value + hours;
+//            }
+//
+//            final List<Integer> testList = new ArrayList<Integer>() {{
+//                for (int i=0; i<1; i++) {
+//                    add(value);
+//                }
+//            }};
+//            Log.d("DateAdapter", "List = " + testList);
+//            Log.d("DateAdapter", "hours = " + value);
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd", Locale.ENGLISH);
             Calendar rightNow = Calendar.getInstance();
@@ -132,7 +175,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
                         return false;
                 }
             }
-
             @Override
             public void onDestroyActionMode(ActionMode mode) {
                 currentActionMode[0] = null;
@@ -164,7 +206,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
                     ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
         });
 
-        if (indexInt == position && indexInt != tempPosition && saveInt == 0) {
+        if (indexInt == position && indexInt != tempPosition) {
             holder.textViewA.setBackgroundColor(Color.RED);
         } else {
             Date current = mDates.get(holder.getAdapterPosition());
@@ -206,7 +248,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView textViewA;
+        TextView textViewA, textViewB;
 //        LinearLayout myView;
 //        LinearLayout linearLayout;
 //        TextView textViewB;
@@ -214,7 +256,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
         ViewHolder(View itemView) {
             super(itemView);
-            textViewA = itemView.findViewById(R.id.item_text_view_a);
+            textViewA = itemView.findViewById(R.id.item_text_view_main);
+            textViewB = itemView.findViewById(R.id.item_text_view_details);
             // previously invisible view
 //            myView = itemView.findViewById(R.id.my_view);
 //            linearLayout = itemView.findViewById(R.id.hidden_layout);

@@ -161,4 +161,22 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/summary_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hidden_linear_layout"
+        android:layout_centerHorizontal="true"
+        android:textSize="21sp"/>
+
+    <TextView
+        android:id="@+id/summary_number_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hidden_linear_layout"
+        android:layout_toRightOf="@id/summary_text_view"
+        android:layout_centerHorizontal="true"
+        tools:text="31"
+        android:textSize="21sp"/>
+
 </RelativeLayout>

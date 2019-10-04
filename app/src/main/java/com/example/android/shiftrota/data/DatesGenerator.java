@@ -23,6 +23,21 @@ public class DatesGenerator {
         return format1.format(calendar.getTime());
     }
 
+    static public String todayM() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format1 = new SimpleDateFormat("MMddyy", Locale.UK);
+        return format1.format(calendar.getTime());
+    }
+
+    static public String yesterdayM() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, Calendar.MONTH, Integer.parseInt(firstTwo(todayM())));
+//        int year = Calendar.getInstance().get(Calendar.YEAR);
+//        int month = Calendar.
+        SimpleDateFormat format1 = new SimpleDateFormat("MMddyy", Locale.UK);
+        return format1.format(calendar.getTime());
+    }
+
     static public String firstTwo(String string) {
         return string.substring(0, 2);
     }

@@ -46,20 +46,19 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     //    String selection;
     DateAdapter dateAdapter;
     RelativeLayout hiddenLayout;
-    TextView titleTextView, monthTextView;
+    TextView titleTextView, monthTextView, hoursBooked, hoursBookedText;
     MaterialButton cancelButton, willWorkButton,
             haveWorkedButton, holidayButton;
     //    Spinner statusSpinner;
     TextInputEditText hoursEditText, notesEditText;
     //    Button  monthIncrementButton, monthDecrementButton;
-    ImageView saveImageView, clearImageView;
-    int statusInt, saveInt;
+    ImageView saveImageView;
+    int statusInt;
     int originalStatusInt;
     Date date;
     int klein = DatesGenerator.getMonth();
     DateViewModel mDateViewModel;
     private GestureDetectorCompat gestureDetector;
-    String clear;
 
     public void onMethodCallback(String yourValue1, String yourValue2, String yourValue3, int gStatusInt) {
 //        DatesGenerator.layoutAnimation(hiddenLayout, true);
@@ -109,6 +108,12 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         hoursEditText = findViewById(R.id.hours_edit_text);
         notesEditText = findViewById(R.id.notes_edit_text);
         saveImageView = findViewById(R.id.save_image_view);
+        hoursBooked = findViewById(R.id.summary_number_text_view);
+        hoursBookedText = findViewById(R.id.summary_text_view);
+
+        hoursBookedText.setText(R.string.string1);
+//        String stringKlein = String.valueOf(clear);
+//        hoursBooked.setText(stringKlein);
 //        monthDecrementButton = findViewById(R.id.month_decrement);
 //        monthIncrementButton = findViewById(R.id.month_increment);
 
@@ -117,6 +122,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         mDateViewModel = ViewModelProviders.of(this).get(DateViewModel.class);
         mDateViewModel.getAnotherMonth().observe(this, aNewDate);
         mDateViewModel.setInput(klein);
+//        mDateViewModel.getStatusUpdate();
 
         monthTextView.setText(DatesGenerator.nameOfMonth(klein));
 
@@ -124,10 +130,8 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         GridLayoutManager gridLayout = new GridLayoutManager(this, NUMBER_OF_COLUMNS);
         recyclerView.setLayoutManager(gridLayout);
-        int etsi = gridLayout.getSpanCount();
-        Log.d("MainActivity", "span count" + etsi);
 
-        dateAdapter = new DateAdapter(this, this, saveInt);
+        dateAdapter = new DateAdapter(this, this);
         recyclerView.setAdapter(dateAdapter);
 
         cancelButton.setOnClickListener(view -> statusInt = 0);
@@ -184,13 +188,10 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
             } else if (statusInt == 0 || statusInt == 3) {
                 date = new Date(originalString1, statusInt, null, null);
                 mDateViewModel.insert(date);
-                saveInt = 1;
             } else {
                 date = new Date(originalString1, statusInt, hoursString, notesString);
                 mDateViewModel.insert(date);
-                saveInt = 1;
             }
-
 //            DatesGenerator.layoutAnimation(hiddenLayout, false);
         });
 

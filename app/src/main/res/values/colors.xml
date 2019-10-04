@@ -2,6 +2,7 @@
 <resources>
     <color name="colorPrimary">#FF7A5A</color>
     <color name="colorPrimaryDark">#b74f33</color>
+    <color name="ic_launcher_background">#C02B10</color>
     <color name="colorAccent">#FF4081</color>
     <color name="klein">#1DE9B6</color>
     <color name="cell_color">#FFFFFF</color>
