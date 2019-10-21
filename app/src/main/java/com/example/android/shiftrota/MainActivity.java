@@ -35,7 +35,10 @@ import com.example.android.shiftrota.data.DatesGenerator;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 
 
@@ -46,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     //    String selection;
     DateAdapter dateAdapter;
     RelativeLayout hiddenLayout;
-    TextView titleTextView, monthTextView, hoursBooked, hoursBookedText;
+    TextView titleTextView, monthTextView, hoursWorkedNumberTextView, hoursWorkedTextView,
+    hoursBookedNumberTextView, hoursBookedTextView;
     MaterialButton cancelButton, willWorkButton,
             haveWorkedButton, holidayButton;
     //    Spinner statusSpinner;
@@ -67,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         originalString2 = yourValue2;
         originalString3 = yourValue3;
 
-        if (originalString2 == null) {
+        if (originalString2 == null || originalString2.matches("null")) {
             Objects.requireNonNull(hoursEditText.getText()).clear();
         } else {
             hoursEditText.setText(originalString2);
@@ -108,12 +112,15 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         hoursEditText = findViewById(R.id.hours_edit_text);
         notesEditText = findViewById(R.id.notes_edit_text);
         saveImageView = findViewById(R.id.save_image_view);
-        hoursBooked = findViewById(R.id.summary_number_text_view);
-        hoursBookedText = findViewById(R.id.summary_text_view);
+        hoursWorkedNumberTextView = findViewById(R.id.hours_worked_number_text_view);
+        hoursWorkedTextView = findViewById(R.id.hours_worked_text_view);
+        hoursBookedNumberTextView = findViewById(R.id.hours_booked_number_text_view);
+        hoursBookedTextView = findViewById(R.id.hours_booked_text_view);
 
-        hoursBookedText.setText(R.string.string1);
+        hoursWorkedTextView.setText(R.string.you_have_worked);
+        hoursBookedTextView.setText(R.string.you_have_booked);
 //        String stringKlein = String.valueOf(clear);
-//        hoursBooked.setText(stringKlein);
+
 //        monthDecrementButton = findViewById(R.id.month_decrement);
 //        monthIncrementButton = findViewById(R.id.month_increment);
 
@@ -121,8 +128,35 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         mDateViewModel = ViewModelProviders.of(this).get(DateViewModel.class);
         mDateViewModel.getAnotherMonth().observe(this, aNewDate);
-        mDateViewModel.setInput(klein);
-//        mDateViewModel.getStatusUpdate();
+        mDateViewModel.setInputMonth(klein);
+
+        mDateViewModel.setInputWorkedHours(klein);
+        mDateViewModel.getWorkedHours().observe(this, dates -> {
+            Log.d("MAIN ACTIVITY", "List " + dates.size());
+            double testInt;
+            double testInt2 =0.0;
+            for (int i=0; i<dates.size(); i++) {
+                testInt = Double.parseDouble(dates.get(i));
+                testInt2 = testInt2 + testInt;
+            }
+            Log.d("MAIN ACTIVITY", "List sum " + testInt2);
+            String stringDouble= Double.toString(testInt2);
+            hoursWorkedNumberTextView.setText(String.format(getResources().getString(R.string.hours_worked_sum), stringDouble));
+        });
+
+        mDateViewModel.setInputBookedHours(klein);
+        mDateViewModel.getBookedHours().observe(this, dates -> {
+            Log.d("MAIN ACTIVITY", "List " + dates.size());
+            double testInt;
+            double testInt2 =0.0;
+            for (int i=0; i<dates.size(); i++) {
+                testInt = Double.parseDouble(dates.get(i));
+                testInt2 = testInt2 + testInt;
+            }
+            Log.d("MAIN ACTIVITY", "List sum " + testInt2);
+            String stringDouble= Double.toString(testInt2);
+            hoursBookedNumberTextView.setText(String.format(getResources().getString(R.string.hours_booked_sum), stringDouble));
+        });
 
         monthTextView.setText(DatesGenerator.nameOfMonth(klein));
 
@@ -147,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 //                return;
 //            }
 //            klein--;
-//            mDateViewModel.setInput(klein);
+//            mDateViewModel.setInputMonth(klein);
 //            monthTextView.setText(DatesGenerator.nameOfMonth(klein));
 //        });
 
@@ -156,7 +190,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 //                return;
 //            }
 //            klein++;
-//            mDateViewModel.setInput(klein);
+//            mDateViewModel.setInputMonth(klein);
 //            monthTextView.setText(DatesGenerator.nameOfMonth(klein));
 //        });
 
@@ -214,14 +248,14 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     @Override
     protected void onPause() {
         super.onPause();
-        mDateViewModel.setInput(klein);
+        mDateViewModel.setInputMonth(klein);
         monthTextView.setText(DatesGenerator.nameOfMonth(klein));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mDateViewModel.setInput(klein);
+        mDateViewModel.setInputMonth(klein);
         monthTextView.setText(DatesGenerator.nameOfMonth(klein));
     }
 
@@ -236,20 +270,24 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             if (event2.getX() > event1.getX()) {
-                if (klein == 1) {
+                if (klein < 1) {
                     return false;
                 } else {
                     klein--;
-                    mDateViewModel.setInput(klein);
+                    mDateViewModel.setInputMonth(klein);
+                    mDateViewModel.setInputWorkedHours(klein);
+                    mDateViewModel.setInputBookedHours(klein);
                     monthTextView.setText(DatesGenerator.nameOfMonth(klein));
                 }
             }
             if (event2.getX() < event1.getX()) {
-                if (klein == 12) {
+                if (klein > 12) {
                     return false;
                 } else {
                     klein++;
-                    mDateViewModel.setInput(klein);
+                    mDateViewModel.setInputMonth(klein);
+                    mDateViewModel.setInputWorkedHours(klein);
+                    mDateViewModel.setInputBookedHours(klein);
                     monthTextView.setText(DatesGenerator.nameOfMonth(klein));
                 }
             }

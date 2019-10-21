@@ -46,7 +46,7 @@ public class DatesGenerator {
         return string.substring(3, 5);
     }
 
-    static String lastTwo(String string) {
+    static String lastFour(String string) {
         return string.substring(6);
     }
 

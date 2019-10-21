@@ -19,11 +19,91 @@
         android:textSize="20sp"
         tools:text="Title" />
 
+    <LinearLayout
+        android:id="@+id/week_text_views"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:layout_below="@id/month_text_view"
+        android:padding="2dp">
+
+        <TextView
+            android:id="@+id/monday_text_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="M" />
+
+        <TextView
+            android:id="@+id/tuesday_text_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="T" />
+
+        <TextView
+            android:id="@+id/wednesday_text_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="W" />
+
+        <TextView
+            android:id="@+id/thursday_text_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="T" />
+
+        <TextView
+            android:id="@+id/friday_text_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="F" />
+
+        <TextView
+            android:id="@+id/saturday_text_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="S"/>
+
+        <TextView
+            android:id="@+id/sunday_text_view"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+
+            android:textSize="16sp"
+            android:gravity="center"
+            android:text="S"/>
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/month_text_view"
+        android:layout_below="@id/week_text_views"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
         android:layout_marginBottom="8dp"
@@ -162,21 +242,39 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/summary_text_view"
+        android:id="@+id/hours_worked_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/hidden_linear_layout"
-        android:layout_centerHorizontal="true"
-        android:textSize="21sp"/>
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"/>
 
     <TextView
-        android:id="@+id/summary_number_text_view"
+        android:id="@+id/hours_worked_number_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/hidden_linear_layout"
-        android:layout_toRightOf="@id/summary_text_view"
-        android:layout_centerHorizontal="true"
+        android:layout_toEndOf="@id/hours_worked_text_view"
+        android:layout_marginTop="8dp"
         tools:text="31"
-        android:textSize="21sp"/>
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/hours_booked_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hours_worked_text_view"
+        android:layout_marginTop="8dp"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/hours_booked_number_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hours_worked_number_text_view"
+        android:layout_toEndOf="@id/hours_booked_text_view"
+        android:layout_marginTop="8dp"
+        tools:text="31"
+        android:textSize="18sp"/>
 
 </RelativeLayout>

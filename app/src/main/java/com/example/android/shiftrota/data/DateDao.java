@@ -18,14 +18,20 @@ public interface DateDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Date date);
 
-//    @Query("DELETE FROM date_table")
-//    void deleteAll();
+    @Query("DELETE FROM date_table")
+    void deleteAll();
 
 //    @Query("SELECT * FROM date_table ORDER BY date ASC")
 //    LiveData<List<Date>> getAllDates();
 
     @Query("SELECT * FROM date_table WHERE date BETWEEN :search AND :search1")
     LiveData<List<Date>> loadByMonth(String search, String search1);
+
+    @Query("SELECT hours FROM date_table WHERE status = 2 AND date BETWEEN :search AND :search1")
+    LiveData<List<String>> klein(String search, String search1);
+
+    @Query("SELECT hours FROM date_table WHERE status = 1 AND date BETWEEN :search AND :search1")
+    LiveData<List<String>> mein(String search, String search1);
 
 //    @Query("SELECT hours FROM date_table WHERE date BETWEEN :search AND :search1")
 //    LiveData<List<String>> loadHoursByMonth(String search, String search1);

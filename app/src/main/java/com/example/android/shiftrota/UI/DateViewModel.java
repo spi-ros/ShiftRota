@@ -20,8 +20,18 @@ public class DateViewModel extends AndroidViewModel {
 
     private MutableLiveData<Integer> searchByMonth = new MutableLiveData<>();
 
+    private MutableLiveData<Integer> searchWorkedHours = new MutableLiveData<>();
+
+    private MutableLiveData<Integer> searchBookedHours = new MutableLiveData<>();
+
     private LiveData<List<Date>> anotherMonth =
             Transformations.switchMap(searchByMonth, (month) -> mDateRepository.getMonth(month));
+
+    private LiveData<List<String>> workedHours =
+            Transformations.switchMap(searchWorkedHours, (month) -> mDateRepository.getWorkedHours(month));
+
+    private LiveData<List<String>> bookedHours =
+            Transformations.switchMap(searchBookedHours, (month) -> mDateRepository.getBookedHours(month));
 
     public DateViewModel(@NonNull Application application) {
         super(application);
@@ -31,9 +41,21 @@ public class DateViewModel extends AndroidViewModel {
 
 //    public List<Date> getStatusUpdate() { return statusUpdate; }
 
-    public void setInput(int month) {
+    public void setInputWorkedHours(int month) {
+        searchWorkedHours.setValue(month);
+    }
+
+    public void setInputBookedHours(int month) {
+        searchBookedHours.setValue(month);
+    }
+
+    public void setInputMonth(int month) {
         searchByMonth.setValue(month);
     }
+
+    public LiveData<List<String>> getWorkedHours() { return workedHours; }
+
+    public LiveData<List<String>> getBookedHours() { return bookedHours; }
 
     public LiveData<List<Date>> getAnotherMonth() { return anotherMonth; }
 

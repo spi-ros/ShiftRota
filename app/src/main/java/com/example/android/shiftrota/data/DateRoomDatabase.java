@@ -60,12 +60,12 @@ public abstract class DateRoomDatabase extends RoomDatabase {
         protected Void doInBackground(final Void... params) {
             // Start the app with a clean database every time.
             // Not needed if you only populate on creation.
-//            mDao.deleteAll();
+            mDao.deleteAll();
             if (mDao.getAnyWord().length < 1) {
-                SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yy", Locale.ENGLISH);
+                SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
 
                 String stringFormat = format1.format(rightNow.getTime());
-                int year = Integer.parseInt(DatesGenerator.lastTwo(stringFormat));
+                int year = Integer.parseInt(DatesGenerator.lastFour(stringFormat));
 
                 rightNow.set(year, MY_MONTH, MY_DAY);
 
@@ -84,7 +84,7 @@ public abstract class DateRoomDatabase extends RoomDatabase {
                         Date date1 = new Date(formatted2, 0, null, null);
                         mDao.insert(date1);
                     }
-                    rightNow.set(year, MY_MONTH++, MY_DAY);
+//                    rightNow.set(year, MY_MONTH++, MY_DAY);
                 }
             }
             return null;

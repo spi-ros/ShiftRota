@@ -33,6 +33,7 @@ import static java.lang.Integer.parseInt;
 
 public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
+    private ArrayList<Double> hoursArray = new ArrayList<>();
     private DateViewModel dateViewModel;
     private final LayoutInflater mInflater;
     private List<Date> mDates;
@@ -41,16 +42,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     private Activity activity;
     private int indexInt = -1;
     private int tempPosition = -1;
-//    private int hours;
-//    private int value;
-
-//    public static int findSum(int[] array) {
-//        int sum = 0;
-//        for (int value : array) {
-//            sum += value;
-//        }
-//        return sum;
-//    }
 
 
     DateAdapter(Context context, Activity activity) {
@@ -79,20 +70,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
             Date current = mDates.get(position);
 
-//            String klein = current.getHours();
-//            int hours = 0;
-//            if (klein != null) {
-//                hours = Integer.parseInt(klein);
-//            }
-//            int finalHours = hours;
-//            ArrayList<Integer> integers = new ArrayList<Integer>(){{
-//                    add(finalHours);
-//
-//            }};
-//
-//            Log.d("DateAdapter", "hours= " + integers);
-//            Log.d("DateAdapter", "hours= " + findSum());
-
             int testInt = current.getStatus();
             switch (testInt) {
                 case 0:
@@ -113,21 +90,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
             holder.textViewB.setText(current.getHours());
 
-
-//            String testString1 = holder.textViewB.getText().toString();
-//            if (!testString1.isEmpty()) {
-//                hours = Integer.parseInt(testString1);
-//                value = value + hours;
-//            }
-//
-//            final List<Integer> testList = new ArrayList<Integer>() {{
-//                for (int i=0; i<1; i++) {
-//                    add(value);
-//                }
-//            }};
-//            Log.d("DateAdapter", "List = " + testList);
-//            Log.d("DateAdapter", "hours = " + value);
-
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd", Locale.ENGLISH);
             Calendar rightNow = Calendar.getInstance();
             String formatted = dateFormat.format(rightNow.getTime());
@@ -141,55 +103,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             holder.textViewA.setText(com.example.android.shiftrota.R.string.no_data);
         }
 
-        final ActionMode[] currentActionMode = new ActionMode[1];
-
-        ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                MenuInflater inflater = mode.getMenuInflater();
-                inflater.inflate(R.menu.action_text_view, menu);
-                return true;
-            }
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                return false;
-            }
-
-            @Override
-            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.menu_clear:
-                        return true;
-                    case R.id.menu_will_work:
-                        return true;
-                    case R.id.menu_have_worked:
-                        return true;
-                    case R.id.menu_holiday:
-                        return true;
-                    case R.id.menu_select_hours:
-                        return true;
-                    case R.id.menu_notes:
-                        return true;
-                    default:
-                        return false;
-                }
-            }
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                currentActionMode[0] = null;
-            }
-        };
-
-        holder.textViewA.setOnLongClickListener(v -> {
-            if (currentActionMode[0] != null) {
-                return false;
-            }
-            currentActionMode[0] = activity.startActionMode(actionModeCallback);
-            v.setSelected(true);
-            return true;
-        });
-
         holder.textViewA.setOnClickListener(v -> {
 
             tempPosition = indexInt;
@@ -198,7 +111,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
             Date current = mDates.get(position);
             String dateString = current.getDate();
-            String hoursString = current.getHours();
+            String hoursString = String.valueOf(current.getHours());
             String notesString = current.getNotes();
             int statusInt = current.getStatus();
             mAdapterCallback.onMethodCallback(dateString, hoursString, notesString, statusInt);
@@ -249,19 +162,12 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView textViewA, textViewB;
-//        LinearLayout myView;
-//        LinearLayout linearLayout;
-//        TextView textViewB;
 
 
         ViewHolder(View itemView) {
             super(itemView);
             textViewA = itemView.findViewById(R.id.item_text_view_main);
             textViewB = itemView.findViewById(R.id.item_text_view_details);
-            // previously invisible view
-//            myView = itemView.findViewById(R.id.my_view);
-//            linearLayout = itemView.findViewById(R.id.hidden_layout);
-//            textViewB = itemView.findViewById(R.id.item_text_view_b);
         }
     }
 }

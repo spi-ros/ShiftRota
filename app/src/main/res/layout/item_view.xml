@@ -7,16 +7,16 @@
 
     <TextView
         android:id="@+id/item_text_view_main"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textSize="16sp"
         android:gravity="center" />
 
     <TextView
         android:id="@+id/item_text_view_details"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         tools:text="31"
