@@ -1,9 +1,10 @@
 package com.example.android.shiftrota.data;
 
 import android.app.Application;
+
 import androidx.lifecycle.LiveData;
+
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -16,7 +17,10 @@ public class DateRepository {
     private LiveData<List<String>> klein;
     private LiveData<List<String>> mein;
     private LiveData<List<Date>> mAllDates;
-    public LiveData<List<String>> mAllHoursByMonth;
+    private Calendar rightNow = Calendar.getInstance();
+    private SimpleDateFormat format11 = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+    private String stringFormats = format11.format(rightNow.getTime());
+    private int years = Integer.parseInt(DatesGenerator.firstFour(stringFormats));
 
     /*constructor that gets a handle to the database and initializes the member variables.*/
 
@@ -25,16 +29,11 @@ public class DateRepository {
         mDateDao = db.dateDao();
     }
 
-//    public List<Date> statusUpdtae() {
-//        klein = mDateDao.statusUpdate(Integer.parseInt(DatesGenerator.yesterdayM()), Integer.parseInt(DatesGenerator.todayM()));
-//        return klein;
-//    }
+    public void setYears(int years) {
+        this.years = years;
+    }
 
     public LiveData<List<String>> getWorkedHours(int months) {
-        Calendar rightNow = Calendar.getInstance();
-        SimpleDateFormat format11 = new SimpleDateFormat("MM/dd/yy", Locale.ENGLISH);
-        String stringFormats = format11.format(rightNow.getTime());
-        int years = Integer.parseInt(DatesGenerator.lastFour(stringFormats));
 
         switch (months) {
             case 1: {
@@ -164,10 +163,6 @@ public class DateRepository {
     }
 
     public LiveData<List<String>> getBookedHours(int months) {
-        Calendar rightNow = Calendar.getInstance();
-        SimpleDateFormat format11 = new SimpleDateFormat("MM/dd/yy", Locale.ENGLISH);
-        String stringFormats = format11.format(rightNow.getTime());
-        int years = Integer.parseInt(DatesGenerator.lastFour(stringFormats));
 
         switch (months) {
             case 1: {
@@ -295,12 +290,6 @@ public class DateRepository {
     }
 
     public LiveData<List<Date>> getMonth(int month) {
-        Log.d("DateRepository", "month = " + month);
-
-        Calendar rightNow = Calendar.getInstance();
-        SimpleDateFormat format11 = new SimpleDateFormat("MM/dd/yyyy", Locale.ENGLISH);
-        String stringFormats = format11.format(rightNow.getTime());
-        int years = Integer.parseInt(DatesGenerator.lastFour(stringFormats));
 
         switch (month) {
             case 1: {
@@ -311,69 +300,69 @@ public class DateRepository {
                 etsi.set(years, Calendar.JANUARY, 1);
                 etsi.getTime();
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                Log.d("DATEREPOSITORY", "ETSI TESTING " + etsiTesting);
-
                 /*Sunday*/
                 if (etsiTesting == 1) {
-                    etsi.set(2018, Calendar.DECEMBER - 1, 1 - 6);
+                    etsi.set(years, Calendar.JANUARY, 1 - 6);
                     search = format11.format(etsi.getTime());
                     /*Saturday*/
                 } else if (etsiTesting == 7) {
-                    etsi.set(2018, Calendar.DECEMBER, 1 - 5);
+                    etsi.set(years, Calendar.JANUARY, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(2018, Calendar.DECEMBER, 1 - 4);
+                } else if (etsiTesting == 6) {
+                    etsi.set(years, Calendar.JANUARY, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
                 } else if (etsiTesting == 5) {
-                    etsi.set(2018, Calendar.DECEMBER, 1 - 3);
+                    etsi.set(years, Calendar.JANUARY, 1 - 3);
                     search = format11.format(etsi.getTime());
                     /*Wednesday*/
                 } else if (etsiTesting == 4) {
-                    etsi.set(2018, Calendar.DECEMBER, 1 - 2);
+                    etsi.set(years, Calendar.JANUARY, 1 - 2);
                     search = format11.format(etsi.getTime());
                     /*Tuesday*/
                 } else if (etsiTesting == 3) {
-                    etsi.set(2018, Calendar.DECEMBER, 0);
+                    etsi.set(years, Calendar.JANUARY, 0);
                     search = format11.format(etsi.getTime());
                     /*Monday*/
                 } else {
                     etsi.set(years, Calendar.JANUARY, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.JANUARY, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.JANUARY, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.JANUARY, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.JANUARY, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.JANUARY, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.JANUARY, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.JANUARY, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.JANUARY, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 5);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.JANUARY, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -385,10 +374,7 @@ public class DateRepository {
                 Calendar etsi = Calendar.getInstance();
                 etsi.set(years, Calendar.FEBRUARY, 1);
                 etsi.getTime();
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                Log.d("DATEREPOSITORY", "ETSI TESTING " + etsiTesting);
-
                 /*Sunday*/
                 if (etsiTesting == 1) {
                     etsi.set(years, Calendar.FEBRUARY, 1 - 6);
@@ -398,7 +384,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.FEBRUARY, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.FEBRUARY, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -418,43 +404,45 @@ public class DateRepository {
                     etsi.set(years, Calendar.FEBRUARY, 1);
                     search = format11.format(etsi.getTime());
                 }
-                etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth);
-                Log.d("DATEREPOSITORY", "totalDaysInMonth " + totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.FEBRUARY, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
+                if (etsiTesting1 == 1) {
                     if (totalOfDaysInMonth == 28) {
-                        etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 14);
-                        search1 = format11.format(etsi.getTime());
+                        etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 14);
+                        search1 = format11.format(etsi1.getTime());
                     } else {
-                        etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 7);
-                        search1 = format11.format(etsi.getTime());
+                        etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 7);
+                        search1 = format11.format(etsi1.getTime());
                     }
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 12);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 13);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 13);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -467,8 +455,6 @@ public class DateRepository {
                 etsi.set(years, Calendar.MARCH, 1);
                 etsi.getTime();
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                Log.d("DATEREPOSITORY", "ETSI TESTING " + etsiTesting);
-
                 /*Sunday*/
                 if (etsiTesting == 1) {
                     etsi.set(years, Calendar.MARCH, 1 - 6);
@@ -478,7 +464,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.MARCH, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.MARCH, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -498,38 +484,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.MARCH, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.MARCH, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.MARCH, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.MARCH, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.MARCH, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.MARCH, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.MARCH, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.MARCH, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.MARCH, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 5);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.MARCH, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -551,7 +539,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.APRIL, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.APRIL, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -571,38 +559,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.APRIL, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.APRIL, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.APRIL, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.APRIL, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.APRIL, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.APRIL, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.APRIL, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.APRIL, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.APRIL, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 12);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.APRIL, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -615,8 +605,6 @@ public class DateRepository {
                 etsi.set(years, Calendar.MAY, 1);
                 etsi.getTime();
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                Log.d("DATEREPOSITORY", "ETSI TESTING " + etsiTesting);
-
                 /*Sunday*/
                 if (etsiTesting == 1) {
                     etsi.set(years, Calendar.MAY, 1 - 6);
@@ -626,7 +614,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.MAY, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.MAY, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -646,38 +634,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.MAY, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.MAY, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.MAY, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.MAY, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.MAY, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.MAY, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.MAY, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.MAY, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.MAY, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.MAY, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 5);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.MAY, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -699,7 +689,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.JUNE, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.JUNE, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -719,38 +709,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.JUNE, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.JUNE, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.JUNE, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.JUNE, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.JUNE, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.JUNE, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.JUNE, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.JUNE, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.JUNE, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 12);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.JUNE, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -763,8 +755,6 @@ public class DateRepository {
                 etsi.set(years, Calendar.JULY, 1);
                 etsi.getTime();
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                Log.d("DATEREPOSITORY", "ETSI TESTING " + etsiTesting);
-
                 /*Sunday*/
                 if (etsiTesting == 1) {
                     etsi.set(years, Calendar.JULY, 1 - 6);
@@ -774,7 +764,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.JULY, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.JULY, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -794,38 +784,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.JULY, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.JULY, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.JULY, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.JULY, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.JULY, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.JULY, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.JULY, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.JULY, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.JULY, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.JULY, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 5);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.JULY, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -838,8 +830,6 @@ public class DateRepository {
                 etsi.set(years, Calendar.AUGUST, 1);
                 etsi.getTime();
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                Log.d("DATEREPOSITORY", "ETSI TESTING " + etsiTesting);
-
                 /*Sunday*/
                 if (etsiTesting == 1) {
                     etsi.set(years, Calendar.AUGUST, 1 - 6);
@@ -849,7 +839,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.AUGUST, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.AUGUST, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -869,38 +859,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.AUGUST, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.AUGUST, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.AUGUST, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.AUGUST, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.AUGUST, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.AUGUST, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.AUGUST, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.AUGUST, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.AUGUST, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 5);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.AUGUST, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -912,7 +904,6 @@ public class DateRepository {
                 Calendar etsi = Calendar.getInstance();
                 etsi.set(years, Calendar.SEPTEMBER, 1);
                 etsi.getTime();
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
                 if (etsiTesting == 1) {
@@ -923,7 +914,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.SEPTEMBER, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.SEPTEMBER, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -943,37 +934,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.SEPTEMBER, 1);
                     search = format11.format(etsi.getTime());
                 }
-                etsi.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.SEPTEMBER, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 12);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -986,8 +980,6 @@ public class DateRepository {
                 etsi.set(years, Calendar.OCTOBER, 1);
                 etsi.getTime();
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                Log.d("DATEREPOSITORY", "ETSI TESTING " + etsiTesting);
-
                 /*Sunday*/
                 if (etsiTesting == 1) {
                     etsi.set(years, Calendar.OCTOBER, 1 - 6);
@@ -997,7 +989,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.OCTOBER, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.OCTOBER, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -1017,38 +1009,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.OCTOBER, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.OCTOBER, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.OCTOBER, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 5);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -1070,7 +1064,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.NOVEMBER, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.NOVEMBER, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -1090,38 +1084,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.NOVEMBER, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.NOVEMBER, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.NOVEMBER, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 12);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
@@ -1134,8 +1130,6 @@ public class DateRepository {
                 etsi.set(years, Calendar.DECEMBER, 1);
                 etsi.getTime();
                 etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                Log.d("DATEREPOSITORY", "ETSI TESTING " + etsiTesting);
-
                 /*Sunday*/
                 if (etsiTesting == 1) {
                     etsi.set(years, Calendar.DECEMBER, 1 - 6);
@@ -1145,7 +1139,7 @@ public class DateRepository {
                     etsi.set(years, Calendar.DECEMBER, 1 - 5);
                     search = format11.format(etsi.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
+                } else if (etsiTesting == 6) {
                     etsi.set(years, Calendar.DECEMBER, 1 - 4);
                     search = format11.format(etsi.getTime());
                     /*Thursday*/
@@ -1165,38 +1159,40 @@ public class DateRepository {
                     etsi.set(years, Calendar.DECEMBER, 1);
                     search = format11.format(etsi.getTime());
                 }
-                int totalOfDaysInMonth = etsi.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi.set(years, Calendar.DECEMBER, totalOfDaysInMonth);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
+                Calendar etsi1 = Calendar.getInstance();
+                etsi1.set(years, Calendar.DECEMBER, 1);
+                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
+                etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth);
+                etsi1.getTime();
+                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
                 /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi.getTime());
+                if (etsiTesting1 == 1) {
+                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 7);
+                    search1 = format11.format(etsi1.getTime());
                     /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 7) {
+                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 8);
+                    search1 = format11.format(etsi1.getTime());
                     /*Friday*/
-                } else if (etsiTesting == 6 ) {
-                    etsi.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 6) {
+                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 9);
+                    search1 = format11.format(etsi1.getTime());
                     /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 5) {
+                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 10);
+                    search1 = format11.format(etsi1.getTime());
                     /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 4) {
+                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 11);
+                    search1 = format11.format(etsi1.getTime());
                     /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years + 1, Calendar.DECEMBER + 1, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi.getTime());
+                } else if (etsiTesting1 == 3) {
+                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 5);
+                    search1 = format11.format(etsi1.getTime());
                     /*Monday*/
                 } else {
-                    etsi.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi.getTime());
+                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 6);
+                    search1 = format11.format(etsi1.getTime());
                 }
                 mAllDates = mDateDao.loadByMonth(search, search1);
                 break;

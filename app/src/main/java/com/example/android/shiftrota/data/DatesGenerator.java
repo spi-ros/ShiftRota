@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Objects;
 
 
 public class DatesGenerator {
@@ -23,7 +24,7 @@ public class DatesGenerator {
         return format1.format(calendar.getTime());
     }
 
-    static public String todayM() {
+    static private String todayM() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format1 = new SimpleDateFormat("MMddyy", Locale.UK);
         return format1.format(calendar.getTime());
@@ -38,16 +39,16 @@ public class DatesGenerator {
         return format1.format(calendar.getTime());
     }
 
-    static public String firstTwo(String string) {
+    static private String firstTwo(String string) {
         return string.substring(0, 2);
     }
 
-    static public String midTwo(String string) {
-        return string.substring(3, 5);
+    static public String lastTwo(String string) {
+        return string.substring(8);
     }
 
-    static String lastFour(String string) {
-        return string.substring(6);
+    static public String firstFour(String string) {
+        return string.substring(0, 4);
     }
 
     static public int getMonth() {
@@ -65,27 +66,20 @@ public class DatesGenerator {
 
     static public Calendar getCalendarFromString(String string) {
         Calendar rightNow = Calendar.getInstance();
-        SimpleDateFormat format1 = new SimpleDateFormat("MM/dd/yy", Locale.UK);
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy/MM/dd", Locale.UK);
         try {
-            rightNow.setTime(format1.parse(string));
+            rightNow.setTime(Objects.requireNonNull(format1.parse(string)));
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return rightNow;
     }
 
-    static public String normalDate(String string) {
-
+    /** Changing date from "yyyy/MM/dd" to "dd/MM/yyyy" */
+    static public  String normalDate(String string) {
         char[] c = string.toCharArray();
-
-        // Replace with a "swap" function, if desired:
-        char temp = c[0];
-        c[0] = c[3];
-        c[3] = temp;
-        char temp1 = c[1];
-        c[1] = c[4];
-        c[4] = temp1;
-        return new String(c);
+        char[] data = {c[8], c[9], c[7], c[5], c[6], c[4], c[2], c[3]};
+        return new String(data);
     }
 
     static public String nameOfMonth(int monthInt) {

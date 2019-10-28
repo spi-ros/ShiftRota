@@ -8,12 +8,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.graphics.Color;
-import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -71,6 +66,8 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             Date current = mDates.get(position);
 
             int testInt = current.getStatus();
+//            String dateString = DatesGenerator.lastTwo(current.getDate());
+//            while (!dateString.matches("01"))
             switch (testInt) {
                 case 0:
                     holder.textViewA.setBackgroundResource(R.drawable.cell_shape_unchecked);
@@ -86,7 +83,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
                     break;
             }
 
-            holder.textViewA.setText(DatesGenerator.midTwo(current.getDate()));
+            holder.textViewA.setText(DatesGenerator.lastTwo(current.getDate()));
 
             holder.textViewB.setText(current.getHours());
 
@@ -116,7 +113,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             int statusInt = current.getStatus();
             mAdapterCallback.onMethodCallback(dateString, hoursString, notesString, statusInt);
             Toast.makeText(context.getApplicationContext(), "You clicked " +
-                    ((TextView) v).getText().toString(), Toast.LENGTH_SHORT).show();
+                    dateString, Toast.LENGTH_SHORT).show();
         });
 
         if (indexInt == position && indexInt != tempPosition) {

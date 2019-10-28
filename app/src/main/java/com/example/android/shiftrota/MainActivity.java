@@ -61,6 +61,12 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     int originalStatusInt;
     Date date;
     int klein = DatesGenerator.getMonth();
+
+    private Calendar rightNow = Calendar.getInstance();
+    private SimpleDateFormat format11 = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+    private String stringFormats = format11.format(rightNow.getTime());
+    private int years = Integer.parseInt(DatesGenerator.firstFour(stringFormats));
+
     DateViewModel mDateViewModel;
     private GestureDetectorCompat gestureDetector;
 
@@ -240,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         klein = savedInstanceState.getInt("klein");
     }
@@ -270,26 +276,28 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         public boolean onFling(MotionEvent event1, MotionEvent event2,
                                float velocityX, float velocityY) {
             if (event2.getX() > event1.getX()) {
-                if (klein < 1) {
-                    return false;
-                } else {
+                if (klein == 1) {
+                    klein = 13;
+                    years = years - 1;
+                    mDateViewModel.setYears(years);
+                }
                     klein--;
                     mDateViewModel.setInputMonth(klein);
                     mDateViewModel.setInputWorkedHours(klein);
                     mDateViewModel.setInputBookedHours(klein);
                     monthTextView.setText(DatesGenerator.nameOfMonth(klein));
-                }
             }
             if (event2.getX() < event1.getX()) {
-                if (klein > 12) {
-                    return false;
-                } else {
+                if (klein == 12) {
+                    klein = 0;
+                    years = years + 1;
+                    mDateViewModel.setYears(years);
+                }
                     klein++;
                     mDateViewModel.setInputMonth(klein);
                     mDateViewModel.setInputWorkedHours(klein);
                     mDateViewModel.setInputBookedHours(klein);
                     monthTextView.setText(DatesGenerator.nameOfMonth(klein));
-                }
             }
             return true;
         }
@@ -307,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
             float x = ev.getRawX() + view.getLeft() - screen[0];
             float y = ev.getRawY() + view.getTop() - screen[1];
             if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
-                ((InputMethodManager) this.getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+                ((InputMethodManager) Objects.requireNonNull(this.getSystemService(Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
         }
         return super.dispatchTouchEvent(ev);
     }

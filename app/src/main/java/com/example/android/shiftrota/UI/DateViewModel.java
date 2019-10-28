@@ -45,13 +45,13 @@ public class DateViewModel extends AndroidViewModel {
         searchWorkedHours.setValue(month);
     }
 
-    public void setInputBookedHours(int month) {
-        searchBookedHours.setValue(month);
-    }
+    public void setInputBookedHours(int month) { searchBookedHours.setValue(month); }
 
     public void setInputMonth(int month) {
         searchByMonth.setValue(month);
     }
+
+    public void setYears(int years) { mDateRepository.setYears(years); }
 
     public LiveData<List<String>> getWorkedHours() { return workedHours; }
 
