@@ -24,6 +24,12 @@ public class DatesGenerator {
         return format1.format(calendar.getTime());
     }
 
+    static public String todayTheOtherWay() {
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat format1 = new SimpleDateFormat("yyyy/MM/dd", Locale.UK);
+        return format1.format(calendar.getTime());
+    }
+
     static private String todayM() {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat format1 = new SimpleDateFormat("MMddyy", Locale.UK);
@@ -45,6 +51,10 @@ public class DatesGenerator {
 
     static public String lastTwo(String string) {
         return string.substring(8);
+    }
+
+    static public String midTwo(String string) {
+        return string.substring(5, 7);
     }
 
     static public String firstFour(String string) {

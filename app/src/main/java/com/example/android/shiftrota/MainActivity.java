@@ -33,6 +33,7 @@ import com.example.android.shiftrota.UI.DateViewModel;
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
@@ -45,12 +46,12 @@ import java.util.Objects;
 public class MainActivity extends AppCompatActivity implements DateAdapter.AdapterCallback {
 
     static final int NUMBER_OF_COLUMNS = 7;
-    static String originalString1, originalString2, originalString3;
-    //    String selection;
+    static String dateString, hoursString, notesString;
     DateAdapter dateAdapter;
     RelativeLayout hiddenLayout;
     TextView titleTextView, monthTextView, hoursWorkedNumberTextView, hoursWorkedTextView,
     hoursBookedNumberTextView, hoursBookedTextView;
+    MaterialButtonToggleGroup toggleGroup;
     MaterialButton cancelButton, willWorkButton,
             haveWorkedButton, holidayButton;
     //    Spinner statusSpinner;
@@ -70,23 +71,37 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     DateViewModel mDateViewModel;
     private GestureDetectorCompat gestureDetector;
 
-    public void onMethodCallback(String yourValue1, String yourValue2, String yourValue3, int gStatusInt) {
+    public void onMethodCallback(String yourValue1, String yourValue2, String yourValue3, int yourValue4) {
 //        DatesGenerator.layoutAnimation(hiddenLayout, true);
 //        hiddenLayout.setElevation(4);
-        originalString1 = yourValue1;
-        originalString2 = yourValue2;
-        originalString3 = yourValue3;
+        dateString = yourValue1;
+        hoursString = yourValue2;
+        notesString = yourValue3;
 
-        if (originalString2 == null || originalString2.matches("null")) {
+        if (hoursString == null || hoursString.matches("null")) {
             Objects.requireNonNull(hoursEditText.getText()).clear();
         } else {
-            hoursEditText.setText(originalString2);
+            hoursEditText.setText(hoursString);
         }
 
-        notesEditText.setText(originalString3);
-        originalStatusInt = gStatusInt;
+        notesEditText.setText(notesString);
+        originalStatusInt = yourValue4;
         titleTextView.setText(DatesGenerator.normalDate(yourValue1));
-//        titleTextView.setElevation(12);
+        toggleGroup.check(R.id.toggle_button_group);
+        switch (originalStatusInt) {
+            case 0:
+                toggleGroup.clearChecked();
+                break;
+            case 1:
+                toggleGroup.check(R.id.will_work_button);
+                break;
+            case 2:
+                toggleGroup.check(R.id.have_worked_button);
+                break;
+            case 3:
+                toggleGroup.check(R.id.holiday_button);
+                break;
+        }
     }
 
     @Override
@@ -107,13 +122,14 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         window.setStatusBarColor(ContextCompat.getColor(MainActivity.this,R.color.colorPrimaryDark));
 
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        hiddenLayout = findViewById(R.id.hidden_linear_layout);
+//        hiddenLayout = findViewById(R.id.hidden_linear_layout);
         titleTextView = findViewById(R.id.title_text_view);
         monthTextView = findViewById(R.id.month_text_view);
-        cancelButton = findViewById(R.id.cancel_text_view);
-        willWorkButton = findViewById(R.id.will_work_text_view);
-        haveWorkedButton = findViewById(R.id.have_worked_text_view);
-        holidayButton = findViewById(R.id.holiday_text_view);
+        toggleGroup = findViewById(R.id.toggle_button_group);
+        cancelButton = findViewById(R.id.cancel_button);
+        willWorkButton = findViewById(R.id.will_work_button);
+        haveWorkedButton = findViewById(R.id.have_worked_button);
+        holidayButton = findViewById(R.id.holiday_button);
 //        statusSpinner = findViewById(R.id.status_spinner);
         hoursEditText = findViewById(R.id.hours_edit_text);
         notesEditText = findViewById(R.id.notes_edit_text);
@@ -130,10 +146,30 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 //        monthDecrementButton = findViewById(R.id.month_decrement);
 //        monthIncrementButton = findViewById(R.id.month_increment);
 
-        Observer<List<Date>> aNewDate = date -> dateAdapter.setDates(date);
+//        Observer<List<Date>> aNewDate = date -> dateAdapter.setDates(date);
+
+        Observer<List<Date>> ka8olou = new Observer<List<Date>>() {
+            @Override
+            public void onChanged(List<Date> dates) {
+                    for (int i = 0; i < dates.size(); i++) {
+                        Date date = dates.get(i);
+                        int klein = date.getStatus();
+                        String mein = date.getDate();
+                        if (klein == 1 && (mein.compareTo(DatesGenerator.todayTheOtherWay()) == 0 ||
+                                mein.compareTo(DatesGenerator.todayTheOtherWay()) < 0)) {
+                            Date tein = new Date(mein,
+                                    2, date.getHours(), date.getNotes());
+
+                            mDateViewModel.insert(tein);
+                        }
+
+                    }
+                dateAdapter.setDates(dates);
+            }
+        };
 
         mDateViewModel = ViewModelProviders.of(this).get(DateViewModel.class);
-        mDateViewModel.getAnotherMonth().observe(this, aNewDate);
+        mDateViewModel.getAnotherMonth().observe(this, ka8olou);
         mDateViewModel.setInputMonth(klein);
 
         mDateViewModel.setInputWorkedHours(klein);
@@ -204,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
             String hoursString = Objects.requireNonNull(hoursEditText.getText()).toString().trim();
             String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
 
-            if (statusInt == 1 && DatesGenerator.getCalendarFromString(originalString1).
+            if (statusInt == 1 && DatesGenerator.getCalendarFromString(dateString).
                     before(DatesGenerator.getToday())) {
                 Toast.makeText(MainActivity.this, getResources().
                                 getString(R.string.cant_book_in_the_past),
@@ -212,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 Toast.makeText(MainActivity.this, getResources().
                                 getString(R.string.change_status_or_date_in_future),
                         Toast.LENGTH_SHORT).show();
-            } else if (statusInt == 2 && DatesGenerator.getCalendarFromString(originalString1).
+            } else if (statusInt == 2 && DatesGenerator.getCalendarFromString(dateString).
                     after(DatesGenerator.getToday())) {
                 Toast.makeText(MainActivity.this, getResources().
                                 getString(R.string.cant_book_in_the_future),
@@ -226,10 +262,10 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 Toast.makeText(MainActivity.this, "Please give the amount of hours",
                         Toast.LENGTH_SHORT).show();
             } else if (statusInt == 0 || statusInt == 3) {
-                date = new Date(originalString1, statusInt, null, null);
+                date = new Date(dateString, statusInt, null, null);
                 mDateViewModel.insert(date);
             } else {
-                date = new Date(originalString1, statusInt, hoursString, notesString);
+                date = new Date(dateString, statusInt, hoursString, notesString);
                 mDateViewModel.insert(date);
             }
 //            DatesGenerator.layoutAnimation(hiddenLayout, false);

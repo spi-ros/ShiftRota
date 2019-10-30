@@ -66,8 +66,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             Date current = mDates.get(position);
 
             int testInt = current.getStatus();
-//            String dateString = DatesGenerator.lastTwo(current.getDate());
-//            while (!dateString.matches("01"))
+//            String dateString = DatesGenerator.midTwo(current.getDate());
+//            if (dateString.compareTo("01") > 0) {
+//                holder.textViewA.setBackgroundResource(R.drawable.cell_shape_other_month);
+//            }
             switch (testInt) {
                 case 0:
                     holder.textViewA.setBackgroundResource(R.drawable.cell_shape_unchecked);

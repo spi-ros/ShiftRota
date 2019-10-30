@@ -18,4 +18,5 @@
     <color name="recycler_view_background">#EEEEEE</color>
     <color name="check_color">#ff1c1c</color>
     <color name="check_color_dark">#450606</color>
+    <color name="other_month_color">#BDBDBD</color>
 </resources>
