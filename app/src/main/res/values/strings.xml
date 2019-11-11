@@ -16,8 +16,15 @@
     <string name="change_status_or_date_in_future">Please change Status or select a date in the Future</string>
     <string name="cant_book_in_the_future">You can\'t check that you have worked in the Future…</string>
     <string name="change_status_or_date_in_past">Please change Status or select a date in the Past</string>
-    <string name="you_have_worked">You have worked for&#160;</string>
+    <string name="total_worked_hours">Total worked hours&#160;</string>
     <string name="hours_worked_sum">%s hrs</string>
-    <string name="you_have_booked">You have booked&#160;</string>
-    <string name="hours_booked_sum">%s more hrs to work</string>
+    <string name="booked_hours_left">Booked hours left&#160;</string>
+    <string name="hours_booked_sum">%s hrs</string>
+    <string name="monday">Mon</string>
+    <string name="tuesday">Tue</string>
+    <string name="Wednesday">Wed</string>
+    <string name="thursday">Thu</string>
+    <string name="friday">Fri</string>
+    <string name="saturday">Sat</string>
+    <string name="sunday">Sun</string>
 </resources>

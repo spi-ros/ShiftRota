@@ -13,6 +13,7 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     static String dateString, hoursString, notesString;
     DateAdapter dateAdapter;
     RelativeLayout hiddenLayout;
-    TextView titleTextView, monthTextView, hoursWorkedNumberTextView, hoursWorkedTextView,
+    TextView dateTextView, monthTextView, hoursWorkedNumberTextView, hoursWorkedTextView,
     hoursBookedNumberTextView, hoursBookedTextView;
     MaterialButtonToggleGroup toggleGroup;
     MaterialButton cancelButton, willWorkButton,
@@ -86,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         notesEditText.setText(notesString);
         originalStatusInt = yourValue4;
-        titleTextView.setText(DatesGenerator.normalDate(yourValue1));
+        dateTextView.setText(DatesGenerator.normalDate(yourValue1));
         toggleGroup.check(R.id.toggle_button_group);
         switch (originalStatusInt) {
             case 0:
@@ -107,8 +108,12 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_constraint);
         gestureDetector = new GestureDetectorCompat(this, new MainActivity.LearnGesture());
+
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        Log.d("MAINACTIVITY", "DISPLAY METRICS " + displayMetrics);
 
         Window window = MainActivity.this.getWindow();
 
@@ -123,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         final RecyclerView recyclerView = findViewById(R.id.recycler_view);
 //        hiddenLayout = findViewById(R.id.hidden_linear_layout);
-        titleTextView = findViewById(R.id.title_text_view);
+        dateTextView = findViewById(R.id.date_text_view);
         monthTextView = findViewById(R.id.month_text_view);
         toggleGroup = findViewById(R.id.toggle_button_group);
         cancelButton = findViewById(R.id.cancel_button);
@@ -133,14 +138,14 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 //        statusSpinner = findViewById(R.id.status_spinner);
         hoursEditText = findViewById(R.id.hours_edit_text);
         notesEditText = findViewById(R.id.notes_edit_text);
-        saveImageView = findViewById(R.id.save_image_view);
+        saveImageView = findViewById(R.id.save_button);
         hoursWorkedNumberTextView = findViewById(R.id.hours_worked_number_text_view);
         hoursWorkedTextView = findViewById(R.id.hours_worked_text_view);
         hoursBookedNumberTextView = findViewById(R.id.hours_booked_number_text_view);
         hoursBookedTextView = findViewById(R.id.hours_booked_text_view);
 
-        hoursWorkedTextView.setText(R.string.you_have_worked);
-        hoursBookedTextView.setText(R.string.you_have_booked);
+        hoursWorkedTextView.setText(R.string.total_worked_hours);
+        hoursBookedTextView.setText(R.string.booked_hours_left);
 //        String stringKlein = String.valueOf(clear);
 
 //        monthDecrementButton = findViewById(R.id.month_decrement);
@@ -202,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         monthTextView.setText(DatesGenerator.nameOfMonth(klein));
 
-        titleTextView.setText(DatesGenerator.today());
+        dateTextView.setText(DatesGenerator.today());
 
         GridLayoutManager gridLayout = new GridLayoutManager(this, NUMBER_OF_COLUMNS);
         recyclerView.setLayoutManager(gridLayout);

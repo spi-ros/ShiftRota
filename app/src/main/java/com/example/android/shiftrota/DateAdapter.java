@@ -89,10 +89,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
             holder.textViewB.setText(current.getHours());
 
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd", Locale.ENGLISH);
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
             Calendar rightNow = Calendar.getInstance();
             String formatted = dateFormat.format(rightNow.getTime());
-            String testString = holder.textViewA.getText().toString();
+            String testString = current.getDate();
 
             if (testString.equals(formatted)) {
                 holder.textViewA.setTextColor(ContextCompat.getColor(context, R.color.today_color));
