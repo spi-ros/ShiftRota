@@ -20,6 +20,10 @@
     <string name="hours_worked_sum">%s hrs</string>
     <string name="booked_hours_left">Booked hours left&#160;</string>
     <string name="hours_booked_sum">%s hrs</string>
+
+
+    <string name="total_worked_hours_smaller">H.W.&#160;</string>
+    <string name="booked_hours_left_smaller">H.L.&#160;</string>
     <string name="monday">Mon</string>
     <string name="tuesday">Tue</string>
     <string name="Wednesday">Wed</string>

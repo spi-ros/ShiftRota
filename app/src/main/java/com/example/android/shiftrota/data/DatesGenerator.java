@@ -7,9 +7,12 @@ import android.view.ViewAnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import androidx.room.Dao;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
@@ -61,11 +64,17 @@ public class DatesGenerator {
         return string.substring(0, 4);
     }
 
-    static public int getMonth() {
+    static public int getMonthInt() {
         Calendar rightNow = Calendar.getInstance();
         SimpleDateFormat format1 = new SimpleDateFormat("MM", Locale.UK);
         String stringFormat = format1.format(rightNow.getTime());
         return Integer.parseInt(stringFormat);
+    }
+
+    static public String getMonthString() {
+        Calendar rightNow = Calendar.getInstance();
+        SimpleDateFormat format1 = new SimpleDateFormat("MM", Locale.UK);
+        return format1.format(rightNow.getTime());
     }
 
     static public Calendar getToday() {
@@ -85,7 +94,7 @@ public class DatesGenerator {
         return rightNow;
     }
 
-    /** Changing date from "yyyy/MM/dd" to "dd/MM/yyyy" */
+    /** Changing date from "yy/MM/dd" to "dd/MM/yy" */
     static public  String normalDate(String string) {
         char[] c = string.toCharArray();
         char[] data = {c[8], c[9], c[7], c[5], c[6], c[4], c[2], c[3]};

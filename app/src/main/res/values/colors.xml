@@ -7,7 +7,7 @@
     <color name="ic_launcher_background">#C02B10</color>
     <color name="colorAccent">#FF4081</color>
     <color name="klein">#1DE9B6</color>
-    <color name="cell_color">#636363</color>
+    <color name="cell_color">#a0a0a0</color>
     <color name="today_color">#E0F2F1</color>
     <color name="will_work_start_color">#8ED2C9</color>
     <color name="will_work_end_color">#90837a</color>
@@ -23,4 +23,5 @@
     <color name="other_month_color">#BDBDBD</color>
     <color name="colorBlueGrey300">#90A4AE</color>
     <color name="info_color">#759683</color>
+    <color name="not_current_color">#636363</color>
 </resources>

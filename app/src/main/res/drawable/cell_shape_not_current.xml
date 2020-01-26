@@ -4,7 +4,7 @@
     <corners
         android:radius="2dp" />
     <solid
-        android:color="@color/will_work_start_color"/>
+        android:color="@color/not_current_color"/>
     <stroke
         android:color="@color/colorPrimary" />
 

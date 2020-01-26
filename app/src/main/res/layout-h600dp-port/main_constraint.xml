@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_theme_color">
+
+    <TextView
+        android:id="@+id/month_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:fontFamily="@font/abeezee_italic"
+        android:gravity="center"
+        android:text="November"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/border_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/border_text_view"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:background="@color/border_color"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/month_text_view" />
+
+    <TextView
+        android:id="@+id/thursday_text_view"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/arima_madurai"
+        android:gravity="center"
+        android:text="@string/thursday"
+        android:textColor="@color/color_days"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/friday_text_view"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/wednesday_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/border_text_view" />
+
+    <TextView
+        android:id="@+id/friday_text_view"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/arima_madurai"
+        android:gravity="center"
+        android:text="@string/friday"
+        android:textColor="@color/color_days"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/satuday_text_view"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/thursday_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/border_text_view" />
+
+    <TextView
+        android:id="@+id/satuday_text_view"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/arima_madurai"
+        android:gravity="center"
+        android:text="@string/saturday"
+        android:textColor="@color/color_days"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/sunday_text_view"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/friday_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/border_text_view" />
+
+    <TextView
+        android:id="@+id/monday_text_view"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/arima_madurai"
+        android:gravity="center"
+        android:text="@string/monday"
+        android:textColor="@color/color_days"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/tuesday_text_view"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/border_text_view" />
+
+    <TextView
+        android:id="@+id/tuesday_text_view"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/arima_madurai"
+        android:gravity="center"
+        android:text="@string/tuesday"
+        android:textColor="@color/color_days"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/wednesday_text_view"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/monday_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/border_text_view" />
+
+    <TextView
+        android:id="@+id/sunday_text_view"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/arima_madurai"
+        android:gravity="center"
+        android:text="@string/sunday"
+        android:textColor="@color/color_days"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/satuday_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/border_text_view" />
+
+    <TextView
+        android:id="@+id/wednesday_text_view"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:fontFamily="@font/arima_madurai"
+        android:gravity="center"
+        android:text="@string/Wednesday"
+        android:textColor="@color/color_days"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toStartOf="@+id/thursday_text_view"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toEndOf="@+id/tuesday_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/border_text_view" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/recycler_view_shape"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/thursday_text_view" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/hidden_layout_shape"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/options_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/recycler_view"
+            android:background="@drawable/hidden_layout_shape"
+            android:elevation="8dp"
+            android:padding="8dp">
+
+            <TextView
+                android:id="@+id/date_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginEnd="8dp"
+                android:gravity="center"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                tools:text="Title" />
+
+            <ImageView
+                android:id="@+id/save_button"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="8dp"
+                android:alpha="0.6"
+                android:background="@drawable/ic_check" />
+
+            <!--<LinearLayout-->
+            <!--android:id="@+id/status_layout"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_below="@id/title_text_view"-->
+            <!--android:layout_alignParentStart="true"-->
+            <!--android:orientation="horizontal">-->
+
+            <com.google.android.material.button.MaterialButtonToggleGroup
+                android:id="@+id/toggle_button_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/date_text_view"
+                android:layout_alignParentStart="true"
+                app:singleSelection="true">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/will_work_button"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abeezee"
+                    android:text="@string/will_work"
+                    android:textAllCaps="false"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/have_worked_button"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abeezee"
+                    android:text="@string/have_worked"
+                    android:textAllCaps="false"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/holiday_button"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abeezee"
+                    android:text="@string/holiday"
+                    android:textAllCaps="false"
+                    android:textSize="12sp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/cancel_button"
+                    style="?attr/materialButtonOutlinedStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abeezee"
+                    android:text="@string/cancel"
+                    android:textAllCaps="false"
+                    android:textSize="12sp" />
+
+            </com.google.android.material.button.MaterialButtonToggleGroup>
+
+            <!--<ImageView-->
+            <!--android:id="@+id/holiday_text_view"-->
+            <!--android:layout_width="27dp"-->
+            <!--android:layout_height="27dp"-->
+            <!--android:layout_marginStart="4dp"-->
+            <!--android:elevation="4dp"-->
+            <!--android:layout_toEndOf="@id/have_worked_text_view"-->
+            <!--android:background="@drawable/holiday_circle" />-->
+            <!--</LinearLayout>-->
+
+
+            <LinearLayout
+                android:id="@+id/hours_notes_linear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/toggle_button_group"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="4dp"
+                    android:hint="@string/hours">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/hours_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="numberDecimal" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/notes">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/notes_edit_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/hours_worked_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hours_notes_linear"
+                android:layout_marginTop="8dp"
+                android:text="@string/total_worked_hours_smaller"
+                android:textColor="@color/info_color"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/hours_worked_number_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hours_notes_linear"
+                android:layout_marginTop="8dp"
+                android:layout_toEndOf="@id/hours_worked_text_view"
+                android:textColor="@color/info_color"
+                android:textSize="18sp"
+                tools:text="31" />
+
+            <TextView
+                android:id="@+id/hours_booked_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hours_notes_linear"
+                android:layout_marginTop="8dp"
+                android:layout_toStartOf="@id/hours_booked_number_text_view"
+                android:text="@string/booked_hours_left_smaller"
+                android:textColor="@color/info_color"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/hours_booked_number_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/hours_notes_linear"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/info_color"
+                android:textSize="18sp"
+                tools:text="31" />
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,11 +14,9 @@ import java.util.Locale;
 public class DateRepository {
 
     private DateDao mDateDao;
-    private LiveData<List<String>> klein;
-    private LiveData<List<String>> mein;
     private LiveData<List<Date>> mAllDates;
     private Calendar rightNow = Calendar.getInstance();
-    private SimpleDateFormat format11 = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+    private SimpleDateFormat format11 = new SimpleDateFormat("yyyy/MM/dd", Locale.UK);
     private String stringFormats = format11.format(rightNow.getTime());
     private int years = Integer.parseInt(DatesGenerator.firstFour(stringFormats));
 
@@ -33,7 +31,7 @@ public class DateRepository {
         this.years = years;
     }
 
-    public LiveData<List<String>> getWorkedHours(int months) {
+    public LiveData<List<Date>> getWorkedHours(int months) {
 
         switch (months) {
             case 1: {
@@ -43,7 +41,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.JANUARY, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 2: {
@@ -53,7 +51,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.FEBRUARY, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 3: {
@@ -63,7 +61,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.MARCH, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 4: {
@@ -73,7 +71,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.APRIL, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 5: {
@@ -83,7 +81,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.MAY, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 6: {
@@ -93,7 +91,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.JUNE, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 7: {
@@ -103,7 +101,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.JULY, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 8: {
@@ -113,7 +111,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.AUGUST, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 9: {
@@ -123,7 +121,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 10: {
@@ -135,7 +133,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.OCTOBER, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 11: {
@@ -145,7 +143,7 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.NOVEMBER, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
             case 12: {
@@ -155,1046 +153,74 @@ public class DateRepository {
                 int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
                 rightMeow.set(years, Calendar.DECEMBER, totalOfDaysInMonth);
                 String search1 = format11.format(rightMeow.getTime());
-                klein = mDateDao.klein(search, search1);
+                mAllDates = mDateDao.loadByMonth(search, search1);
                 break;
             }
         }
-        return klein;
-    }
-
-    public LiveData<List<String>> getBookedHours(int months) {
-
-        switch (months) {
-            case 1: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.JANUARY, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.JANUARY, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 2: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.FEBRUARY, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.FEBRUARY, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 3: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.MARCH, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.MARCH, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 4: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.APRIL, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.APRIL, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 5: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.MAY, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.MAY, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 6: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.JUNE, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.JUNE, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 7: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.JULY, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.JULY, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 8: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.AUGUST, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.AUGUST, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 9: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.SEPTEMBER, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 10: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.OCTOBER, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.OCTOBER, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 11: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.NOVEMBER, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.NOVEMBER, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-            case 12: {
-                Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(years, Calendar.DECEMBER, 1);
-                String search = format11.format(rightMeow.getTime());
-                int totalOfDaysInMonth = rightMeow.getActualMaximum(Calendar.DAY_OF_MONTH);
-                rightMeow.set(years, Calendar.DECEMBER, totalOfDaysInMonth);
-                String search1 = format11.format(rightMeow.getTime());
-                mein = mDateDao.mein(search, search1);
-                break;
-            }
-        }
-        return mein;
+        return mAllDates;
     }
 
     public LiveData<List<Date>> getMonth(int month) {
 
         switch (month) {
             case 1: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.JANUARY, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.JANUARY, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.JANUARY, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.JANUARY, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.JANUARY, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.JANUARY, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.JANUARY, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.JANUARY, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.JANUARY, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.JANUARY, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsJanuary(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 2: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.FEBRUARY, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.FEBRUARY, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.FEBRUARY, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.FEBRUARY, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.FEBRUARY, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.FEBRUARY, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.FEBRUARY, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.FEBRUARY, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.FEBRUARY, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    if (totalOfDaysInMonth == 28) {
-                        etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 14);
-                        search1 = format11.format(etsi1.getTime());
-                    } else {
-                        etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 7);
-                        search1 = format11.format(etsi1.getTime());
-                    }
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.FEBRUARY, totalOfDaysInMonth + 13);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsFebruary(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 3: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.MARCH, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.MARCH, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.MARCH, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.MARCH, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.MARCH, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.MARCH, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.MARCH, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.MARCH, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.MARCH, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.MARCH, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsMarch(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 4: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.APRIL, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.APRIL, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.APRIL, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.APRIL, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.APRIL, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.APRIL, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.APRIL, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.APRIL, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.APRIL, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.APRIL, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsApril(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 5: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.MAY, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.MAY, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.MAY, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.MAY, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.MAY, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.MAY, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.MAY, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.MAY, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.MAY, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.MAY, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.MAY, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsMay(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 6: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.JUNE, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.JUNE, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.JUNE, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.JUNE, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.JUNE, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.JUNE, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.JUNE, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.JUNE, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.JUNE, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.JUNE, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsJune(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 7: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.JULY, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.JULY, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.JULY, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.JULY, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.JULY, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.JULY, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.JULY, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.JULY, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.JULY, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.JULY, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.JULY, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsJuly(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 8: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.AUGUST, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.AUGUST, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.AUGUST, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.AUGUST, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.AUGUST, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.AUGUST, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.AUGUST, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.AUGUST, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.AUGUST, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.AUGUST, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsAugust(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 9: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.SEPTEMBER, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.SEPTEMBER, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.SEPTEMBER, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.SEPTEMBER, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.SEPTEMBER, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.SEPTEMBER, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.SEPTEMBER, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.SEPTEMBER, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.SEPTEMBER, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.SEPTEMBER, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsSeptember(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 10: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.OCTOBER, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.OCTOBER, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.OCTOBER, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.OCTOBER, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.OCTOBER, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.OCTOBER, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.OCTOBER, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.OCTOBER, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.OCTOBER, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.OCTOBER, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsOctober(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 11: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.NOVEMBER, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.NOVEMBER, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.NOVEMBER, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.NOVEMBER, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.NOVEMBER, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.NOVEMBER, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.NOVEMBER, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.NOVEMBER, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.NOVEMBER, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 12);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.NOVEMBER, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsNovember(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
             case 12: {
-                String search;
-                String search1;
-                int etsiTesting;
-                Calendar etsi = Calendar.getInstance();
-                etsi.set(years, Calendar.DECEMBER, 1);
-                etsi.getTime();
-                etsiTesting = etsi.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting == 1) {
-                    etsi.set(years, Calendar.DECEMBER, 1 - 6);
-                    search = format11.format(etsi.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting == 7) {
-                    etsi.set(years, Calendar.DECEMBER, 1 - 5);
-                    search = format11.format(etsi.getTime());
-                    /*Friday*/
-                } else if (etsiTesting == 6) {
-                    etsi.set(years, Calendar.DECEMBER, 1 - 4);
-                    search = format11.format(etsi.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting == 5) {
-                    etsi.set(years, Calendar.DECEMBER, 1 - 3);
-                    search = format11.format(etsi.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting == 4) {
-                    etsi.set(years, Calendar.DECEMBER, 1 - 2);
-                    search = format11.format(etsi.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting == 3) {
-                    etsi.set(years, Calendar.DECEMBER, 0);
-                    search = format11.format(etsi.getTime());
-                    /*Monday*/
-                } else {
-                    etsi.set(years, Calendar.DECEMBER, 1);
-                    search = format11.format(etsi.getTime());
-                }
-                Calendar etsi1 = Calendar.getInstance();
-                etsi1.set(years, Calendar.DECEMBER, 1);
-                int totalOfDaysInMonth = etsi1.getActualMaximum(Calendar.DAY_OF_MONTH);
-                etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth);
-                etsi1.getTime();
-                int etsiTesting1 = etsi1.get(Calendar.DAY_OF_WEEK);
-                /*Sunday*/
-                if (etsiTesting1 == 1) {
-                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 7);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Saturday*/
-                } else if (etsiTesting1 == 7) {
-                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 8);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Friday*/
-                } else if (etsiTesting1 == 6) {
-                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 9);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Thursday*/
-                } else if (etsiTesting1 == 5) {
-                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 10);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Wednesday*/
-                } else if (etsiTesting1 == 4) {
-                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 11);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Tuesday*/
-                } else if (etsiTesting1 == 3) {
-                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 5);
-                    search1 = format11.format(etsi1.getTime());
-                    /*Monday*/
-                } else {
-                    etsi1.set(years, Calendar.DECEMBER, totalOfDaysInMonth + 6);
-                    search1 = format11.format(etsi1.getTime());
-                }
-                mAllDates = mDateDao.loadByMonth(search, search1);
+                String[] string = DateRepositoryHelper.searchStringsDecember(years);
+                mAllDates = mDateDao.loadByMonth(string[0], string[1]);
                 break;
             }
         }

@@ -27,12 +27,6 @@ public interface DateDao {
     @Query("SELECT * FROM date_table WHERE date BETWEEN :search AND :search1")
     LiveData<List<Date>> loadByMonth(String search, String search1);
 
-    @Query("SELECT hours FROM date_table WHERE status = 2 AND date BETWEEN :search AND :search1")
-    LiveData<List<String>> klein(String search, String search1);
-
-    @Query("SELECT hours FROM date_table WHERE status = 1 AND date BETWEEN :search AND :search1")
-    LiveData<List<String>> mein(String search, String search1);
-
 //    @Query("SELECT hours FROM date_table WHERE date BETWEEN :search AND :search1")
 //    LiveData<List<String>> loadHoursByMonth(String search, String search1);
 
