@@ -150,7 +150,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/thursday_text_view" />
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -297,18 +297,9 @@
 
             </LinearLayout>
 
-<!--            <NumberPicker-->
-<!--                android:id="@+id/number_picker"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:scaleX="0.85"-->
-<!--                android:scaleY="0.85" />-->
-
-
         </RelativeLayout>
 
-    </androidx.cardview.widget.CardView>
-
+    </com.google.android.material.card.MaterialCardView>
     <TextView
         android:id="@+id/hours_worked_text_view"
         android:layout_width="wrap_content"

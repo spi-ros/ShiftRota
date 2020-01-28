@@ -2,24 +2,28 @@ package com.example.android.shiftrota;
 
 import android.content.Context;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.selection.ItemDetailsLookup;
+import androidx.recyclerview.selection.ItemKeyProvider;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
+import com.example.android.shiftrota.selection.Details;
+import com.google.android.material.card.MaterialCardView;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
+public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private final LayoutInflater mInflater;
     private List<Date> mDates;
@@ -28,12 +32,7 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     private int indexInt = -1;
     private int tempPosition = -1;
     private int mMonthInt;
-
-    List<Integer> list = new ArrayList<>();
-    SelectionTracker<Long> tracker;
-//    private Activity activity;
-//    private int spinnerStatusInt;
-//    private Spinner statusSpinner;
+    private SelectionTracker<Long> tracker;
 
 
     DateAdapter(Context context) {
@@ -44,7 +43,10 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
         }
         mInflater = LayoutInflater.from(context);
         this.context = context;
-//        this.activity = activity;
+    }
+
+    void setSelectionTracker(SelectionTracker<Long> selectionTracker) {
+        this.tracker = selectionTracker;
     }
 
     @NonNull
@@ -56,109 +58,55 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final DateAdapter.ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
 
-        Log.d("DATEADAPTER", "MONTHIN " + mMonthInt);
         if (mDates != null) {
-
-
-            holder.bind();
 
             Date current = mDates.get(position);
 
-            int statusInt = current.getStatus();
+            ((ViewHolder) holder).bind(current, position);
 
             int klein = Integer.parseInt(DatesGenerator.midTwo(current.getDate()));
             Log.d("DATEADAPTER", "KLEIN " + klein);
 
-//            if (indexInt == position) {
-//                holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_check);
-//            } else if (klein != mMonthInt) {
-//                holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_not_current);
-//            } else {
-//                switch (statusInt) {
-//                    case 0:
-//                        holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_unchecked);
-//                        break;
-//                    case 1:
-//                        holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_will_work);
-//                        break;
-//                    case 2:
-//                        holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_have_worked);
-//                        break;
-//                    case 3:
-//                        holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_holiday);
-//                        break;
-//                }
-//            }
+            int statusInt = current.getStatus();
 
-            holder.dayTextView.setText(DatesGenerator.lastTwo(current.getDate()));
+            if (indexInt == position) {
+                ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_check);
+            } else if (klein != mMonthInt) {
+                ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_not_current);
+            } else {
+                switch (statusInt) {
+                    case 0:
+                        ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_unchecked);
+                        break;
+                    case 1:
+                        ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_will_work);
+                        break;
+                    case 2:
+                        ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_have_worked);
+                        break;
+                    case 3:
+                        ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_holiday);
+                        break;
+                }
+            }
 
-            holder.hoursWorkedTextView.setText(current.getHours());
+            ((ViewHolder) holder).dayTextView.setText(DatesGenerator.lastTwo(current.getDate()));
+
+            ((ViewHolder) holder).hoursWorkedTextView.setText(current.getHours());
 
             String currentDate = current.getDate();
 
             if (currentDate.equals(DatesGenerator.todayTheOtherWay())) {
-                holder.dayTextView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
+                ((ViewHolder) holder).dayTextView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
             }
 
         } else {
-            holder.dayTextView.setText(com.example.android.shiftrota.R.string.no_data);
+            ((ViewHolder) holder).dayTextView.setText(com.example.android.shiftrota.R.string.no_data);
         }
 
-//        final boolean[] isSelected = {false};
-
-//        final ActionMode[] currentActionMode = new ActionMode[1];
-//
-//        ActionMode.Callback actionModeCallback = new ActionMode.Callback() {
-//            @Override
-//            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//                MenuInflater inflater = mode.getMenuInflater();
-//                inflater.inflate(R.menu.action_text_view, menu);
-//                return true;
-//            }
-//
-//            @Override
-//            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//                switch (item.getItemId()) {
-//                    case R.id.menu_clear:
-//                        return true;
-//                    case R.id.menu_will_work:
-//                        return true;
-//                    case R.id.menu_have_worked:
-//                        return true;
-//                    case R.id.menu_holiday:
-//                        return true;
-//                    case R.id.menu_select_hours:
-//                        return true;
-//                    case R.id.menu_notes:
-//                        return true;
-//                    default:
-//                        return false;
-//                }
-//            }
-//
-//            @Override
-//            public void onDestroyActionMode(ActionMode mode) {
-//                currentActionMode[0] = null;
-//            }
-//        };
-//
-//        holder.dayTextView.setOnLongClickListener(v -> {
-//            if (currentActionMode[0] != null) {
-//                return false;
-//            }
-//            currentActionMode[0] = activity.startActionMode(actionModeCallback);
-//            v.setSelected(true);
-//            return true;
-//        });
-
-        holder.dayTextView.setOnClickListener(v -> {
+        ((ViewHolder) holder).dayTextView.setOnClickListener(v -> {
 
             indexInt = position;
             notifyDataSetChanged();
@@ -172,31 +120,6 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
             Toast.makeText(context.getApplicationContext(), "You clicked " +
                     dateString, Toast.LENGTH_SHORT).show();
         });
-
-//        if (indexInt == position) {
-//            holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_check);
-//        } else if (klein != DatesGenerator.getMonthInt()) {
-//            holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_not_current);
-//        } else {
-//            Date current = mDates.get(holder.getAdapterPosition());
-//
-//            int testInt = current.getStatus();
-//
-//            switch (testInt) {
-//                case 0:
-//                    holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_unchecked);
-//                    break;
-//                case 1:
-//                    holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_will_work);
-//                    break;
-//                case 2:
-//                    holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_have_worked);
-//                    break;
-//                case 3:
-//                    holder.dayTextView.setBackgroundResource(R.drawable.cell_shape_holiday);
-//                    break;
-//            }
-//        }
     }
 
     void setDates(List<Date> dates, int monthInt) {
@@ -223,69 +146,32 @@ public class DateAdapter extends RecyclerView.Adapter<DateAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
+        private final Details details;
+        private final MaterialCardView materialCardView;
         TextView dayTextView, hoursWorkedTextView;
-
-        void bind() {
-            itemView.isActivated();
-        }
-
-        public ItemDetailsLookup.ItemDetails<Long> getItemDetails(){
-            return new ItemDetailsLookup.ItemDetails<Long>(){
-                @Override
-                public int getPosition() {
-                    return getAdapterPosition();
-                }
-
-                @NonNull
-                @Override
-                public Long getSelectionKey() {
-                    return getItemId();
-                }
-            };
-        }
-
 
         ViewHolder(View itemView) {
             super(itemView);
+            materialCardView = itemView.findViewById(R.id.item_card);
             dayTextView = itemView.findViewById(R.id.item_text_view_main);
             hoursWorkedTextView = itemView.findViewById(R.id.item_text_view_details);
+            details = new Details();
         }
-    }
 
-//    private void setUpSpinner() {
-//
-//        ArrayAdapter statusSpinnerAdapter = ArrayAdapter.createFromResource(activity,
-//                R.array.array_hours_options, android.R.layout.simple_spinner_item);
-//
-//        statusSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-//
-//        statusSpinner.setAdapter(statusSpinnerAdapter);
-//
-//        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                String selection = (String) parent.getItemAtPosition(position);
-//                if (!selection.isEmpty()) {
-//                    switch (selection) {
-//                        case "Clear":
-//                            spinnerStatusInt = 0;
-//                            break;
-//                        case "Work":
-//                            spinnerStatusInt = 1;
-//                            break;
-//                        case "Worked":
-//                            spinnerStatusInt = 2;
-//                            break;
-//                        case "Holiday":
-//                            spinnerStatusInt = 3;
-//                            break;
-//                    }
-//                }
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                spinnerStatusInt = 0;
-//            }
-//        });
-//    }
+        private void bind(Date date, int position) {
+            details.position = position;
+            if (tracker != null) {
+                bindSelectedState();
+            }
+        }
+
+        private void bindSelectedState() {
+            materialCardView.setChecked(tracker.isSelected(details.getSelectionKey()));
+        }
+
+        public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
+            return details;
+        }
+
+    }
 }

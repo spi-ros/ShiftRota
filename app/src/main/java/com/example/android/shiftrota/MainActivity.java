@@ -1,9 +1,10 @@
 package com.example.android.shiftrota;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.ActionMode;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +14,6 @@ import android.os.Bundle;
 
 import androidx.recyclerview.selection.SelectionPredicates;
 import androidx.recyclerview.selection.SelectionTracker;
-import androidx.recyclerview.selection.StableIdKeyProvider;
 import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +21,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -28,33 +30,35 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.NumberPicker;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.shiftrota.UI.DateViewModel;
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
-import com.example.android.shiftrota.selection.MyItemDetailsLookup;
+import com.example.android.shiftrota.selection.DetailsLookup;
+import com.example.android.shiftrota.selection.KeyProvider;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 
-public class MainActivity extends AppCompatActivity implements DateAdapter.AdapterCallback {
+public class MainActivity extends AppCompatActivity implements DateAdapter.AdapterCallback, ActionMode.Callback {
 
     int statusInt;
     int monthInt = DatesGenerator.getMonthInt();
     Date date;
     DateAdapter dateAdapter;
+    RecyclerView recyclerView;
     SelectionTracker<Long> tracker;
+    private ActionMode actionMode;
     static final int NUMBER_OF_COLUMNS = 7;
     static String dateString;
     TextView dateTextView, monthTextView, hoursWorkedNumberTextView,
@@ -63,20 +67,14 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     MaterialButton cancelButton, willWorkButton,
             haveWorkedButton, holidayButton, saveButton;
     TextInputEditText hoursEditText, notesEditText;
-//    NumberPicker numberPicker;
     DateViewModel mDateViewModel;
     private Calendar rightNow = Calendar.getInstance();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
     private String formattedString = simpleDateFormat.format(rightNow.getTime());
     private int year = Integer.parseInt(DatesGenerator.firstFour(formattedString));
     private GestureDetectorCompat gestureDetector;
-//    RelativeLayout optionsLayout;
-    //    Button  monthIncrementButton, monthDecrementButton;
-    //    Spinner statusSpinner;
 
     public void onMethodCallback(String dateString, String hoursString, String notesString, int originalStatusInt) {
-//        DatesGenerator.layoutAnimation(hiddenLayout, true);
-//        hiddenLayout.setElevation(4);
 
         MainActivity.dateString = dateString;
         statusInt = originalStatusInt;
@@ -127,8 +125,6 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_constraint);
 
-        int testInt = monthInt;
-
         gestureDetector = new GestureDetectorCompat(this, new MainActivity.LearnGesture());
 
 
@@ -146,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark));
 
-        final RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        recyclerView = findViewById(R.id.recycler_view);
         dateTextView = findViewById(R.id.date_text_view);
         monthTextView = findViewById(R.id.month_text_view);
         toggleGroup = findViewById(R.id.toggle_button_group);
@@ -159,19 +155,6 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         saveButton = findViewById(R.id.save_button);
         hoursWorkedNumberTextView = findViewById(R.id.hours_worked_number_text_view);
         hoursBookedNumberTextView = findViewById(R.id.hours_booked_number_text_view);
-
-
-//        numberPicker = findViewById(R.id.number_picker);
-//        statusSpinner = findViewById(R.id.status_spinner);
-//        optionsLayout = findViewById(R.id.options_relative_layout);
-
-//        numberPicker.setMinValue(1);
-//
-//        numberPicker.setMaxValue(15);
-//        numberPicker.setWrapSelectorWheel(true);
-//        numberPicker.setOnValueChangedListener((numberPicker, i, i1) -> {
-//
-//        });
 
         Observer<List<Date>> monthDates = dates -> {
             for (int i = 0; i < dates.size(); i++) {
@@ -215,7 +198,8 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                     getString(R.string.hours_booked_sum), stringDouble1));
         };
 
-        mDateViewModel = ViewModelProviders.of(this).get(DateViewModel.class);
+        ViewModelProvider modelProvider = new ViewModelProvider(this);
+        mDateViewModel = modelProvider.get(DateViewModel.class);
 
         mDateViewModel.getAnotherMonth().observe(this, monthDates);
         mDateViewModel.setInputMonth(monthInt);
@@ -230,21 +214,38 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         recyclerView.setLayoutManager(gridLayout);
 
         dateAdapter = new DateAdapter(this);
-
-        dateAdapter.setHasStableIds(true);
-
         recyclerView.setAdapter(dateAdapter);
 
         tracker = new SelectionTracker.Builder<Long>(
-                "my-selection-id",
+                "selection",
                 recyclerView,
-                new StableIdKeyProvider(recyclerView),
-                new MyItemDetailsLookup(recyclerView),
+                new KeyProvider(dateAdapter),
+                new DetailsLookup(recyclerView),
                 StorageStrategy.createLongStorage())
                 .withSelectionPredicate(SelectionPredicates.createSelectAnything())
                 .build();
 
-        tracker = dateAdapter.tracker;
+        dateAdapter.setSelectionTracker(tracker);
+
+        tracker.addObserver(
+                new SelectionTracker.SelectionObserver<Long>() {
+                    @Override
+                    public void onSelectionChanged() {
+                        if (tracker.getSelection().size() > 0) {
+                            List<String> list = new ArrayList();
+                            list.add(tracker.getSelection().toString());
+                            Log.d("MAINACTIVITY", "TrackerSelection " + tracker.getSelection().toString());
+                            Log.d("mainACTVITY", "list " + list);
+                            if (actionMode == null) {
+                                actionMode = startSupportActionMode(MainActivity.this);
+                            }
+                            assert actionMode != null;
+                            actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
+                        } else if (actionMode != null) {
+                            actionMode.finish();
+                        }
+                    }
+                });
 
         cancelButton.setOnClickListener(view -> statusInt = 0);
 
@@ -254,31 +255,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         holidayButton.setOnClickListener(view -> statusInt = 3);
 
-//        monthDecrementButton.setOnClickListener(v -> {
-//            if (monthInt == 1) {
-//                return;
-//            }
-//            monthInt--;
-//            mDateViewModel.setInputMonth(monthInt);
-//            monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
-//        });
-
-//        monthIncrementButton.setOnClickListener(v -> {
-//            if (monthInt == 12) {
-//                return;
-//            }
-//            monthInt++;
-//            mDateViewModel.setInputMonth(monthInt);
-//            monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
-//        });
-
-//        MaterialButtonToggleGroup.OnButtonCheckedListener listener = (group, checkedId, isChecked) -> {
-//            if (!isChecked)
-//                Toast.makeText(MainActivity.this, "Testing", Toast.LENGTH_SHORT).show();
-//        };
-
         saveButton.setOnClickListener(v -> {
-//            toggleGroup.addOnButtonCheckedListener(listener);
             String hoursString = Objects.requireNonNull(hoursEditText.getText()).toString().trim();
             String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
 
@@ -317,11 +294,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 mDateViewModel.insert(date);
             }
             Log.d("MAINACTIVITY", "STATUSINT " + statusInt);
-//            DatesGenerator.layoutAnimation(hiddenLayout, false);
         });
-
-//        clearImageView.setOnClickListener(v ->
-//                DatesGenerator.layoutAnimation(hiddenLayout, false));
     }
 
     @Override
@@ -370,15 +343,43 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         View view = getCurrentFocus();
-        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP || ev.getAction() == MotionEvent.ACTION_MOVE) && view instanceof EditText && !view.getClass().getName().startsWith("android.webkit.")) {
+        if (view != null && (ev.getAction() == MotionEvent.ACTION_UP ||
+                ev.getAction() == MotionEvent.ACTION_MOVE) &&
+                view instanceof EditText &&
+                !view.getClass().getName().startsWith("android.webkit.")) {
             int[] screen = new int[2];
             view.getLocationOnScreen(screen);
             float x = ev.getRawX() + view.getLeft() - screen[0];
             float y = ev.getRawY() + view.getTop() - screen[1];
-            if (x < view.getLeft() || x > view.getRight() || y < view.getTop() || y > view.getBottom())
-                ((InputMethodManager) Objects.requireNonNull(this.getSystemService(Context.INPUT_METHOD_SERVICE))).hideSoftInputFromWindow((this.getWindow().getDecorView().getApplicationWindowToken()), 0);
+            if (x < view.getLeft() || x > view.getRight() ||
+                    y < view.getTop() || y > view.getBottom())
+                ((InputMethodManager) Objects.requireNonNull(this.
+                        getSystemService(Context.INPUT_METHOD_SERVICE))).
+                        hideSoftInputFromWindow((this.getWindow().
+                                getDecorView().getApplicationWindowToken()), 0);
         }
         return super.dispatchTouchEvent(ev);
+    }
+
+    @Override
+    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+        return false;
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode mode) {
+        tracker.clearSelection();
+        this.actionMode = null;
     }
 
     class LearnGesture extends GestureDetector.SimpleOnGestureListener {
@@ -411,35 +412,4 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         }
     }
 
-//    private void setUpSpinner() {
-//
-//        ArrayAdapter statusSpinnerAdapter = ArrayAdapter.createFromResource(this,
-//                R.array.array_hours_options, android.R.layout.simple_spinner_item);
-//
-//        statusSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-//
-//        statusSpinner.setAdapter(statusSpinnerAdapter);
-//
-//        statusSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-//            @Override
-//            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                selection = (String) parent.getItemAtPosition(position);
-//                if (!selection.isEmpty()) {
-//                    if (selection.equals(getString(R.string.cancel))) {
-//                        statusInt = 0;
-//                    } else if (selection.equals(getString(R.string.will_work))) {
-//                        statusInt = 1;
-//                    } else if (selection.equals(getString(R.string.have_worked))) {
-//                        statusInt = 2;
-//                    } else if (selection.equals(getString(R.string.holiday))) {
-//                        statusInt = 3;
-//                    }
-//                }
-//            }
-//            @Override
-//            public void onNothingSelected(AdapterView<?> parent) {
-//                statusInt = 0;
-//            }
-//        });
-//    }
 }
