@@ -1,7 +1,6 @@
 package com.example.android.shiftrota;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.view.ActionMode;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,8 +20,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.GestureDetector;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -44,23 +41,23 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 
-public class MainActivity extends AppCompatActivity implements DateAdapter.AdapterCallback, ActionMode.Callback {
+public class MainActivity extends AppCompatActivity implements DateAdapter.AdapterCallback {
 
+    static final int NUMBER_OF_COLUMNS = 7;
+    static String dateString;
     int statusInt;
     int monthInt = DatesGenerator.getMonthInt();
     Date date;
     DateAdapter dateAdapter;
     RecyclerView recyclerView;
     SelectionTracker<Long> tracker;
-    private ActionMode actionMode;
-    static final int NUMBER_OF_COLUMNS = 7;
-    static String dateString;
     TextView dateTextView, monthTextView, hoursWorkedNumberTextView,
             hoursBookedNumberTextView;
     MaterialButtonToggleGroup toggleGroup;
@@ -74,73 +71,10 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     private int year = Integer.parseInt(DatesGenerator.firstFour(formattedString));
     private GestureDetectorCompat gestureDetector;
 
-    public void onMethodCallback(String dateString, String hoursString, String notesString, int originalStatusInt) {
-
-        MainActivity.dateString = dateString;
-        statusInt = originalStatusInt;
-
-        if (hoursString == null || hoursString.matches("null")) {
-            Objects.requireNonNull(hoursEditText.getText()).clear();
-        } else {
-            hoursEditText.setText(hoursString);
-        }
-
-        notesEditText.setText(notesString);
-
-        // get the center for the clipping circle
-        int cx = dateTextView.getWidth() / 2;
-        int cy = dateTextView.getHeight() / 2;
-
-        // get the final radius for the clipping circle
-        float finalRadius = (float) Math.hypot(cx, cy);
-
-        // create the animator for this view (the start radius is zero)
-        Animator anim = ViewAnimationUtils.createCircularReveal(dateTextView, cx, cy, 0f, finalRadius);
-        anim.setDuration(550);
-
-        // make the view visible and start the animation
-        dateTextView.setVisibility(View.VISIBLE);
-        anim.start();
-        dateTextView.setText(DatesGenerator.normalDate(dateString));
-
-        toggleGroup.check(R.id.toggle_button_group);
-        switch (statusInt) {
-            case 0:
-                toggleGroup.clearChecked();
-                break;
-            case 1:
-                toggleGroup.check(R.id.will_work_button);
-                break;
-            case 2:
-                toggleGroup.check(R.id.have_worked_button);
-                break;
-            case 3:
-                toggleGroup.check(R.id.holiday_button);
-                break;
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_constraint);
-
-        gestureDetector = new GestureDetectorCompat(this, new MainActivity.LearnGesture());
-
-
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        Log.d("MAINACTIVITY", "DISPLAY METRICS " + displayMetrics);
-
-        Window window = MainActivity.this.getWindow();
-
-        // clear FLAG_TRANSLUCENT_STATUS flag:
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-        // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark));
 
         recyclerView = findViewById(R.id.recycler_view);
         dateTextView = findViewById(R.id.date_text_view);
@@ -155,6 +89,22 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         saveButton = findViewById(R.id.save_button);
         hoursWorkedNumberTextView = findViewById(R.id.hours_worked_number_text_view);
         hoursBookedNumberTextView = findViewById(R.id.hours_booked_number_text_view);
+
+        gestureDetector = new GestureDetectorCompat(this, new MainActivity.LearnGesture());
+
+        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        Log.d("MAINACTIVITY", "DISPLAY METRICS " + displayMetrics);
+
+        Window window = MainActivity.this.getWindow();
+
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(MainActivity.this, R.color.colorPrimaryDark));
 
         Observer<List<Date>> monthDates = dates -> {
             for (int i = 0; i < dates.size(); i++) {
@@ -209,6 +159,9 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
         dateTextView.setText(DatesGenerator.today());
+        if (dateString == null) {
+            dateString = DatesGenerator.today();
+        }
 
         GridLayoutManager gridLayout = new GridLayoutManager(this, NUMBER_OF_COLUMNS);
         recyclerView.setLayoutManager(gridLayout);
@@ -216,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         dateAdapter = new DateAdapter(this);
         recyclerView.setAdapter(dateAdapter);
 
-        tracker = new SelectionTracker.Builder<Long>(
+        tracker = new SelectionTracker.Builder<>(
                 "selection",
                 recyclerView,
                 new KeyProvider(dateAdapter),
@@ -227,26 +180,6 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         dateAdapter.setSelectionTracker(tracker);
 
-        tracker.addObserver(
-                new SelectionTracker.SelectionObserver<Long>() {
-                    @Override
-                    public void onSelectionChanged() {
-                        if (tracker.getSelection().size() > 0) {
-                            List<String> list = new ArrayList();
-                            list.add(tracker.getSelection().toString());
-                            Log.d("MAINACTIVITY", "TrackerSelection " + tracker.getSelection().toString());
-                            Log.d("mainACTVITY", "list " + list);
-                            if (actionMode == null) {
-                                actionMode = startSupportActionMode(MainActivity.this);
-                            }
-                            assert actionMode != null;
-                            actionMode.setTitle(String.valueOf(tracker.getSelection().size()));
-                        } else if (actionMode != null) {
-                            actionMode.finish();
-                        }
-                    }
-                });
-
         cancelButton.setOnClickListener(view -> statusInt = 0);
 
         willWorkButton.setOnClickListener(view -> statusInt = 1);
@@ -255,46 +188,77 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
         holidayButton.setOnClickListener(view -> statusInt = 3);
 
-        saveButton.setOnClickListener(v -> {
-            String hoursString = Objects.requireNonNull(hoursEditText.getText()).toString().trim();
-            String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
+        tracker.addObserver(
+                new SelectionTracker.SelectionObserver<Long>() {
+                    @Override
+                    public void onSelectionChanged() {
+                        if (tracker.getSelection().size() > 0) {
+                            String testString01 = tracker.getSelection().toString();
+                            String search = testString01.substring(testString01.indexOf("[") + 1, testString01.indexOf("]"));
+                            List<String> searchItems = Arrays.asList(search.split(", "));
+                            List<String> testList = new ArrayList<>();
 
-            if (dateString == null)
-                dateString = DatesGenerator.today();
+                            Log.d("MainActivity", "testString01 " + testString01);
 
-            if (statusInt == 1 && DatesGenerator.getCalendarFromString(dateString).
-                    before(DatesGenerator.getToday())) {
-                Toast.makeText(MainActivity.this, getResources().
-                                getString(R.string.cant_book_in_the_past),
-                        Toast.LENGTH_SHORT).show();
-                Toast.makeText(MainActivity.this, getResources().
-                                getString(R.string.change_status_or_date_in_future),
-                        Toast.LENGTH_SHORT).show();
-            } else if (statusInt == 2 && DatesGenerator.getCalendarFromString(dateString).
-                    after(DatesGenerator.getToday())) {
-                Toast.makeText(MainActivity.this, getResources().
-                                getString(R.string.cant_book_in_the_future),
-                        Toast.LENGTH_SHORT).show();
-                Toast.makeText(MainActivity.this, getResources().
-                                getString(R.string.change_status_or_date_in_past),
-                        Toast.LENGTH_SHORT).show();
-            } else if ((statusInt == 1 || statusInt == 2) &&
-                    (hoursString.isEmpty() || hoursString.matches("0") ||
-                            hoursString.matches("00"))) {
-                Toast.makeText(MainActivity.this, "Please give the amount of hours",
-                        Toast.LENGTH_SHORT).show();
-            } else if (statusInt == 0) {
-                date = new Date(dateString, statusInt, null, null);
-                mDateViewModel.insert(date);
-            } else if (statusInt == 3) {
-                date = new Date(dateString, statusInt, null, notesString);
-                mDateViewModel.insert(date);
-            } else {
-                date = new Date(dateString, statusInt, hoursString, notesString);
-                mDateViewModel.insert(date);
-            }
-            Log.d("MAINACTIVITY", "STATUSINT " + statusInt);
-        });
+                            for (int i = 0; i < searchItems.size(); i++) {
+                                String klein = dateAdapter.getItemInPosition(Integer.parseInt(searchItems.get(i)));
+                                testList.add(klein);
+                            }
+                            Log.d("MainActivity", "searchItems " + searchItems);
+                            Log.d("MainActivity", "testList " + testList);
+
+                            saveButton.setOnClickListener(view -> {
+                                String hoursString = Objects.requireNonNull(hoursEditText.getText()).toString().trim();
+                                String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
+                                for (int i = 0; i < testList.size(); i++) {
+                                    if (statusInt == 1 && DatesGenerator.getCalendarFromString(testList.get(i)).
+                                            before(DatesGenerator.getToday())) {
+                                        Toast.makeText(MainActivity.this, getResources().
+                                                        getString(R.string.cant_book_in_the_past),
+                                                Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, getResources().
+                                                        getString(R.string.change_status_or_date_in_future),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else if (statusInt == 2 && DatesGenerator.getCalendarFromString(testList.get(i)).
+                                            after(DatesGenerator.getToday())) {
+                                        Toast.makeText(MainActivity.this, getResources().
+                                                        getString(R.string.cant_book_in_the_future),
+                                                Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(MainActivity.this, getResources().
+                                                        getString(R.string.change_status_or_date_in_past),
+                                                Toast.LENGTH_SHORT).show();
+                                    } else if ((statusInt == 1 || statusInt == 2) &&
+                                            (hoursString.isEmpty() || hoursString.matches("0") ||
+                                                    hoursString.matches("00"))) {
+                                        Toast.makeText(MainActivity.this, "Please give the amount of hours",
+                                                Toast.LENGTH_SHORT).show();
+                                    } else if (statusInt == 0) {
+                                        for (int j = 0; j < testList.size(); j++) {
+                                            date = new Date(testList.get(j), statusInt, null, null);
+                                            mDateViewModel.insert(date);
+                                        }
+                                        Log.d("MainActivity", "Insert status 00");
+                                    } else if (statusInt == 3) {
+                                        for (int j = 0; j < testList.size(); j++) {
+                                            date = new Date(testList.get(j), statusInt, null, notesString);
+                                            mDateViewModel.insert(date);
+                                        }
+                                        Log.d("MainActivity", "Insert status 03");
+                                    } else {
+                                        for (int j = 0; j < testList.size(); j++) {
+                                            date = new Date(testList.get(j), statusInt, hoursString, notesString);
+                                            mDateViewModel.insert(date);
+                                        }
+                                        Log.d("MainActivity", "Insert status 01 02");
+                                    }
+                                }
+                                if (tracker.hasSelection()) {
+                                    tracker.clearSelection();
+                                }
+                            });
+                        }
+                    }
+                });
     }
 
     @Override
@@ -325,10 +289,11 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        mDateViewModel.setInputMonth(monthInt);
-        monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
-        Log.d("BACK", "BACK");
+        if (tracker.hasSelection()) {
+            tracker.clearSelection();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -361,25 +326,50 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         return super.dispatchTouchEvent(ev);
     }
 
-    @Override
-    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-        return true;
-    }
+    public void onMethodCallback(String dateString, String hoursString, String notesString, int originalStatusInt) {
 
-    @Override
-    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-        return false;
-    }
+        MainActivity.dateString = dateString;
+        statusInt = originalStatusInt;
 
-    @Override
-    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-        return false;
-    }
+        if (hoursString == null || hoursString.matches("null")) {
+            Objects.requireNonNull(hoursEditText.getText()).clear();
+        } else {
+            hoursEditText.setText(hoursString);
+        }
 
-    @Override
-    public void onDestroyActionMode(ActionMode mode) {
-        tracker.clearSelection();
-        this.actionMode = null;
+        notesEditText.setText(notesString);
+
+        // get the center for the clipping circle
+        int cx = dateTextView.getWidth() / 2;
+        int cy = dateTextView.getHeight() / 2;
+
+        // get the final radius for the clipping circle
+        float finalRadius = (float) Math.hypot(cx, cy);
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim = ViewAnimationUtils.createCircularReveal(dateTextView, cx, cy, 0f, finalRadius);
+        anim.setDuration(550);
+
+        // make the view visible and start the animation
+        dateTextView.setVisibility(View.VISIBLE);
+        anim.start();
+        dateTextView.setText(DatesGenerator.normalDate(dateString));
+
+        toggleGroup.check(R.id.toggle_button_group);
+        switch (statusInt) {
+            case 0:
+                toggleGroup.clearChecked();
+                break;
+            case 1:
+                toggleGroup.check(R.id.will_work_button);
+                break;
+            case 2:
+                toggleGroup.check(R.id.have_worked_button);
+                break;
+            case 3:
+                toggleGroup.check(R.id.holiday_button);
+                break;
+        }
     }
 
     class LearnGesture extends GestureDetector.SimpleOnGestureListener {
@@ -392,6 +382,11 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                     year = year - 1;
                     mDateViewModel.setYears(year);
                 }
+
+                if (tracker.hasSelection()) {
+                    tracker.clearSelection();
+                }
+
                 monthInt--;
                 mDateViewModel.setInputMonth(monthInt);
                 mDateViewModel.setInputWorkedHours(monthInt);
@@ -403,6 +398,11 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                     year = year + 1;
                     mDateViewModel.setYears(year);
                 }
+
+                if (tracker.hasSelection()) {
+                    tracker.clearSelection();
+                }
+
                 monthInt++;
                 mDateViewModel.setInputMonth(monthInt);
                 mDateViewModel.setInputWorkedHours(monthInt);
@@ -411,5 +411,4 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
             return true;
         }
     }
-
 }

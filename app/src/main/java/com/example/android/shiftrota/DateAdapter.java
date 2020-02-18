@@ -1,21 +1,20 @@
 package com.example.android.shiftrota;
 
 import android.content.Context;
+
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.selection.ItemDetailsLookup;
-import androidx.recyclerview.selection.ItemKeyProvider;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
 import com.example.android.shiftrota.selection.Details;
@@ -30,7 +29,6 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private AdapterCallback mAdapterCallback;
     private int indexInt = -1;
-    private int tempPosition = -1;
     private int mMonthInt;
     private SelectionTracker<Long> tracker;
 
@@ -66,66 +64,20 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
             ((ViewHolder) holder).bind(current, position);
 
-            int klein = Integer.parseInt(DatesGenerator.midTwo(current.getDate()));
-            Log.d("DATEADAPTER", "KLEIN " + klein);
-
-            int statusInt = current.getStatus();
-
-            if (indexInt == position) {
-                ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_check);
-            } else if (klein != mMonthInt) {
-                ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_not_current);
-            } else {
-                switch (statusInt) {
-                    case 0:
-                        ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_unchecked);
-                        break;
-                    case 1:
-                        ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_will_work);
-                        break;
-                    case 2:
-                        ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_have_worked);
-                        break;
-                    case 3:
-                        ((ViewHolder) holder).dayTextView.setBackgroundResource(R.drawable.cell_shape_holiday);
-                        break;
-                }
-            }
-
-            ((ViewHolder) holder).dayTextView.setText(DatesGenerator.lastTwo(current.getDate()));
-
-            ((ViewHolder) holder).hoursWorkedTextView.setText(current.getHours());
-
-            String currentDate = current.getDate();
-
-            if (currentDate.equals(DatesGenerator.todayTheOtherWay())) {
-                ((ViewHolder) holder).dayTextView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
-            }
-
         } else {
             ((ViewHolder) holder).dayTextView.setText(com.example.android.shiftrota.R.string.no_data);
         }
-
-        ((ViewHolder) holder).dayTextView.setOnClickListener(v -> {
-
-            indexInt = position;
-            notifyDataSetChanged();
-
-            Date current = mDates.get(position);
-            String dateString = current.getDate();
-            String hoursString = String.valueOf(current.getHours());
-            String notesString = current.getNotes();
-            int statusInt = current.getStatus();
-            mAdapterCallback.onMethodCallback(dateString, hoursString, notesString, statusInt);
-            Toast.makeText(context.getApplicationContext(), "You clicked " +
-                    dateString, Toast.LENGTH_SHORT).show();
-        });
     }
 
     void setDates(List<Date> dates, int monthInt) {
         mDates = dates;
         mMonthInt = monthInt;
         notifyDataSetChanged();
+    }
+
+    String getItemInPosition(int position) {
+        Date date = mDates.get(position);
+        return date.getDate();
     }
 
     @Override
@@ -160,6 +112,40 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private void bind(Date date, int position) {
             details.position = position;
+
+            int klein = Integer.parseInt(DatesGenerator.midTwo(date.getDate()));
+
+            int statusInt = date.getStatus();
+
+                if (klein != mMonthInt) {
+                dayTextView.setBackgroundResource(R.drawable.cell_shape_not_current);
+                materialCardView.setCheckable(false);
+            } else {
+                switch (statusInt) {
+                    case 0:
+                        dayTextView.setBackgroundResource(R.drawable.cell_shape_unchecked);
+                        break;
+                    case 1:
+                        dayTextView.setBackgroundResource(R.drawable.cell_shape_will_work);
+                        break;
+                    case 2:
+                        dayTextView.setBackgroundResource(R.drawable.cell_shape_have_worked);
+                        break;
+                    case 3:
+                        dayTextView.setBackgroundResource(R.drawable.cell_shape_holiday);
+                        break;
+                }
+            }
+
+            dayTextView.setText(DatesGenerator.lastTwo(date.getDate()));
+
+            hoursWorkedTextView.setText(date.getHours());
+
+            String currentDate = date.getDate();
+
+            if (currentDate.equals(DatesGenerator.todayTheOtherWay())) {
+                dayTextView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
+            }
             if (tracker != null) {
                 bindSelectedState();
             }
