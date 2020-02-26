@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,8 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private int indexInt = -1;
     private int mMonthInt;
     private SelectionTracker<Long> tracker;
+    int previousExpandedPosition = -1;
+    int mExpandedPosition = -1;
 
 
     DateAdapter(Context context) {
@@ -67,6 +70,7 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         } else {
             ((ViewHolder) holder).dayTextView.setText(com.example.android.shiftrota.R.string.no_data);
         }
+
     }
 
     void setDates(List<Date> dates, int monthInt) {
@@ -101,11 +105,15 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private final Details details;
         private final MaterialCardView materialCardView;
         TextView dayTextView, hoursWorkedTextView;
+        RecyclerView recyclerView;
+//        RelativeLayout hiddenLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
+            recyclerView = itemView.findViewById(R.id.recycler_view);
             materialCardView = itemView.findViewById(R.id.item_card);
             dayTextView = itemView.findViewById(R.id.item_text_view_main);
+//            hiddenLayout = itemView.findViewById(R.id.hidden_layout);
             hoursWorkedTextView = itemView.findViewById(R.id.item_text_view_details);
             details = new Details();
         }

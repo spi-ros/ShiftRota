@@ -147,6 +147,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/recycler_view_shape"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/status_number_picker"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/thursday_text_view" />
 
@@ -156,9 +157,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/hidden_layout_shape"
         android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view">
+        app:layout_constraintStart_toStartOf="parent">
 
         <RelativeLayout
             android:id="@+id/options_relative_layout"
@@ -188,8 +189,8 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:backgroundTint="#beebd1"
-                android:textSize="12sp"
-                android:text="SAVE" />
+                android:text="@string/save"
+                android:textSize="12sp" />
 
             <!--<LinearLayout-->
             <!--android:id="@+id/status_layout"-->
@@ -300,6 +301,7 @@
         </RelativeLayout>
 
     </com.google.android.material.card.MaterialCardView>
+
     <TextView
         android:id="@+id/hours_worked_text_view"
         android:layout_width="wrap_content"
@@ -352,5 +354,85 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="219dp" />
+
+    <!--    <com.google.android.material.chip.ChipGroup-->
+    <!--        android:id="@+id/chip_group"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:chipSpacing="8dp"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/recycler_view"-->
+    <!--        app:singleSelection="true">-->
+
+    <!--        <com.google.android.material.chip.Chip-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:checkable="true"-->
+    <!--            android:text="@string/will_work" />-->
+
+    <!--        <com.google.android.material.chip.Chip-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:checkable="true"-->
+    <!--            android:text="@string/have_worked" />-->
+
+    <!--        <com.google.android.material.chip.Chip-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:checkable="true"-->
+    <!--            android:text="@string/holiday" />-->
+
+    <!--        <com.google.android.material.chip.Chip-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:checkable="true"-->
+    <!--            android:text="@string/cancel" />-->
+    <!--    </com.google.android.material.chip.ChipGroup>-->
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/status_number_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_margin="6dp"
+        android:layout_marginEnd="23dp"
+        app:layout_constraintEnd_toStartOf="@+id/hours_number_picker"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+        app:np_dividerColor="@color/colorPrimary"
+        app:np_formatter="@string/number_picker_formatter"
+        app:np_height="64dp"
+        app:np_orientation="horizontal"
+        app:np_selectedTextColor="@color/colorPrimary"
+        app:np_selectedTextSize="15dp"
+        app:np_textColor="@color/colorPrimary"
+        app:np_textSize="8dp"
+        app:np_typeface="@string/roboto_light"
+        app:np_width="180dp" />
+
+    <com.shawnlin.numberpicker.NumberPicker
+        android:id="@+id/hours_number_picker"
+        android:layout_width="wrap_content"
+        android:layout_height="46dp"
+        android:layout_margin="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/status_number_picker"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+        app:np_dividerColor="@color/colorPrimary"
+        app:np_formatter="@string/number_picker_formatter"
+        app:np_height="64dp"
+        app:np_orientation="horizontal"
+        app:np_selectedTextColor="@color/colorPrimary"
+        app:np_selectedTextSize="15dp"
+        app:np_textColor="@color/colorPrimary"
+        app:np_textSize="8dp"
+        app:np_typeface="@string/roboto_light"
+        app:np_width="180dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="333dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

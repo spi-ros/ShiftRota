@@ -38,6 +38,7 @@ import com.example.android.shiftrota.selection.KeyProvider;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textfield.TextInputEditText;
+import com.shawnlin.numberpicker.NumberPicker;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -63,13 +64,15 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     MaterialButtonToggleGroup toggleGroup;
     MaterialButton cancelButton, willWorkButton,
             haveWorkedButton, holidayButton, saveButton;
-    TextInputEditText hoursEditText, notesEditText;
+    TextInputEditText notesEditText;
     DateViewModel mDateViewModel;
     private Calendar rightNow = Calendar.getInstance();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
     private String formattedString = simpleDateFormat.format(rightNow.getTime());
     private int year = Integer.parseInt(DatesGenerator.firstFour(formattedString));
     private GestureDetectorCompat gestureDetector;
+    NumberPicker statusNumberPicker, hoursNumberPicker;
+    int statusChangedValue, hoursChangedValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,16 +87,34 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         willWorkButton = findViewById(R.id.will_work_button);
         haveWorkedButton = findViewById(R.id.have_worked_button);
         holidayButton = findViewById(R.id.holiday_button);
-        hoursEditText = findViewById(R.id.hours_edit_text);
+//        hoursEditText = findViewById(R.id.hours_edit_text);
         notesEditText = findViewById(R.id.notes_edit_text);
         saveButton = findViewById(R.id.save_button);
         hoursWorkedNumberTextView = findViewById(R.id.hours_worked_number_text_view);
         hoursBookedNumberTextView = findViewById(R.id.hours_booked_number_text_view);
+        statusNumberPicker = findViewById(R.id.status_number_picker);
+        hoursNumberPicker = findViewById(R.id.hours_number_picker);
+
+        String[] data = {"Clear", "Work", "Worked", "Holiday"};
+        statusNumberPicker.setMinValue(1);
+        statusNumberPicker.setMaxValue(data.length);
+        statusNumberPicker.setDisplayedValues(data);
+        statusNumberPicker.setDividerDistance(200);
+        statusNumberPicker.setDividerThickness(3);
+        statusNumberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
+            statusChangedValue = newVal;
+        });
+
+        hoursNumberPicker.setMinValue(1);
+        hoursNumberPicker.setMaxValue(15);
+        hoursNumberPicker.setDividerThickness(3);
+        hoursNumberPicker.setOnValueChangedListener(((picker, oldVal, newVal) -> {
+            hoursChangedValue = newVal;
+        }));
 
         gestureDetector = new GestureDetectorCompat(this, new MainActivity.LearnGesture());
 
         DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
-        Log.d("MAINACTIVITY", "DISPLAY METRICS " + displayMetrics);
 
         Window window = MainActivity.this.getWindow();
 
@@ -179,14 +200,16 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 .build();
 
         dateAdapter.setSelectionTracker(tracker);
+        statusNumberPicker.setOnClickListener(view ->
+                Log.d("MainActivity", "Number Picker OnClick " + statusNumberPicker.getValue()));
 
-        cancelButton.setOnClickListener(view -> statusInt = 0);
-
-        willWorkButton.setOnClickListener(view -> statusInt = 1);
-
-        haveWorkedButton.setOnClickListener(view -> statusInt = 2);
-
-        holidayButton.setOnClickListener(view -> statusInt = 3);
+//        cancelButton.setOnClickListener(view -> statusInt = 0);
+//
+//        willWorkButton.setOnClickListener(view -> statusInt = 1);
+//
+//        haveWorkedButton.setOnClickListener(view -> statusInt = 2);
+//
+//        holidayButton.setOnClickListener(view -> statusInt = 3);
 
         tracker.addObserver(
                 new SelectionTracker.SelectionObserver<Long>() {
@@ -208,7 +231,9 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                             Log.d("MainActivity", "testList " + testList);
 
                             saveButton.setOnClickListener(view -> {
-                                String hoursString = Objects.requireNonNull(hoursEditText.getText()).toString().trim();
+                                statusInt = statusChangedValue - 1;
+//                                Log.d("MainActivity", "klein " + klein);
+                                String hoursString = String.valueOf(hoursChangedValue);
                                 String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
                                 for (int i = 0; i < testList.size(); i++) {
                                     if (statusInt == 1 && DatesGenerator.getCalendarFromString(testList.get(i)).
@@ -237,19 +262,16 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                                             date = new Date(testList.get(j), statusInt, null, null);
                                             mDateViewModel.insert(date);
                                         }
-                                        Log.d("MainActivity", "Insert status 00");
                                     } else if (statusInt == 3) {
                                         for (int j = 0; j < testList.size(); j++) {
                                             date = new Date(testList.get(j), statusInt, null, notesString);
                                             mDateViewModel.insert(date);
                                         }
-                                        Log.d("MainActivity", "Insert status 03");
                                     } else {
                                         for (int j = 0; j < testList.size(); j++) {
                                             date = new Date(testList.get(j), statusInt, hoursString, notesString);
                                             mDateViewModel.insert(date);
                                         }
-                                        Log.d("MainActivity", "Insert status 01 02");
                                     }
                                 }
                                 if (tracker.hasSelection()) {
@@ -331,11 +353,11 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         MainActivity.dateString = dateString;
         statusInt = originalStatusInt;
 
-        if (hoursString == null || hoursString.matches("null")) {
-            Objects.requireNonNull(hoursEditText.getText()).clear();
-        } else {
-            hoursEditText.setText(hoursString);
-        }
+//        if (hoursString == null || hoursString.matches("null")) {
+//            Objects.requireNonNull(hoursEditText.getText()).clear();
+//        } else {
+//            hoursEditText.setText(hoursString);
+//        }
 
         notesEditText.setText(notesString);
 
@@ -359,15 +381,19 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         switch (statusInt) {
             case 0:
                 toggleGroup.clearChecked();
+                statusNumberPicker.setValue(1);
                 break;
             case 1:
                 toggleGroup.check(R.id.will_work_button);
+                statusNumberPicker.setValue(2);
                 break;
             case 2:
                 toggleGroup.check(R.id.have_worked_button);
+                statusNumberPicker.setValue(3);
                 break;
             case 3:
                 toggleGroup.check(R.id.holiday_button);
+                statusNumberPicker.setValue(4);
                 break;
         }
     }
