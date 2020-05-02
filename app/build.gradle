@@ -4,6 +4,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 29
+    viewBinding.enabled = true
     defaultConfig {
         applicationId "com.example.android.shiftrota"
         minSdkVersion 21

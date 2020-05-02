@@ -126,7 +126,7 @@ public class DateRepository {
             }
             case 10: {
                 Calendar rightMeow = Calendar.getInstance();
-                rightMeow.set(2019, Calendar.OCTOBER, 1);
+                rightMeow.set(years, Calendar.OCTOBER, 1);
                 rightMeow.getTime();
 //                Log.d("DATEREPOSITORY", "CALENDAR" + rightMeow);
                 String search = format11.format(rightMeow.getTime());

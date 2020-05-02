@@ -2,12 +2,20 @@ package com.example.android.shiftrota.data;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.Context;
+import android.content.res.Resources;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.widget.LinearLayout;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
-import androidx.room.Dao;
+import androidx.recyclerview.selection.SelectionTracker;
+
+import com.example.android.shiftrota.MainActivity;
+import com.example.android.shiftrota.R;
+import com.example.android.shiftrota.UI.DateViewModel;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -139,6 +147,60 @@ public class DatesGenerator {
             monthString = "December";
         }
         return monthString;
+    }
+
+    static public void saveInit(int statusChangedValue, int hoursChangedValue, EditText notesEditText,
+                                List<String> testList, DateViewModel mDateViewModel,
+                                SelectionTracker tracker, Context context, Resources resources) {
+
+        int statusInt = statusChangedValue - 1;
+
+        String hoursString = String.valueOf(hoursChangedValue);
+        String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
+
+        for (int i = 0; i < testList.size(); i++) {
+            Date date;
+            if (statusInt == 1 && DatesGenerator.getCalendarFromString(testList.get(i)).
+                    before(DatesGenerator.getToday())) {
+                Toast.makeText(context, resources.
+                                getString(R.string.cant_book_in_the_past),
+                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, resources.
+                                getString(R.string.change_status_or_date_in_future),
+                        Toast.LENGTH_SHORT).show();
+            } else if (statusInt == 2 && DatesGenerator.getCalendarFromString(testList.get(i)).
+                    after(DatesGenerator.getToday())) {
+                Toast.makeText(context, resources.
+                                getString(R.string.cant_book_in_the_future),
+                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, resources.
+                                getString(R.string.change_status_or_date_in_past),
+                        Toast.LENGTH_SHORT).show();
+            } else if ((statusInt == 1 || statusInt == 2) &&
+                    (hoursString.isEmpty() || hoursString.matches("0") ||
+                            hoursString.matches("00"))) {
+                Toast.makeText(context, "Please give the amount of hours",
+                        Toast.LENGTH_SHORT).show();
+            } else if (statusInt == 0) {
+                for (int j = 0; j < testList.size(); j++) {
+                    date = new Date(testList.get(j), statusInt, null, null);
+                    mDateViewModel.insert(date);
+                }
+            } else if (statusInt == 3) {
+                for (int j = 0; j < testList.size(); j++) {
+                    date = new Date(testList.get(j), statusInt, null, notesString);
+                    mDateViewModel.insert(date);
+                }
+            } else {
+                for (int j = 0; j < testList.size(); j++) {
+                    date = new Date(testList.get(j), statusInt, hoursString, notesString);
+                    mDateViewModel.insert(date);
+                }
+            }
+        }
+        if (tracker.hasSelection()) {
+            tracker.clearSelection();
+        }
     }
 
 

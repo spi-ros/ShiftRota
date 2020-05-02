@@ -7,38 +7,30 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.core.view.GestureDetectorCompat;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.animation.Animator;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.recyclerview.selection.SelectionPredicates;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StorageStrategy;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.shiftrota.UI.DateViewModel;
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
+import com.example.android.shiftrota.databinding.MainConstraintBinding;
 import com.example.android.shiftrota.selection.DetailsLookup;
 import com.example.android.shiftrota.selection.KeyProvider;
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.button.MaterialButtonToggleGroup;
-import com.google.android.material.textfield.TextInputEditText;
-import com.shawnlin.numberpicker.NumberPicker;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -49,72 +41,56 @@ import java.util.Locale;
 import java.util.Objects;
 
 
-public class MainActivity extends AppCompatActivity implements DateAdapter.AdapterCallback {
+public class MainActivity extends AppCompatActivity {
 
     static final int NUMBER_OF_COLUMNS = 7;
-    static String dateString;
-    int statusInt;
     int monthInt = DatesGenerator.getMonthInt();
-    Date date;
     DateAdapter dateAdapter;
-    RecyclerView recyclerView;
     SelectionTracker<Long> tracker;
-    TextView dateTextView, monthTextView, hoursWorkedNumberTextView,
-            hoursBookedNumberTextView;
-    MaterialButtonToggleGroup toggleGroup;
-    MaterialButton cancelButton, willWorkButton,
-            haveWorkedButton, holidayButton, saveButton;
-    TextInputEditText notesEditText;
     DateViewModel mDateViewModel;
+    int statusChangedValue;
+    int hoursChangedValue;
+    BottomSheetBehavior bottomSheetBehavior;
+    GestureDetectorCompat gestureDetector;
     private Calendar rightNow = Calendar.getInstance();
     private SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
     private String formattedString = simpleDateFormat.format(rightNow.getTime());
     private int year = Integer.parseInt(DatesGenerator.firstFour(formattedString));
-    private GestureDetectorCompat gestureDetector;
-    NumberPicker statusNumberPicker, hoursNumberPicker;
-    int statusChangedValue, hoursChangedValue;
+    private MainConstraintBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_constraint);
+        binding = MainConstraintBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
+        setContentView(view);
 
-        recyclerView = findViewById(R.id.recycler_view);
-        dateTextView = findViewById(R.id.date_text_view);
-        monthTextView = findViewById(R.id.month_text_view);
-        toggleGroup = findViewById(R.id.toggle_button_group);
-        cancelButton = findViewById(R.id.cancel_button);
-        willWorkButton = findViewById(R.id.will_work_button);
-        haveWorkedButton = findViewById(R.id.have_worked_button);
-        holidayButton = findViewById(R.id.holiday_button);
-//        hoursEditText = findViewById(R.id.hours_edit_text);
-        notesEditText = findViewById(R.id.notes_edit_text);
-        saveButton = findViewById(R.id.save_button);
-        hoursWorkedNumberTextView = findViewById(R.id.hours_worked_number_text_view);
-        hoursBookedNumberTextView = findViewById(R.id.hours_booked_number_text_view);
-        statusNumberPicker = findViewById(R.id.status_number_picker);
-        hoursNumberPicker = findViewById(R.id.hours_number_picker);
+        assert binding.collapsingRelativeLayout != null;
+        bottomSheetBehavior = BottomSheetBehavior.from(binding.collapsingRelativeLayout);
 
         String[] data = {"Clear", "Work", "Worked", "Holiday"};
-        statusNumberPicker.setMinValue(1);
-        statusNumberPicker.setMaxValue(data.length);
-        statusNumberPicker.setDisplayedValues(data);
-        statusNumberPicker.setDividerDistance(200);
-        statusNumberPicker.setDividerThickness(3);
-        statusNumberPicker.setOnValueChangedListener((picker, oldVal, newVal) -> {
-            statusChangedValue = newVal;
-        });
+        assert binding.statusPicker != null;
+        binding.statusPicker.setMinValue(1);
+        binding.statusPicker.setMaxValue(data.length);
+        binding.statusPicker.setDisplayedValues(data);
+        binding.statusPicker.setDividerDistance(200);
+        binding.statusPicker.setDividerThickness(3);
+        binding.statusPicker.setOnValueChangedListener((picker, oldVal, newVal) ->
+                statusChangedValue = newVal);
 
-        hoursNumberPicker.setMinValue(1);
-        hoursNumberPicker.setMaxValue(15);
-        hoursNumberPicker.setDividerThickness(3);
-        hoursNumberPicker.setOnValueChangedListener(((picker, oldVal, newVal) -> {
-            hoursChangedValue = newVal;
-        }));
+//        String[] pickerHoursString = {"1", "1.5", "2", "2.5", "3", "3.5", "4", "4.5",
+//        "5", "5.5", "6", "6.5", "7", "7.5", "8", "8.5", "9", "9.5", "10", "10.5", "11",
+//        "11.5", "12", "12.5", "13", "13.5", "14", "14.5", "15"};
 
-        gestureDetector = new GestureDetectorCompat(this, new MainActivity.LearnGesture());
+        assert binding.hoursNumberPicker != null;
+        binding.hoursNumberPicker.setMinValue(1);
+        binding.hoursNumberPicker.setMaxValue(15);
+//        hoursNumberPicker.setDisplayedValues(pickerHoursString);
+        binding.hoursNumberPicker.setDividerThickness(3);
+        binding.hoursNumberPicker.setOnValueChangedListener(((picker, oldVal, newVal) ->
+                hoursChangedValue = newVal));
 
-        DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+        gestureDetector = new GestureDetectorCompat(this, new LearnGesture());
 
         Window window = MainActivity.this.getWindow();
 
@@ -136,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                         dateString.compareTo(DatesGenerator.todayTheOtherWay()) < 0)) {
                     Date updateDate = new Date(dateString,
                             2, date.getHours(), date.getNotes());
-
                     mDateViewModel.insert(updateDate);
                 }
             }
@@ -162,10 +137,10 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 }
             }
             String stringDouble = Double.toString(workedStatusDouble1);
-            hoursWorkedNumberTextView.setText(String.format(getResources().
+            binding.hoursWorkedNumberTextView.setText(String.format(getResources().
                     getString(R.string.hours_worked_sum), stringDouble));
             String stringDouble1 = Double.toString(bookedStatusDouble1);
-            hoursBookedNumberTextView.setText(String.format(getResources().
+            binding.hoursBookedNumberTextView.setText(String.format(getResources().
                     getString(R.string.hours_booked_sum), stringDouble1));
         };
 
@@ -178,107 +153,91 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         mDateViewModel.getWorkedHours().observe(this, hoursObserver);
         mDateViewModel.setInputWorkedHours(monthInt);
 
-        monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
-        dateTextView.setText(DatesGenerator.today());
-        if (dateString == null) {
-            dateString = DatesGenerator.today();
-        }
+        binding.monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
 
         GridLayoutManager gridLayout = new GridLayoutManager(this, NUMBER_OF_COLUMNS);
-        recyclerView.setLayoutManager(gridLayout);
+        binding.recyclerView.setLayoutManager(gridLayout);
 
         dateAdapter = new DateAdapter(this);
-        recyclerView.setAdapter(dateAdapter);
+        binding.recyclerView.setAdapter(dateAdapter);
 
         tracker = new SelectionTracker.Builder<>(
                 "selection",
-                recyclerView,
+                binding.recyclerView,
                 new KeyProvider(dateAdapter),
-                new DetailsLookup(recyclerView),
+                new DetailsLookup(binding.recyclerView),
                 StorageStrategy.createLongStorage())
                 .withSelectionPredicate(SelectionPredicates.createSelectAnything())
                 .build();
 
         dateAdapter.setSelectionTracker(tracker);
-        statusNumberPicker.setOnClickListener(view ->
-                Log.d("MainActivity", "Number Picker OnClick " + statusNumberPicker.getValue()));
-
-//        cancelButton.setOnClickListener(view -> statusInt = 0);
-//
-//        willWorkButton.setOnClickListener(view -> statusInt = 1);
-//
-//        haveWorkedButton.setOnClickListener(view -> statusInt = 2);
-//
-//        holidayButton.setOnClickListener(view -> statusInt = 3);
 
         tracker.addObserver(
                 new SelectionTracker.SelectionObserver<Long>() {
                     @Override
                     public void onSelectionChanged() {
                         if (tracker.getSelection().size() > 0) {
-                            String testString01 = tracker.getSelection().toString();
-                            String search = testString01.substring(testString01.indexOf("[") + 1, testString01.indexOf("]"));
-                            List<String> searchItems = Arrays.asList(search.split(", "));
-                            List<String> testList = new ArrayList<>();
 
-                            Log.d("MainActivity", "testString01 " + testString01);
+                            binding.notesEditText.setText("");
+
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                            int selectionSizeInt = tracker.getSelection().size();
+
+                            String trackerSelectionString = tracker.getSelection().toString();
+                            String search = trackerSelectionString.
+                                    substring(trackerSelectionString.indexOf("[") + 1,
+                                            trackerSelectionString.indexOf("]"));
+                            List<String> searchItems = Arrays.asList(search.split(", "));
+                            List<String> datesList = new ArrayList<>();
 
                             for (int i = 0; i < searchItems.size(); i++) {
-                                String klein = dateAdapter.getItemInPosition(Integer.parseInt(searchItems.get(i)));
-                                testList.add(klein);
-                            }
-                            Log.d("MainActivity", "searchItems " + searchItems);
-                            Log.d("MainActivity", "testList " + testList);
-
-                            saveButton.setOnClickListener(view -> {
-                                statusInt = statusChangedValue - 1;
-//                                Log.d("MainActivity", "klein " + klein);
-                                String hoursString = String.valueOf(hoursChangedValue);
-                                String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
-                                for (int i = 0; i < testList.size(); i++) {
-                                    if (statusInt == 1 && DatesGenerator.getCalendarFromString(testList.get(i)).
-                                            before(DatesGenerator.getToday())) {
-                                        Toast.makeText(MainActivity.this, getResources().
-                                                        getString(R.string.cant_book_in_the_past),
-                                                Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(MainActivity.this, getResources().
-                                                        getString(R.string.change_status_or_date_in_future),
-                                                Toast.LENGTH_SHORT).show();
-                                    } else if (statusInt == 2 && DatesGenerator.getCalendarFromString(testList.get(i)).
-                                            after(DatesGenerator.getToday())) {
-                                        Toast.makeText(MainActivity.this, getResources().
-                                                        getString(R.string.cant_book_in_the_future),
-                                                Toast.LENGTH_SHORT).show();
-                                        Toast.makeText(MainActivity.this, getResources().
-                                                        getString(R.string.change_status_or_date_in_past),
-                                                Toast.LENGTH_SHORT).show();
-                                    } else if ((statusInt == 1 || statusInt == 2) &&
-                                            (hoursString.isEmpty() || hoursString.matches("0") ||
-                                                    hoursString.matches("00"))) {
-                                        Toast.makeText(MainActivity.this, "Please give the amount of hours",
-                                                Toast.LENGTH_SHORT).show();
-                                    } else if (statusInt == 0) {
-                                        for (int j = 0; j < testList.size(); j++) {
-                                            date = new Date(testList.get(j), statusInt, null, null);
-                                            mDateViewModel.insert(date);
-                                        }
-                                    } else if (statusInt == 3) {
-                                        for (int j = 0; j < testList.size(); j++) {
-                                            date = new Date(testList.get(j), statusInt, null, notesString);
-                                            mDateViewModel.insert(date);
-                                        }
-                                    } else {
-                                        for (int j = 0; j < testList.size(); j++) {
-                                            date = new Date(testList.get(j), statusInt, hoursString, notesString);
-                                            mDateViewModel.insert(date);
-                                        }
+                                String dateString = dateAdapter.
+                                        getItemInPosition(Integer.parseInt(searchItems.get(i)));
+                                int monthCheckInt = Integer.parseInt(DatesGenerator.midTwo(dateString));
+                                if (monthCheckInt != monthInt) {
+                                    if (tracker.isSelected(Long.parseLong(searchItems.get(i)))) {
+                                        selectionSizeInt = selectionSizeInt - 1;
                                     }
+                                } else {
+                                    datesList.add(dateString);
                                 }
-                                if (tracker.hasSelection()) {
-                                    tracker.clearSelection();
+                            }
+
+                            String selectionSizeString = String.valueOf(selectionSizeInt);
+                            if (selectionSizeInt == 0) {
+                                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                            }
+                            assert binding.selectedTextView != null;
+                            binding.selectedTextView.setText(selectionSizeString);
+
+                            if (selectionSizeInt == 1) {
+                                String notesString = dateAdapter.
+                                        getItemNotesInPosition(Integer.parseInt(searchItems.get(0)));
+                                binding.notesEditText.setText(notesString);
+
+                                Configuration config = getResources().getConfiguration();
+                                int screenHeight = config.screenHeightDp;
+
+                                if (screenHeight < 700) {
+                                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+                                } else {
+                                    bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                                 }
-                            });
+                            }
+                            binding.saveButton.setOnClickListener(view -> DatesGenerator.
+                                    saveInit(statusChangedValue, hoursChangedValue,
+                                            binding.notesEditText, datesList, mDateViewModel, tracker,
+                                            getApplicationContext(), getResources()));
+                        } else {
+                            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                            binding.statusPicker.setValue(1);
+                            binding.hoursNumberPicker.setValue(1);
                         }
+                    }
+
+                    @Override
+                    public void onItemStateChanged(@NonNull Long key, boolean selected) {
+                        super.onItemStateChanged(key, selected);
                     }
                 });
     }
@@ -299,14 +258,14 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
     protected void onPause() {
         super.onPause();
         mDateViewModel.setInputMonth(monthInt);
-        monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
+        binding.monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         mDateViewModel.setInputMonth(monthInt);
-        monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
+        binding.monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
     }
 
     @Override
@@ -348,56 +307,6 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
         return super.dispatchTouchEvent(ev);
     }
 
-    public void onMethodCallback(String dateString, String hoursString, String notesString, int originalStatusInt) {
-
-        MainActivity.dateString = dateString;
-        statusInt = originalStatusInt;
-
-//        if (hoursString == null || hoursString.matches("null")) {
-//            Objects.requireNonNull(hoursEditText.getText()).clear();
-//        } else {
-//            hoursEditText.setText(hoursString);
-//        }
-
-        notesEditText.setText(notesString);
-
-        // get the center for the clipping circle
-        int cx = dateTextView.getWidth() / 2;
-        int cy = dateTextView.getHeight() / 2;
-
-        // get the final radius for the clipping circle
-        float finalRadius = (float) Math.hypot(cx, cy);
-
-        // create the animator for this view (the start radius is zero)
-        Animator anim = ViewAnimationUtils.createCircularReveal(dateTextView, cx, cy, 0f, finalRadius);
-        anim.setDuration(550);
-
-        // make the view visible and start the animation
-        dateTextView.setVisibility(View.VISIBLE);
-        anim.start();
-        dateTextView.setText(DatesGenerator.normalDate(dateString));
-
-        toggleGroup.check(R.id.toggle_button_group);
-        switch (statusInt) {
-            case 0:
-                toggleGroup.clearChecked();
-                statusNumberPicker.setValue(1);
-                break;
-            case 1:
-                toggleGroup.check(R.id.will_work_button);
-                statusNumberPicker.setValue(2);
-                break;
-            case 2:
-                toggleGroup.check(R.id.have_worked_button);
-                statusNumberPicker.setValue(3);
-                break;
-            case 3:
-                toggleGroup.check(R.id.holiday_button);
-                statusNumberPicker.setValue(4);
-                break;
-        }
-    }
-
     class LearnGesture extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onFling(MotionEvent event1, MotionEvent event2,
@@ -416,7 +325,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 monthInt--;
                 mDateViewModel.setInputMonth(monthInt);
                 mDateViewModel.setInputWorkedHours(monthInt);
-                monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
+                binding.monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
             }
             if (event2.getX() < event1.getX()) {
                 if (monthInt == 12) {
@@ -432,7 +341,7 @@ public class MainActivity extends AppCompatActivity implements DateAdapter.Adapt
                 monthInt++;
                 mDateViewModel.setInputMonth(monthInt);
                 mDateViewModel.setInputWorkedHours(monthInt);
-                monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
+                binding.monthTextView.setText(DatesGenerator.nameOfMonth(monthInt));
             }
             return true;
         }

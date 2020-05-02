@@ -18,9 +18,6 @@ public abstract class DateRoomDatabase extends RoomDatabase {
     /*Make the DateRoomDatabase a singleton to prevent having multiple instances of the database
      opened at the same time */
     private static volatile DateRoomDatabase INSTANCE;
-    private static int MY_MONTH = 0;
-    private static int MY_DAY = 1;
-    private static Calendar rightNow = Calendar.getInstance();
     private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
 
         @Override
@@ -84,58 +81,6 @@ public abstract class DateRoomDatabase extends RoomDatabase {
                 endCalendar.set(2070, 11, 31);
                 endCalendar.getTime();
                 iterateBetweenDatesJava7(startCalendar, endCalendar);
-//                LocalDate localDateStart = LocalDate.of(2000, 1, 1);
-//                LocalDate localDateEnd = LocalDate.of(2070, 12, 31);
-//                for (LocalDate localDate = localDateStart; localDate.isBefore(localDateEnd); localDate = localDate.plusDays(1)) {
-//                    String string = localDate.format(DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.ENGLISH));
-//                    Date date = new Date(string, 0, null, null);
-//                    mDao.insert(date);
-//                }
-
-//
-//                SimpleDateFormat format1 = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
-//
-//                String stringFormat = format1.format(rightNow.getTime());
-//                int year = Integer.parseInt(DatesGenerator.firstFour(stringFormat));
-//
-//                rightNow.set(year, MY_MONTH, MY_DAY);
-//
-//                for (int i = 0; i < 13; i++) {
-//
-//                    rightNow.add(Calendar.DATE, 0);
-//                    String formatted = format1.format(rightNow.getTime());
-//                    Date date = new Date(formatted, 0, null, null);
-//                    mDao.insert(date);
-//
-//                    int test = rightNow.getActualMaximum(Calendar.DATE);
-//
-//                    for (int j = 1; j < test; j++) {
-//                        rightNow.add(Calendar.DATE, 1);
-//                        String formatted2 = format1.format(rightNow.getTime());
-//                        Date date1 = new Date(formatted2, 0, null, null);
-//                        mDao.insert(date1);
-//                    }
-////                    rightNow.set(year, MY_MONTH++, MY_DAY);
-//                }
-//
-//                rightNow.set(year+1, MY_MONTH, MY_DAY);
-//                for (int i = 0; i < 13; i++) {
-//
-//                    rightNow.add(Calendar.DATE, 0);
-//                    String formatted = format1.format(rightNow.getTime());
-//                    Date date = new Date(formatted, 0, null, null);
-//                    mDao.insert(date);
-//
-//                    int test = rightNow.getActualMaximum(Calendar.DATE);
-//
-//                    for (int j = 1; j < test; j++) {
-//                        rightNow.add(Calendar.DATE, 1);
-//                        String formatted2 = format1.format(rightNow.getTime());
-//                        Date date1 = new Date(formatted2, 0, null, null);
-//                        mDao.insert(date1);
-//                    }
-////                    rightNow.set(year, MY_MONTH++, MY_DAY);
-//                }
             }
             return null;
         }

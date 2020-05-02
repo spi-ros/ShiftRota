@@ -12,8 +12,8 @@
     <color name="will_work_start_color">#8ED2C9</color>
     <color name="will_work_end_color">#90837a</color>
     <color name="have_worked">#00bcb1</color>
-    <color name="cancel_start_color">#ff887f</color>
-    <color name="border_color">#FFC9CA</color>
+    <color name="cancel_start_color">#6dd0c7</color>
+    <color name="cancel_end_color">#e1f8f5</color>
     <color name="holiday">#d6e8e7</color>
     <color name="month">#FCF4D9</color>
     <color name="hidden_layout_color">#0bc998</color>

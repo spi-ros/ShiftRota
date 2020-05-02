@@ -1,39 +1,52 @@
-<?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/item_card"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_margin="1.5dp"
+    android:id="@+id/material_card_view"
+    android:layout_width="47dp"
+    android:layout_height="69dp"
+    android:layout_margin="1dp"
     android:checkable="true"
     android:clickable="true"
     android:focusable="true">
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <TextView
-            android:id="@+id/item_text_view_main"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            android:textColor="@android:color/black"
-            android:textSize="16sp"
-            tools:text="301" />
-
-        <TextView
-            android:id="@+id/item_text_view_details"
+            android:id="@+id/day_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentBottom="true"
-            android:gravity="end|bottom"
             android:paddingStart="2dp"
             android:paddingEnd="2dp"
             android:textColor="@android:color/black"
-            android:textSize="12sp"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="31" />
-    </RelativeLayout>
+
+        <TextView
+            android:id="@+id/hours_worked_text_view"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:gravity="center"
+            android:textColor="@android:color/black"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="12" />
+
+        <TextView
+            android:id="@+id/notes_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="1dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:singleLine="true"
+            tools:text="Spiros" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

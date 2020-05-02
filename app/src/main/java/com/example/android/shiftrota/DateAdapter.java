@@ -8,16 +8,14 @@ import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
+import com.example.android.shiftrota.databinding.ItemViewBinding;
 import com.example.android.shiftrota.selection.Details;
 import com.google.android.material.card.MaterialCardView;
 
@@ -28,20 +26,11 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private final LayoutInflater mInflater;
     private List<Date> mDates;
     private Context context;
-    private AdapterCallback mAdapterCallback;
-    private int indexInt = -1;
     private int mMonthInt;
     private SelectionTracker<Long> tracker;
-    int previousExpandedPosition = -1;
-    int mExpandedPosition = -1;
 
 
     DateAdapter(Context context) {
-        try {
-            this.mAdapterCallback = ((AdapterCallback) context);
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement AdapterCallback.");
-        }
         mInflater = LayoutInflater.from(context);
         this.context = context;
     }
@@ -55,22 +44,15 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public DateAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = mInflater.inflate(R.layout.item_view, parent, false);
         return new ViewHolder(v);
-
     }
 
     @Override
     public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, final int position) {
 
         if (mDates != null) {
-
             Date current = mDates.get(position);
-
             ((ViewHolder) holder).bind(current, position);
-
-        } else {
-            ((ViewHolder) holder).dayTextView.setText(com.example.android.shiftrota.R.string.no_data);
         }
-
     }
 
     void setDates(List<Date> dates, int monthInt) {
@@ -84,6 +66,11 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return date.getDate();
     }
 
+    String getItemNotesInPosition(int position) {
+        Date date = mDates.get(position);
+        return date.getNotes();
+    }
+
     @Override
     public int getItemCount() {
         if (mDates != null)
@@ -93,79 +80,81 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public long getItemId(int position) {
-        return (long) position;
-    }
-
-    public interface AdapterCallback {
-        void onMethodCallback(String yourValue1, String yourValue2, String yourValue3, int statusInt);
+        return position;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         private final Details details;
         private final MaterialCardView materialCardView;
-        TextView dayTextView, hoursWorkedTextView;
-        RecyclerView recyclerView;
-//        RelativeLayout hiddenLayout;
+        TextView dayTextView, hoursWorkedTextView, notesTextView;
+
 
         ViewHolder(View itemView) {
             super(itemView);
-            recyclerView = itemView.findViewById(R.id.recycler_view);
-            materialCardView = itemView.findViewById(R.id.item_card);
-            dayTextView = itemView.findViewById(R.id.item_text_view_main);
-//            hiddenLayout = itemView.findViewById(R.id.hidden_layout);
-            hoursWorkedTextView = itemView.findViewById(R.id.item_text_view_details);
+            materialCardView = itemView.findViewById(R.id.material_card_view);
+            dayTextView = itemView.findViewById(R.id.day_text_view);
+            hoursWorkedTextView = itemView.findViewById(R.id.hours_worked_text_view);
+            notesTextView = itemView.findViewById(R.id.notes_text_view);
             details = new Details();
         }
 
         private void bind(Date date, int position) {
+
             details.position = position;
 
             int klein = Integer.parseInt(DatesGenerator.midTwo(date.getDate()));
 
             int statusInt = date.getStatus();
 
-                if (klein != mMonthInt) {
-                dayTextView.setBackgroundResource(R.drawable.cell_shape_not_current);
-                materialCardView.setCheckable(false);
-            } else {
+            if (klein == mMonthInt) {
+
+                materialCardView.setChecked(tracker.isSelected(details.getSelectionKey()));
+
                 switch (statusInt) {
                     case 0:
-                        dayTextView.setBackgroundResource(R.drawable.cell_shape_unchecked);
+                        materialCardView.setBackgroundResource(R.drawable.cell_shape_unchecked);
                         break;
                     case 1:
-                        dayTextView.setBackgroundResource(R.drawable.cell_shape_will_work);
+                        materialCardView.setBackgroundResource(R.drawable.cell_shape_will_work);
                         break;
                     case 2:
-                        dayTextView.setBackgroundResource(R.drawable.cell_shape_have_worked);
+                        materialCardView.setBackgroundResource(R.drawable.cell_shape_have_worked);
                         break;
                     case 3:
-                        dayTextView.setBackgroundResource(R.drawable.cell_shape_holiday);
+                        materialCardView.setBackgroundResource(R.drawable.cell_shape_holiday);
                         break;
                 }
-            }
 
+                if (date.getHours() != null) {
+                    hoursWorkedTextView.setText(date.getHours());
+                    hoursWorkedTextView.setVisibility(View.VISIBLE);
+                } else {
+                    hoursWorkedTextView.setVisibility(View.GONE);
+                }
+
+                String notesString = date.getNotes();
+                if (!(notesString == null) && notesString.length() > 6) {
+                    String firstSevenChars = notesString.substring(0, 6);
+                    notesTextView.setText(firstSevenChars);
+                } else {
+                    notesTextView.setText(notesString);
+                }
+
+                String currentDate = date.getDate();
+
+                if (currentDate.equals(DatesGenerator.todayTheOtherWay())) {
+                    dayTextView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
+                }
+            } else {
+                materialCardView.setBackgroundResource(R.drawable.cell_shape_not_current);
+                hoursWorkedTextView.setVisibility(View.GONE);
+            }
             dayTextView.setText(DatesGenerator.lastTwo(date.getDate()));
-
-            hoursWorkedTextView.setText(date.getHours());
-
-            String currentDate = date.getDate();
-
-            if (currentDate.equals(DatesGenerator.todayTheOtherWay())) {
-                dayTextView.setTextColor(ContextCompat.getColor(context, R.color.today_color));
-            }
-            if (tracker != null) {
-                bindSelectedState();
-            }
-        }
-
-        private void bindSelectedState() {
-            materialCardView.setChecked(tracker.isSelected(details.getSelectionKey()));
         }
 
         public ItemDetailsLookup.ItemDetails<Long> getItemDetails() {
             return details;
         }
-
     }
 }
