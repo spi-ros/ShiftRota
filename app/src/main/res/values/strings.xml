@@ -4,7 +4,6 @@
     <string name="no_data">No Data</string>
     <string name="hours">Hours</string>
     <string name="hours_00">00</string>
-    <string name="status">Status</string>
 
     <!-- Strings for hours drop-down Spinner -->
     <string name="will_work">Work</string>
@@ -38,4 +37,10 @@
 
     <string name="number_picker_formatter">%02d</string>
     <string name="roboto_light">sans-serif-light</string>
+    <string name="start">Start</string>
+    <string name="end">End</string>
+    <string name="status">Status</string>
+    <string name="set_status">Set Status</string>
+    <string name="start_time">Start Time</string>
+    <string name="end_time">End Time</string>
 </resources>

@@ -18,10 +18,10 @@ public class Date {
     @ColumnInfo(name = "status")
     private int mStatus;
 
-    @ColumnInfo (name = "hours")
+    @ColumnInfo(name = "hours")
     private String mHours;
 
-    @ColumnInfo (name = "notes")
+    @ColumnInfo(name = "notes")
     private String mNotes;
 
     public Date(@NonNull String date, int status, String hours, String notes) {
@@ -36,19 +36,13 @@ public class Date {
         return mDate;
     }
 
-    void setDate(String date) {
-        this.mDate = date;
-        this.mStatus = 0;
-    }
-
-    void setStatus (int status) {
-        this.mStatus = status;
-    }
     public int getStatus() {
         return mStatus;
     }
 
-    public String getHours() { return  mHours;}
+    public String getHours() {
+        return mHours;
+    }
 
     public String getNotes() {
         return mNotes;

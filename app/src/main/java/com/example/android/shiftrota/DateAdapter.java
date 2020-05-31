@@ -126,11 +126,11 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         break;
                 }
 
-                if (date.getHours() != null) {
+                if (date.getHours().equals("00:00") || date.getHours() == null) {
+                    hoursWorkedTextView.setVisibility(View.GONE);
+                } else {
                     hoursWorkedTextView.setText(date.getHours());
                     hoursWorkedTextView.setVisibility(View.VISIBLE);
-                } else {
-                    hoursWorkedTextView.setVisibility(View.GONE);
                 }
 
                 String notesString = date.getNotes();

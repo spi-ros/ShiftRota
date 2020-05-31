@@ -60,7 +60,7 @@ public abstract class DateRoomDatabase extends RoomDatabase {
                 start.add(Calendar.DATE, 1);
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
                 String formatted = format1.format(start.getTime());
-                Date date = new Date(formatted, 0, null, null);
+                Date date = new Date(formatted, 0, "00:00", null);
                 mDao.insert(date);
             }
         }

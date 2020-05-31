@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_theme_color">
@@ -249,8 +249,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/hidden_layout_shape"
-            app:behavior_peekHeight="60dp"
             app:behavior_hideable="true"
+            app:behavior_peekHeight="60dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
             <TextView
@@ -259,7 +259,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:layout_margin="6dp"/>
+                android:layout_margin="6dp" />
 
             <TextView
                 android:id="@+id/selected_text_view"
@@ -268,14 +268,14 @@
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="6dp"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <com.shawnlin.numberpicker.NumberPicker
                 android:id="@+id/status_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="46dp"
-                android:layout_alignParentStart="true"
                 android:layout_below="@id/selected_text_view"
+                android:layout_alignParentStart="true"
                 android:layout_marginStart="6dp"
                 android:layout_marginTop="6dp"
                 app:np_dividerColor="@color/colorPrimary"
@@ -293,9 +293,9 @@
                 android:id="@+id/hours_number_picker"
                 android:layout_width="wrap_content"
                 android:layout_height="46dp"
+                android:layout_below="@id/selected_text_view"
                 android:layout_marginTop="6dp"
                 android:layout_toEndOf="@id/status_picker"
-                android:layout_below="@id/selected_text_view"
                 app:np_dividerColor="@color/colorPrimary"
                 app:np_formatter="@string/number_picker_formatter"
                 app:np_height="64dp"
@@ -328,8 +328,8 @@
                 android:id="@+id/save_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
                 android:layout_below="@id/text_input_layout"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="6dp"
                 android:layout_marginEnd="6dp"
                 android:text="@string/save"

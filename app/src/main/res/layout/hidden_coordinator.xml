@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="230dp"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent">
+
+<!--    <RelativeLayout-->
+<!--        android:id="@+id/collapsing_relative_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:background="@drawable/hidden_layout_shape"-->
+<!--        app:behavior_peekHeight="60dp"-->
+<!--        app:behavior_hideable="true"-->
+<!--        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/selected_text_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentTop="true"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_margin="6dp"-->
+<!--            android:textSize="16sp" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/set_status_text_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/status"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_below="@id/selected_text_view"-->
+<!--            android:layout_margin="6dp"-->
+<!--            android:textSize="32sp"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/status_text_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/selected_text_view"-->
+<!--            android:layout_toEndOf="@id/set_status_text_view"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/start_text_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/start"-->
+<!--            android:layout_alignParentStart="true"-->
+<!--            android:layout_below="@id/set_status_text_view"-->
+<!--            android:layout_margin="6dp"-->
+<!--            android:textSize="32sp"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/start_time_text_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/status_text_view"-->
+<!--            android:layout_toEndOf="@id/start_text_view"-->
+<!--            android:layout_margin="6dp"-->
+<!--            android:textSize="32sp"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/end_text_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/end"-->
+<!--            android:layout_below="@id/start_text_view"-->
+<!--            android:layout_margin="6dp"-->
+<!--            android:textSize="32sp"/>-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/end_time_text_view"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_below="@id/start_time_text_view"-->
+<!--            android:layout_toEndOf="@id/end_text_view"-->
+<!--            android:layout_margin="6dp"-->
+<!--            android:textSize="32sp"/>-->
+
+<!--        <com.google.android.material.button.MaterialButton-->
+<!--            android:id="@+id/save_button"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentEnd="true"-->
+<!--            android:layout_below="@id/end_time_text_view"-->
+<!--            android:layout_marginTop="6dp"-->
+<!--            android:layout_marginEnd="6dp"-->
+<!--            android:text="@string/save"-->
+<!--            android:textSize="12sp" />-->
+
+
+<!--    </RelativeLayout>-->
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

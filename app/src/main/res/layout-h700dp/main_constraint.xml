@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraint_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="8dp"
     android:background="@color/dark_theme_color">
 
     <TextView
@@ -144,7 +143,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/recycler_view_shape"
         app:layout_constraintEnd_toEndOf="parent"
@@ -152,57 +151,64 @@
         app:layout_constraintTop_toBottomOf="@+id/thursday_text_view" />
 
     <TextView
-        android:id="@+id/empty_view"
+        android:id="@+id/first_week_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="@color/info_color"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view"
+        tools:text="Arxidia" />
 
     <TextView
-        android:id="@+id/hours_worked_text_view"
+        android:id="@+id/second_week_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/total_worked_hours"
         android:textColor="@color/info_color"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/hours_worked_number_text_view"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
+        app:layout_constraintTop_toBottomOf="@+id/first_week_text_view"
+        tools:text="Arxidia" />
 
     <TextView
-        android:id="@+id/hours_worked_number_text_view"
+        android:id="@+id/third_week_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/info_color"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/hours_worked_text_view"
-        app:layout_constraintTop_toTopOf="@+id/hours_worked_text_view"
-        tools:text="31" />
-
-    <TextView
-        android:id="@+id/hours_booked_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/booked_hours_left"
-        android:textColor="@color/info_color"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/hours_booked_number_text_view"
+        android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hours_worked_text_view" />
+        app:layout_constraintTop_toBottomOf="@+id/second_week_text_view"
+        tools:text="Arxidia" />
 
     <TextView
-        android:id="@+id/hours_booked_number_text_view"
+        android:id="@+id/forth_week_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
         android:textColor="@color/info_color"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/hours_booked_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/hours_worked_number_text_view"
-        tools:text="31" />
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/third_week_text_view"
+        tools:text="Arxidia" />
+
+    <TextView
+        android:id="@+id/fifth_week_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/info_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/forth_week_text_view"
+        tools:text="Arxidia" />
+
+    <TextView
+        android:id="@+id/sixth_week_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/info_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fifth_week_text_view"
+        tools:text="Arxidia" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
@@ -253,98 +259,94 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-            <RelativeLayout
-                android:id="@+id/collapsing_relative_layout"
+        <RelativeLayout
+            android:id="@+id/collapsing_relative_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/hidden_layout_shape"
+            app:behavior_hideable="true"
+            app:behavior_peekHeight="60dp"
+            app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+            <TextView
+                android:id="@+id/selected_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="6dp"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/set_status_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/selected_text_view"
+                android:layout_alignParentStart="true"
+                android:layout_margin="6dp"
+                android:text="@string/status"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/status_text_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/hidden_layout_shape"
-                app:behavior_peekHeight="60dp"
-                app:behavior_hideable="true"
-                app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+                android:layout_height="wrap_content"
+                android:layout_below="@id/selected_text_view"
+                android:layout_margin="6dp"
+                android:layout_toEndOf="@id/set_status_text_view"
+                android:hint="@string/set_status"
+                android:textSize="24sp" />
 
-                <TextView
-                    android:id="@+id/date_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerInParent="true"
-                    android:layout_margin="6dp"/>
+            <TextView
+                android:id="@+id/start_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/set_status_text_view"
+                android:layout_alignParentStart="true"
+                android:layout_margin="6dp"
+                android:text="@string/start"
+                android:textSize="24sp" />
 
-                <TextView
-                    android:id="@+id/selected_text_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_margin="6dp"
-                    android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/start_time_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/status_text_view"
+                android:layout_margin="6dp"
+                android:layout_toEndOf="@id/start_text_view"
+                android:hint="@string/start_time"
+                android:textSize="24sp" />
 
-                <com.shawnlin.numberpicker.NumberPicker
-                    android:id="@+id/status_picker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="46dp"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@id/selected_text_view"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginTop="6dp"
-                    app:np_dividerColor="@color/colorPrimary"
-                    app:np_formatter="@string/number_picker_formatter"
-                    app:np_height="64dp"
-                    app:np_orientation="horizontal"
-                    app:np_selectedTextColor="@color/colorPrimary"
-                    app:np_selectedTextSize="15dp"
-                    app:np_textColor="@color/colorPrimary"
-                    app:np_textSize="8dp"
-                    app:np_typeface="@string/roboto_light"
-                    app:np_width="180dp" />
+            <TextView
+                android:id="@+id/end_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/start_text_view"
+                android:layout_margin="6dp"
+                android:text="@string/end"
+                android:textSize="24sp" />
 
-                <com.shawnlin.numberpicker.NumberPicker
-                    android:id="@+id/hours_number_picker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="46dp"
-                    android:layout_marginTop="6dp"
-                    android:layout_toEndOf="@id/status_picker"
-                    android:layout_below="@id/selected_text_view"
-                    app:np_dividerColor="@color/colorPrimary"
-                    app:np_formatter="@string/number_picker_formatter"
-                    app:np_height="64dp"
-                    app:np_orientation="horizontal"
-                    app:np_selectedTextColor="@color/colorPrimary"
-                    app:np_selectedTextSize="15dp"
-                    app:np_textColor="@color/colorPrimary"
-                    app:np_textSize="8dp"
-                    app:np_typeface="@string/roboto_light"
-                    app:np_width="180dp" />
+            <TextView
+                android:id="@+id/end_time_text_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/start_time_text_view"
+                android:layout_margin="6dp"
+                android:layout_toEndOf="@id/end_text_view"
+                android:hint="@string/end_time"
+                android:textSize="24sp" />
 
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/text_input_layout"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/status_picker"
-                    android:layout_margin="6dp"
-                    android:hint="@string/notes"
-                    app:endIconMode="clear_text">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/notes_edit_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="2" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/save_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_below="@id/text_input_layout"
-                    android:layout_marginTop="6dp"
-                    android:layout_marginEnd="6dp"
-                    android:text="@string/save"
-                    android:textSize="12sp" />
-            </RelativeLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/save_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/end_time_text_view"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="6dp"
+                android:layout_marginEnd="6dp"
+                android:text="@string/save"
+                android:textSize="12sp" />
+        </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.constraintlayout.widget.Guideline

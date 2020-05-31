@@ -4,16 +4,13 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.res.Resources;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
-import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.recyclerview.selection.SelectionTracker;
 
-import com.example.android.shiftrota.MainActivity;
 import com.example.android.shiftrota.R;
 import com.example.android.shiftrota.UI.DateViewModel;
 
@@ -79,6 +76,18 @@ public class DatesGenerator {
         return Integer.parseInt(stringFormat);
     }
 
+    private static String formatting(long s) {
+        if (s < 10) return "0" + s;
+        else return "" + s;
+    }
+
+    static public String hoursWorkedString (long workedLong) {
+        long hhWorked01 = workedLong / 3600;
+        workedLong %= 3600;
+        long mmWorked01 = workedLong / 60;
+        return formatting(hhWorked01) + " Hours and " + formatting(mmWorked01) + " Minutes";
+    }
+
     static public String getMonthString() {
         Calendar rightNow = Calendar.getInstance();
         SimpleDateFormat format1 = new SimpleDateFormat("MM", Locale.UK);
@@ -102,11 +111,22 @@ public class DatesGenerator {
         return rightNow;
     }
 
-    /** Changing date from "yy/MM/dd" to "dd/MM/yy" */
-    static public  String normalDate(String string) {
+    /**
+     * Changing date from "yyyy/MM/dd" to "dd/MM/yy"
+     */
+    static public String normalDate(String string) {
         char[] c = string.toCharArray();
-        char[] data = {c[8], c[9], c[7], c[5], c[6], c[4], c[2], c[3]};
+        char[] data = {c[8], c[9], c[7], c[5], c[6]};
         return new String(data);
+    }
+
+    static public String normalHour(String string) {
+        String data = null;
+        if (string != null) {
+            char[] c = string.toCharArray();
+            data = c[1] + c[2] + ":" + c[3];
+        }
+        return data;
     }
 
     static public String nameOfMonth(int monthInt) {
@@ -149,18 +169,15 @@ public class DatesGenerator {
         return monthString;
     }
 
-    static public void saveInit(int statusChangedValue, int hoursChangedValue, EditText notesEditText,
+    static public void saveInit(int statusChangedValue, String hoursChangedValue,
                                 List<String> testList, DateViewModel mDateViewModel,
                                 SelectionTracker tracker, Context context, Resources resources) {
 
-        int statusInt = statusChangedValue - 1;
-
-        String hoursString = String.valueOf(hoursChangedValue);
-        String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
+        //        String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
 
         for (int i = 0; i < testList.size(); i++) {
             Date date;
-            if (statusInt == 1 && DatesGenerator.getCalendarFromString(testList.get(i)).
+            if (statusChangedValue == 1 && DatesGenerator.getCalendarFromString(testList.get(i)).
                     before(DatesGenerator.getToday())) {
                 Toast.makeText(context, resources.
                                 getString(R.string.cant_book_in_the_past),
@@ -168,7 +185,7 @@ public class DatesGenerator {
                 Toast.makeText(context, resources.
                                 getString(R.string.change_status_or_date_in_future),
                         Toast.LENGTH_SHORT).show();
-            } else if (statusInt == 2 && DatesGenerator.getCalendarFromString(testList.get(i)).
+            } else if (statusChangedValue == 2 && DatesGenerator.getCalendarFromString(testList.get(i)).
                     after(DatesGenerator.getToday())) {
                 Toast.makeText(context, resources.
                                 getString(R.string.cant_book_in_the_future),
@@ -176,24 +193,24 @@ public class DatesGenerator {
                 Toast.makeText(context, resources.
                                 getString(R.string.change_status_or_date_in_past),
                         Toast.LENGTH_SHORT).show();
-            } else if ((statusInt == 1 || statusInt == 2) &&
-                    (hoursString.isEmpty() || hoursString.matches("0") ||
-                            hoursString.matches("00"))) {
+            } else if ((statusChangedValue == 1 || statusChangedValue == 2) &&
+                    (hoursChangedValue.isEmpty() || hoursChangedValue.matches("0") ||
+                            hoursChangedValue.matches("00"))) {
                 Toast.makeText(context, "Please give the amount of hours",
                         Toast.LENGTH_SHORT).show();
-            } else if (statusInt == 0) {
+            } else if (statusChangedValue == 0) {
                 for (int j = 0; j < testList.size(); j++) {
-                    date = new Date(testList.get(j), statusInt, null, null);
+                    date = new Date(testList.get(j), statusChangedValue, "00:00", null);
                     mDateViewModel.insert(date);
                 }
-            } else if (statusInt == 3) {
+            } else if (statusChangedValue == 3) {
                 for (int j = 0; j < testList.size(); j++) {
-                    date = new Date(testList.get(j), statusInt, null, notesString);
+                    date = new Date(testList.get(j), statusChangedValue, "00:00", null);
                     mDateViewModel.insert(date);
                 }
             } else {
                 for (int j = 0; j < testList.size(); j++) {
-                    date = new Date(testList.get(j), statusInt, hoursString, notesString);
+                    date = new Date(testList.get(j), statusChangedValue, hoursChangedValue, null);
                     mDateViewModel.insert(date);
                 }
             }
