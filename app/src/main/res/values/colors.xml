@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#60D196</color>
-    <color name="colorPrimaryDark">#1a6e45</color>
+    <color name="colorPrimaryDark">#121212</color>
     <color name="dark_theme_color">#121212</color>
     <color name="color_days">#BEEBD1</color>
     <color name="ic_launcher_background">#C02B10</color>
     <color name="colorAccent">#FF4081</color>
     <color name="klein">#1DE9B6</color>
     <color name="cell_color">#a0a0a0</color>
+    <color name="headline_color">#777777</color>
     <color name="today_color">#E0F2F1</color>
     <color name="will_work_start_color">#8ED2C9</color>
     <color name="will_work_end_color">#90837a</color>
@@ -16,7 +17,7 @@
     <color name="cancel_end_color">#e1f8f5</color>
     <color name="holiday">#d6e8e7</color>
     <color name="month">#FCF4D9</color>
-    <color name="hidden_layout_color">#0bc998</color>
+    <color name="hidden_layout_color">#8a8989</color>
     <color name="recycler_view_background">#e7f9e8</color>
     <color name="check_color">#ff1c1c</color>
     <color name="check_color_dark">#450606</color>

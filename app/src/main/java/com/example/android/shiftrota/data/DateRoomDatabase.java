@@ -12,7 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
-@Database(entities = {Date.class}, version = 20)
+@Database(entities = {Date.class}, version = 21)
 public abstract class DateRoomDatabase extends RoomDatabase {
 
     /*Make the DateRoomDatabase a singleton to prevent having multiple instances of the database
@@ -60,7 +60,7 @@ public abstract class DateRoomDatabase extends RoomDatabase {
                 start.add(Calendar.DATE, 1);
                 SimpleDateFormat format1 = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
                 String formatted = format1.format(start.getTime());
-                Date date = new Date(formatted, 0, "00:00", null);
+                Date date = new Date(formatted, 0,null, null, "00:00", null, null);
                 mDao.insert(date);
             }
         }

@@ -12,18 +12,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
         android:fontFamily="@font/abeezee_italic"
         android:gravity="center"
-        android:text="November"
         android:textColor="@color/colorPrimary"
-        android:textSize="24sp"
+        android:textSize="34sp"
         app:layout_constraintBottom_toTopOf="@+id/border_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="November" />
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/year_text_view"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="8dp"-->
+    <!--        android:layout_marginTop="16dp"-->
+    <!--        android:fontFamily="@font/abeezee_italic"-->
+    <!--        android:gravity="center"-->
+    <!--        android:text="2020"-->
+    <!--        android:textColor="@color/colorPrimary"-->
+    <!--        android:textSize="24sp"-->
+    <!--        app:layout_constraintStart_toEndOf="@+id/month_text_view"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
 
     <TextView
         android:id="@+id/border_text_view"
@@ -31,7 +44,6 @@
         android:layout_height="1dp"
         android:layout_marginTop="8dp"
         android:background="@color/cancel_end_color"
-        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -45,7 +57,7 @@
         android:gravity="center"
         android:text="@string/thursday"
         android:textColor="@color/color_days"
-        android:textSize="14sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toStartOf="@+id/friday_text_view"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintHorizontal_weight="1"
@@ -144,63 +156,97 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/recycler_view_shape"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/thursday_text_view" />
 
-    <TextView
-        android:id="@+id/hours_worked_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/total_worked_hours"
-        android:textColor="@color/info_color"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/hours_worked_number_text_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="6dp"
+        app:layout_constraintBottom_toTopOf="@id/adView">
 
-    <TextView
-        android:id="@+id/hours_worked_number_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/info_color"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/hours_worked_text_view"
-        app:layout_constraintTop_toTopOf="@+id/hours_worked_text_view"
-        tools:text="31" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/hours_booked_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/booked_hours_left"
-        android:textColor="@color/info_color"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toStartOf="@+id/hours_booked_number_text_view"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/hours_worked_text_view" />
+            <TextView
+                android:id="@+id/first_week_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/info_color"
+                android:textSize="16sp"
+                tools:text="Arxidia" />
 
-    <TextView
-        android:id="@+id/hours_booked_number_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:textColor="@color/info_color"
-        android:textSize="18sp"
-        app:layout_constraintStart_toEndOf="@+id/hours_booked_text_view"
-        app:layout_constraintTop_toBottomOf="@+id/hours_worked_number_text_view"
-        tools:text="31" />
+            <TextView
+                android:id="@+id/second_week_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/info_color"
+                android:textSize="16sp"
+                tools:text="Arxidia" />
+
+            <TextView
+                android:id="@+id/third_week_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/info_color"
+                android:textSize="16sp"
+                tools:text="Arxidia" />
+
+            <TextView
+                android:id="@+id/fourth_week_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/info_color"
+                android:textSize="16sp"
+                tools:text="Arxidia" />
+
+            <TextView
+                android:id="@+id/fifth_week_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/info_color"
+                android:textSize="16sp"
+                tools:text="Arxidia" />
+
+            <TextView
+                android:id="@+id/sixth_week_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/info_color"
+                android:textSize="16sp"
+                tools:text="Arxidia" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="183dp" />
+        app:layout_constraintGuide_begin="40dp" />
 
     <!--    <com.google.android.material.chip.ChipGroup-->
     <!--        android:id="@+id/chip_group"-->
@@ -236,6 +282,13 @@
     <!--            android:text="@string/cancel" />-->
     <!--    </com.google.android.material.chip.ChipGroup>-->
 
+    <View
+        android:id="@+id/scrim_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#99000000"
+        android:visibility="gone" />
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
@@ -250,98 +303,106 @@
             android:layout_height="match_parent"
             android:background="@drawable/hidden_layout_shape"
             app:behavior_hideable="true"
-            app:behavior_peekHeight="60dp"
+            app:behavior_peekHeight="56dp"
             app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
-            <TextView
-                android:id="@+id/date_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerInParent="true"
-                android:layout_margin="6dp" />
-
-            <TextView
-                android:id="@+id/selected_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:layout_margin="6dp"
-                android:textSize="16sp" />
-
-            <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/status_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="46dp"
-                android:layout_below="@id/selected_text_view"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp"
-                app:np_dividerColor="@color/colorPrimary"
-                app:np_formatter="@string/number_picker_formatter"
-                app:np_height="64dp"
-                app:np_orientation="horizontal"
-                app:np_selectedTextColor="@color/colorPrimary"
-                app:np_selectedTextSize="15dp"
-                app:np_textColor="@color/colorPrimary"
-                app:np_textSize="8dp"
-                app:np_typeface="@string/roboto_light"
-                app:np_width="180dp" />
-
-            <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/hours_number_picker"
-                android:layout_width="wrap_content"
-                android:layout_height="46dp"
-                android:layout_below="@id/selected_text_view"
-                android:layout_marginTop="6dp"
-                android:layout_toEndOf="@id/status_picker"
-                app:np_dividerColor="@color/colorPrimary"
-                app:np_formatter="@string/number_picker_formatter"
-                app:np_height="64dp"
-                app:np_orientation="horizontal"
-                app:np_selectedTextColor="@color/colorPrimary"
-                app:np_selectedTextSize="15dp"
-                app:np_textColor="@color/colorPrimary"
-                app:np_textSize="8dp"
-                app:np_typeface="@string/roboto_light"
-                app:np_width="180dp" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/text_input_layout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/options_card_view"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/status_picker"
-                android:layout_margin="6dp"
-                android:hint="@string/notes"
-                app:endIconMode="clear_text">
+                android:layout_height="56dp"
+                app:cardBackgroundColor="@color/headline_color">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/notes_edit_text"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="match_parent">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <ImageView
+                        android:id="@+id/up_down_image_view_01"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/ic_baseline_expand_more_24"
+                        android:rotationX="180"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/save_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/text_input_layout"
-                android:layout_alignParentEnd="true"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="6dp"
-                android:text="@string/save"
-                android:textSize="12sp" />
+                    <ImageView
+                        android:id="@+id/notes_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        app:layout_constraintEnd_toStartOf="@+id/clear_image_view"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageView
+                        android:id="@+id/clear_image_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="6dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@drawable/baseline_clear_black_24"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/selected_text_view"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textSize="24sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:text="25" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <include
+                layout="@layout/save_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/options_card_view" />
+
+            <include
+                layout="@layout/notes_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/options_card_view"
+                android:visibility="gone" />
+
+
         </RelativeLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/adView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        ads:adSize="BANNER"
+        ads:adUnitId="ca-app-pub-3940256099942544/6300978111"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+    </com.google.android.gms.ads.AdView>
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="342dp" />
+        app:layout_constraintGuide_begin="627dp" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="25dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

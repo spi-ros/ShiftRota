@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.view.View;
 import android.view.ViewAnimationUtils;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ import java.util.Objects;
 
 public class DatesGenerator {
 
-    private static String monthString;
+
 
     static public String today() {
         Calendar calendar = Calendar.getInstance();
@@ -81,11 +82,11 @@ public class DatesGenerator {
         else return "" + s;
     }
 
-    static public String hoursWorkedString (long workedLong) {
+    static public String hoursWorkedString (long workedLong, String firstWeek, String secondWeek) {
         long hhWorked01 = workedLong / 3600;
         workedLong %= 3600;
         long mmWorked01 = workedLong / 60;
-        return formatting(hhWorked01) + " Hours and " + formatting(mmWorked01) + " Minutes";
+        return firstWeek + " - " + secondWeek + "      " + formatting(hhWorked01) + "  Hours and  " + formatting(mmWorked01) + "  Minutes";
     }
 
     static public String getMonthString() {
@@ -129,7 +130,8 @@ public class DatesGenerator {
         return data;
     }
 
-    static public String nameOfMonth(int monthInt) {
+    static public String nameOfMonth(int monthInt, int year) {
+        String monthString = "";
         if (monthInt == 1) {
             monthString = "January";
         }
@@ -166,51 +168,59 @@ public class DatesGenerator {
         if (monthInt == 12) {
             monthString = "December";
         }
-        return monthString;
+        return monthString + ", " + year;
     }
 
-    static public void saveInit(int statusChangedValue, String hoursChangedValue,
-                                List<String> testList, DateViewModel mDateViewModel,
+    static public void saveInit(int statusChangedValue, String hoursChangedValue, String startTime, String endTime,
+                                String breakString, String notesString, List<String> testList, DateViewModel mDateViewModel,
                                 SelectionTracker tracker, Context context, Resources resources) {
-
-        //        String notesString = Objects.requireNonNull(notesEditText.getText()).toString().trim();
 
         for (int i = 0; i < testList.size(); i++) {
             Date date;
             if (statusChangedValue == 1 && DatesGenerator.getCalendarFromString(testList.get(i)).
                     before(DatesGenerator.getToday())) {
-                Toast.makeText(context, resources.
-                                getString(R.string.cant_book_in_the_past),
-                        Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, resources.
-                                getString(R.string.change_status_or_date_in_future),
-                        Toast.LENGTH_SHORT).show();
+                if (i == testList.size() - 1) {
+                    Toast.makeText(context, resources.
+                                    getString(R.string.cant_book_in_the_past),
+                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, resources.
+                                    getString(R.string.change_status_or_date_in_future),
+                            Toast.LENGTH_SHORT).show();
+                }
             } else if (statusChangedValue == 2 && DatesGenerator.getCalendarFromString(testList.get(i)).
                     after(DatesGenerator.getToday())) {
-                Toast.makeText(context, resources.
-                                getString(R.string.cant_book_in_the_future),
-                        Toast.LENGTH_SHORT).show();
-                Toast.makeText(context, resources.
-                                getString(R.string.change_status_or_date_in_past),
-                        Toast.LENGTH_SHORT).show();
-            } else if ((statusChangedValue == 1 || statusChangedValue == 2) &&
-                    (hoursChangedValue.isEmpty() || hoursChangedValue.matches("0") ||
-                            hoursChangedValue.matches("00"))) {
-                Toast.makeText(context, "Please give the amount of hours",
-                        Toast.LENGTH_SHORT).show();
-            } else if (statusChangedValue == 0) {
+                if (i == testList.size() - 1) {
+                    Toast.makeText(context, resources.
+                                    getString(R.string.cant_book_in_the_future),
+                            Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, resources.
+                                    getString(R.string.change_status_or_date_in_past),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+//            else if ((statusChangedValue == 1 || statusChangedValue == 2) &&
+//                    (startTime.isEmpty() || startTime.matches(resources.getString(R.string.start_time)) ||
+//                            startTime.matches("") || endTime.isEmpty() || endTime.matches(resources.getString(R.string.end_time)) ||
+//                            endTime.matches(""))) {
+//
+//                if (i == testList.size() - 1) {
+//                    Toast.makeText(context, "Please add Start Time and End Time",
+//                            Toast.LENGTH_SHORT).show();
+//                }
+//            }
+            else if (statusChangedValue == 0) {
                 for (int j = 0; j < testList.size(); j++) {
-                    date = new Date(testList.get(j), statusChangedValue, "00:00", null);
+                    date = new Date(testList.get(j), statusChangedValue, null, null, "00:00", null, null);
                     mDateViewModel.insert(date);
                 }
             } else if (statusChangedValue == 3) {
                 for (int j = 0; j < testList.size(); j++) {
-                    date = new Date(testList.get(j), statusChangedValue, "00:00", null);
+                    date = new Date(testList.get(j), statusChangedValue, null, null, "00:00", null, notesString);
                     mDateViewModel.insert(date);
                 }
             } else {
                 for (int j = 0; j < testList.size(); j++) {
-                    date = new Date(testList.get(j), statusChangedValue, hoursChangedValue, null);
+                    date = new Date(testList.get(j), statusChangedValue, startTime, endTime, hoursChangedValue,breakString, notesString);
                     mDateViewModel.insert(date);
                 }
             }

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/save_relative"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/set_status_text_view"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
+            android:text="@string/status"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/status_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_toEndOf="@id/set_status_text_view"
+            android:hint="@string/set_status"
+            android:onClick="showPopup"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/start_text_view"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/set_status_text_view"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
+            android:text="@string/start"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/start_time_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/status_text_view"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_marginBottom="6dp"
+            android:layout_toEndOf="@id/start_text_view"
+            android:hint="@string/start_time"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/end_text_view"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/start_text_view"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:text="@string/end"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/end_time_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/start_time_text_view"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="6dp"
+            android:layout_toEndOf="@id/end_text_view"
+            android:hint="@string/end_time"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/break_text_view"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/end_text_view"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="6dp"
+            android:text="@string/add_break"
+            android:textSize="18sp"/>
+
+        <EditText
+            android:id="@+id/break_edit_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_marginTop="6dp"
+            android:layout_below="@id/end_time_text_view"
+            android:layout_toEndOf="@id/break_text_view"
+            android:hint="@string/minutes"
+            android:inputType="number"
+            android:autofillHints="30"
+            android:textSize="18sp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="12dp"
+            android:layout_marginBottom="12dp"
+            android:text="@string/save"
+            android:textSize="12sp" />
+
+    </RelativeLayout>

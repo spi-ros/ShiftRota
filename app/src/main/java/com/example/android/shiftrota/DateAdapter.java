@@ -3,11 +3,13 @@ package com.example.android.shiftrota;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.selection.ItemDetailsLookup;
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.res.Configuration;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +17,6 @@ import android.widget.TextView;
 
 import com.example.android.shiftrota.data.Date;
 import com.example.android.shiftrota.data.DatesGenerator;
-import com.example.android.shiftrota.databinding.ItemViewBinding;
 import com.example.android.shiftrota.selection.Details;
 import com.google.android.material.card.MaterialCardView;
 
@@ -66,16 +67,41 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return date.getDate();
     }
 
-    String getItemNotesInPosition(int position) {
-        Date date = mDates.get(position);
-        return date.getNotes();
-    }
-
     @Override
     public int getItemCount() {
         if (mDates != null)
             return mDates.size();
         else return 0;
+    }
+
+    int getItemStatusInPosition(int position) {
+        Date date = mDates.get(position);
+        return date.getStatus();
+    }
+
+    String getItemStartInPosition(int position) {
+        Date date = mDates.get(position);
+        return date.getStartTime();
+    }
+
+    String getItemEndInPosition(int position) {
+        Date date = mDates.get(position);
+        return date.getEndTime();
+    }
+
+    String getItemHoursInPosition(int position) {
+        Date date = mDates.get(position);
+        return date.getHours();
+    }
+
+    String getItemLunchBreakInPosition(int position) {
+        Date date = mDates.get(position);
+        return date.getLunchBreak();
+    }
+
+    String getItemNotesInPosition(int position) {
+        Date date = mDates.get(position);
+        return date.getNotes();
     }
 
     @Override
@@ -87,19 +113,28 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private final Details details;
         private final MaterialCardView materialCardView;
-        TextView dayTextView, hoursWorkedTextView, notesTextView;
-
+        TextView dayTextView, startTimeTextView, endTimeTextVIew, notesTextView, totalHoursTextView;
+        ConstraintLayout itemLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
             materialCardView = itemView.findViewById(R.id.material_card_view);
             dayTextView = itemView.findViewById(R.id.day_text_view);
-            hoursWorkedTextView = itemView.findViewById(R.id.hours_worked_text_view);
+            startTimeTextView = itemView.findViewById(R.id.start_time_text_view);
+            endTimeTextVIew = itemView.findViewById(R.id.end_time_text_view);
             notesTextView = itemView.findViewById(R.id.notes_text_view);
+            totalHoursTextView = itemView.findViewById(R.id.total_hours_text_view);
+            itemLayout = itemView.findViewById(R.id.item_layout);
             details = new Details();
         }
 
         private void bind(Date date, int position) {
+
+            Configuration config = context.getResources().getConfiguration();
+            int screenHeight = config.screenHeightDp;
+//            if (screenHeight < 700) {
+//                materialCardView.getLayoutParams().height = 49;
+//            }
 
             details.position = position;
 
@@ -126,21 +161,6 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                         break;
                 }
 
-                if (date.getHours().equals("00:00") || date.getHours() == null) {
-                    hoursWorkedTextView.setVisibility(View.GONE);
-                } else {
-                    hoursWorkedTextView.setText(date.getHours());
-                    hoursWorkedTextView.setVisibility(View.VISIBLE);
-                }
-
-                String notesString = date.getNotes();
-                if (!(notesString == null) && notesString.length() > 6) {
-                    String firstSevenChars = notesString.substring(0, 6);
-                    notesTextView.setText(firstSevenChars);
-                } else {
-                    notesTextView.setText(notesString);
-                }
-
                 String currentDate = date.getDate();
 
                 if (currentDate.equals(DatesGenerator.todayTheOtherWay())) {
@@ -148,8 +168,37 @@ public class DateAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 }
             } else {
                 materialCardView.setBackgroundResource(R.drawable.cell_shape_not_current);
-                hoursWorkedTextView.setVisibility(View.GONE);
             }
+
+            String notesString = date.getNotes();
+            if (!(notesString == null) && notesString.length() > 6) {
+                String firstSevenChars = notesString.substring(0, 6);
+                notesTextView.setText(firstSevenChars);
+            } else {
+                notesTextView.setText(notesString);
+            }
+
+            if (startTimeTextView != null) {
+                if (date.getHours().equals("00:00") || date.getHours() == null) {
+                    startTimeTextView.setVisibility(View.GONE);
+                    endTimeTextVIew.setVisibility(View.GONE);
+                } else {
+                    startTimeTextView.setText(date.getStartTime());
+                    startTimeTextView.setVisibility(View.VISIBLE);
+                    endTimeTextVIew.setText(date.getEndTime());
+                    endTimeTextVIew.setVisibility(View.VISIBLE);
+                }
+            }
+
+            if (totalHoursTextView != null) {
+                if (date.getHours().equals("00:00") || date.getHours() == null) {
+                    totalHoursTextView.setVisibility(View.GONE);
+                } else  {
+                    totalHoursTextView.setText(date.getHours());
+                }
+
+            }
+
             dayTextView.setText(DatesGenerator.lastTwo(date.getDate()));
         }
 
